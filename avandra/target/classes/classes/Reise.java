@@ -6,7 +6,7 @@ public class Reise {
 
     private Destinasjon destinasjon_obj;
     private String reiseNavn_str;
-    private LocalDate startTid_dateTime;
+    private LocalDate startTid_LocalDate;
 
 
 

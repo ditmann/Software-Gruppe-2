@@ -4,6 +4,6 @@ import java.util.ArrayList;
 
 public class LiteBruker extends Bruker{
 
-    private ArrayList<AdminBruker> safeBruker;
+    private ArrayList<AdminBruker> safeBruker_aList;
 
 }
