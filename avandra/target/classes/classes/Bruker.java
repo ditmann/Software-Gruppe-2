@@ -10,7 +10,7 @@ public abstract class Bruker {
     private String ePost_str;
     private ArrayList<Reise> favorittReise_aList;
     private ArrayList<Reise> planlagtReise_aList;
-    private float hastighetsfaktor_fl;
+    private float hastighetsfaktor_float;
     private int filtreringPreferanse_int;    
 
 }

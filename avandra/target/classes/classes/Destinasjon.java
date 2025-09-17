@@ -4,8 +4,8 @@ package classes;
 
 public class Destinasjon {
     
-    private String posisjon;  //kordinater fra Google
-    private String reiseNavn;
+    private String posisjon_str;  //kordinater fra Google
+    private Boolean validert_bool;
   
 
 }
