@@ -1,6 +1,6 @@
 package classes;
 
-import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public abstract class Bruker {
     private String navn_str;
