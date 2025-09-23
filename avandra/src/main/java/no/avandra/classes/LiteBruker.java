@@ -10,19 +10,18 @@ import java.util.List;
 
 public class LiteBruker extends Bruker{
 
-    private ArrayList<AdminBruker> safeBruker_aList;
+    private ArrayList<AdminBruker> safeBruker_aList = new ArrayList<>();
 
     public LiteBruker(String navn_str, String passord_str, String id_str, String tlf_str, String ePost_str, float hastighetsfaktor_float, int filtreringPreferanse_int) {
         super(navn_str, passord_str, id_str, tlf_str, ePost_str, hastighetsfaktor_float, filtreringPreferanse_int);
     }
 
     public ArrayList<AdminBruker> getSafeBruker_aList() {
-        return safeBruker_aList;
+        return new ArrayList<>(safeBruker_aList);
     }
 
-    public void setSafeBruker_aList(ArrayList<AdminBruker> safeBruker_aList) {
-        this.safeBruker_aList = safeBruker_aList;
-    }
+    public void addSafeBruker(AdminBruker adminBruker){safeBruker_aList.add(adminBruker);}
+
 
     private void getInfoFromAdmin(File file) {
         ObjectMapper objectMapper = new ObjectMapper()

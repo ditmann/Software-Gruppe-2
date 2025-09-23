@@ -8,8 +8,8 @@ public abstract class Bruker {
     private String id_str;
     private String tlf_str;
     private String ePost_str;
-    private ArrayList<Reise> favorittReise_aList;
-    private ArrayList<Reise> planlagtReise_aList;
+    private ArrayList<Reise> favorittReise_aList = new ArrayList<>();
+    private ArrayList<Reise> planlagtReise_aList = new ArrayList<>();
     private float hastighetsfaktor_float;
     private int filtreringPreferanse_int;
 
@@ -25,6 +25,16 @@ public abstract class Bruker {
 
     public void addFavReise(Reise reise) {
         favorittReise_aList.add(reise);
+    }
+
+    public void addPlanlagtReise(Reise reise) { planlagtReise_aList.add(reise); }
+
+    public ArrayList<Reise> getFavorittReise_aList() {
+        return new ArrayList<>(favorittReise_aList);
+    }
+
+    public ArrayList<Reise> getPlanlagtReise_aList() {
+        return new ArrayList<>(planlagtReise_aList);
     }
 
     public float getHastighetsfaktor_float() {
