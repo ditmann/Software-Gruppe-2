@@ -2,6 +2,8 @@ package no.avandra.classes;
 
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public abstract class Bruker {
     private String navn_str;
     private String passord_str;
@@ -92,4 +94,23 @@ public abstract class Bruker {
     public void setNavn_str(String navn_str) {
         this.navn_str = navn_str;
     }
+
+    public void lagreDestinasjoner (Destinasjon destinasjon) {
+
+          ObjectMapper mapper = new ObjectMapper();
+          
+            try {
+                String jsonString = mapper.writeValueAsString(destinasjon);
+                System.out.println(jsonString); 
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+    }
+
+
+
+
+
 }
