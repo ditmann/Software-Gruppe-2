@@ -1,7 +1,4 @@
 package no.avandra;
 
-public class Main {
-    public static void main(String[] args) {
-        System.out.println("Hello world!");
-    }
-}
+import no.avandra.classes.Destinasjon;
+
