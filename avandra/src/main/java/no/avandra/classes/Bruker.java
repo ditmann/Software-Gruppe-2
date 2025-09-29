@@ -1,5 +1,6 @@
 package no.avandra.classes;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -95,18 +96,27 @@ public abstract class Bruker {
         this.navn_str = navn_str;
     }
 
-    public void lagreDestinasjoner (Destinasjon destinasjon) {
+    //  funksjon for å lagre destinasjoner til en JSON fil    
+    public static void saveDestinations (Destinasjon destinasjon) {
 
-          ObjectMapper mapper = new ObjectMapper();
-          
-            try {
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+                // convert Java object to JSON file
+                mapper.writeValue(new File("saved Destinations.json"), destinasjon);
+                // convert Java object to JSON string
                 String jsonString = mapper.writeValueAsString(destinasjon);
+                
                 System.out.println(jsonString); 
                 
             } catch (Exception e) {
                 e.printStackTrace();
             }
+    }
 
+    public static void main(String[] args) {
+        Destinasjon destinasjon = new Destinasjon("59.9139,10.7522", true);
+        saveDestinations(destinasjon);
     }
 
 
