@@ -114,8 +114,9 @@ public abstract class Bruker {
             }
     }
 
+    // :bug: brukt for debugging og litt testing lager og skriver en destinasjon til jason (skal fjernes)
     public static void main(String[] args) {
-        Destinasjon destinasjon = new Destinasjon("59.9139,10.7522", true);
+        Destinasjon destinasjon = new Destinasjon(true, 59.9139f, true, 10.7522f, true);
         saveDestinations(destinasjon);
     }
 
