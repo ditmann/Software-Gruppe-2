@@ -3,10 +3,9 @@ package no.avandra.classes;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 
-public class JSONDBHandler extends DBHandler{
-    @Override
-    public void sendData(Object object, String fileName) {
+public class JSONDBHandler implements DBHandler{
 
+    public void sendData(Object object, String fileName) {
         ObjectMapper mapper = new ObjectMapper();
         try {
             mapper.writeValue(new File(fileName), object);
@@ -18,27 +17,28 @@ public class JSONDBHandler extends DBHandler{
         }
     }
 
-    @Override
     public Object retrieveData() {
-
-
-    }
-
-    //  funksjon for å lagre destinasjoner til en JSON fil
-    public static void saveDestinations (Destinasjon destinasjon) {
-
-        ObjectMapper mapper = new ObjectMapper();
-
+        Destinasjon destinasjon = new Destinasjon();
         try {
-            // convert Java object to JSON file
-            mapper.writeValue(new File("saved Destinations.json"), destinasjon);
-            // convert Java object to JSON string
-            String jsonString = mapper.writeValueAsString(destinasjon);
-
-            System.out.println(jsonString);
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            ObjectMapper mapper = new ObjectMapper();
+            File file = new File("dummydata.json");
+            destinasjon = mapper.readValue(file, Destinasjon.class);
         }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+        return destinasjon;
     }
+
+    public static void main(String[] args) {
+        JSONDBHandler handler = new JSONDBHandler();
+        System.out.println(handler.retrieveData());
+    }
+    /*
+    {"latitudeN":true,
+    "latitudeNum":59.9139,
+    "longitudeE":true,
+    "longitudeNUM":10.7522,
+    "validert_bool":true}*/
+
 }
