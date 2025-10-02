@@ -23,6 +23,7 @@ public class Destinasjon {
         this.validert_bool = validert_bool;
     }
 
+
     public boolean isLatitudeN() {
         return latitudeN;
     }

@@ -14,6 +14,10 @@ public class Reise {
         this.startTid_LocalDate = startTid_LocalDate;
     }
 
+    public  Reise() {
+
+    }
+
     public Destinasjon getDestinasjon_obj() {
         return destinasjon_obj;
     }
