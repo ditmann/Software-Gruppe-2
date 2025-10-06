@@ -158,7 +158,7 @@ public final class EnturHttpClient implements EnturClient {
     /**
      * Builds the JSON payload, sets required headers, executes the HTTP call,
      * validates HTTP status and GraphQL errors, and returns the decoded JsonNode
-     *
+     *DONT TOUCH
      * @param query     GraphQL query string
      * @param variables Map of variables to bind to the query
      * @return root JsonNode of the response (already parsed)
