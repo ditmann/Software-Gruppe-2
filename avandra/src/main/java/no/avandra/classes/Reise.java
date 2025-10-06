@@ -7,6 +7,7 @@ public class Reise {
     private Destinasjon destinasjon_obj;
     private String reiseNavn_str;
     private LocalDate startTid_LocalDate;
+    private Coordinate startCoordinate;
 
     public Reise(Destinasjon destinasjon_obj, String reiseNavn_str, LocalDate startTid_LocalDate) {
         this.destinasjon_obj = destinasjon_obj;
@@ -40,5 +41,13 @@ public class Reise {
 
     public void setStartTid_LocalDate(LocalDate startTid_LocalDate) {
         this.startTid_LocalDate = startTid_LocalDate;
+    }
+
+    public Coordinate getCoordinate() {
+        return startCoordinate;
+    }
+
+    public void setCoordinate(Coordinate coordinate) {
+        this.startCoordinate = coordinate;
     }
 }

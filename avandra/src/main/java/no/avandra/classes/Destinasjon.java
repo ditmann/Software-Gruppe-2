@@ -1,60 +1,21 @@
 package no.avandra.classes;
 
-
-
 public class Destinasjon {
 
+private Coordinate coordinate;
+private Boolean validert_bool;
 
-    //Koordinater fra Google:
-    private boolean  latitudeN;
-    private float latitudeNum;
-    private boolean  longitudeE;
-    private float longitudeNUM;
-
-
-    private Boolean validert_bool;
-
-
-    public Destinasjon(boolean latitudeN, float latitudeNum, boolean longitudeE, float longitudeNUM, Boolean validert_bool) {
-        this.latitudeN = latitudeN;
-        this.latitudeNum = latitudeNum;
-        this.longitudeE = longitudeE;
-        this.longitudeNUM = longitudeNUM;
+    public Destinasjon(Boolean validert_bool, Coordinate coordinate) {
         this.validert_bool = validert_bool;
+        this.coordinate = coordinate;
     }
 
-    public Destinasjon() {}
-
-    public boolean isLatitudeN() {
-        return latitudeN;
+    public Coordinate getCoordinate() {
+        return coordinate;
     }
 
-    public void setLatitudeN(boolean latitudeN) {
-        this.latitudeN = latitudeN;
-    }
-
-    public float getLatitudeNum() {
-        return latitudeNum;
-    }
-
-    public void setLatitudeNum(float latitudeNum) {
-        this.latitudeNum = latitudeNum;
-    }
-
-    public boolean isLongitudeE() {
-        return longitudeE;
-    }
-
-    public void setLongitudeE(boolean longitudeE) {
-        this.longitudeE = longitudeE;
-    }
-
-    public float getLongitudeNUM() {
-        return longitudeNUM;
-    }
-
-    public void setLongitudeNUM(float longitudeNUM) {
-        this.longitudeNUM = longitudeNUM;
+    public void setCoordinate(Coordinate coordinate) {
+        this.coordinate = coordinate;
     }
 
     public Boolean getValidert_bool() {
