@@ -1,4 +1,4 @@
-package no.avandra.entur;
+package no.avandra.classes;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
