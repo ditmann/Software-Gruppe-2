@@ -26,6 +26,10 @@ public abstract class Bruker {
         this.filtreringPreferanse_int = filtreringPreferanse_int;
     }
 
+    public Bruker() {
+
+    }
+
     public void addFavReise(Reise reise) {
         favorittReise_aList.add(reise);
     }

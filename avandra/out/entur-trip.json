@@ -1,0 +1,147 @@
+{
+  "request" : {
+    "fromLat" : 59.9139,
+    "fromLon" : 10.7522,
+    "toLat" : 60.1976,
+    "toLon" : 11.1004,
+    "numPatterns" : 3
+  },
+  "trip" : {
+    "tripPatterns" : [ {
+      "startTime" : "2025-10-05T18:10:53+02:00",
+      "duration" : 3572,
+      "walkDistance" : 2687.71,
+      "legs" : [ {
+        "mode" : "foot",
+        "distance" : 566.99,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "rail",
+        "distance" : 47629.55,
+        "line" : {
+          "id" : "FLT:Line:FLY1",
+          "name" : "FLY1",
+          "publicCode" : "FLY1",
+          "transportMode" : "rail",
+          "authority" : {
+            "name" : "Flytoget"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:557",
+            "name" : "Oslo S"
+          },
+          "aimedDepartureTime" : "2025-10-05T18:20:00+02:00",
+          "expectedDepartureTime" : "2025-10-05T18:20:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:447",
+            "name" : "Oslo lufthavn stasjon"
+          },
+          "aimedDepartureTime" : "2025-10-05T18:42:00+02:00",
+          "expectedDepartureTime" : "2025-10-05T18:42:00+02:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 2120.72,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      } ]
+    }, {
+      "startTime" : "2025-10-05T18:20:32+02:00",
+      "duration" : 3413,
+      "walkDistance" : 2683.41,
+      "legs" : [ {
+        "mode" : "foot",
+        "distance" : 562.69,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "rail",
+        "distance" : 47626.76,
+        "line" : {
+          "id" : "FLT:Line:FLY2",
+          "name" : "FLY2",
+          "publicCode" : "FLY2",
+          "transportMode" : "rail",
+          "authority" : {
+            "name" : "Flytoget"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:569",
+            "name" : "Oslo S"
+          },
+          "aimedDepartureTime" : "2025-10-05T18:30:00+02:00",
+          "expectedDepartureTime" : "2025-10-05T18:30:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:447",
+            "name" : "Oslo lufthavn stasjon"
+          },
+          "aimedDepartureTime" : "2025-10-05T18:49:00+02:00",
+          "expectedDepartureTime" : "2025-10-05T18:49:00+02:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 2120.72,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      } ]
+    }, {
+      "startTime" : "2025-10-05T18:15:59+02:00",
+      "duration" : 3726,
+      "walkDistance" : 2800.37,
+      "legs" : [ {
+        "mode" : "foot",
+        "distance" : 503.7,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "rail",
+        "distance" : 47631.87,
+        "line" : {
+          "id" : "VYG:Line:RE11",
+          "name" : "Eidsvoll-Oslo S-Skien",
+          "publicCode" : "RE11",
+          "transportMode" : "rail",
+          "authority" : {
+            "name" : "Vy"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:551",
+            "name" : "Oslo S"
+          },
+          "aimedDepartureTime" : "2025-10-05T18:24:00+02:00",
+          "expectedDepartureTime" : "2025-10-05T18:24:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:451",
+            "name" : "Oslo lufthavn stasjon"
+          },
+          "aimedDepartureTime" : "2025-10-05T18:49:00+02:00",
+          "expectedDepartureTime" : "2025-10-05T18:49:00+02:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 2296.67,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      } ]
+    } ]
+  }
+}
