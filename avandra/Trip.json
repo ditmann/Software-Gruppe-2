@@ -8,52 +8,52 @@
   },
   "trip" : {
     "tripPatterns" : [ {
-      "startTime" : "2025-10-06T08:26:49+02:00",
-      "duration" : 3676,
-      "walkDistance" : 2813.35,
+      "startTime" : "2025-10-06T09:00:53+02:00",
+      "duration" : 3392,
+      "walkDistance" : 2687.71,
       "legs" : [ {
         "mode" : "foot",
-        "distance" : 516.68,
+        "distance" : 566.99,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null
       }, {
         "mode" : "rail",
-        "distance" : 47632.12,
+        "distance" : 47622.78,
         "line" : {
-          "id" : "VYG:Line:RE10",
-          "name" : "Drammen-Oslo S-Lillehammer",
-          "publicCode" : "RE10",
+          "id" : "FLT:Line:FLY2",
+          "name" : "FLY2",
+          "publicCode" : "FLY2",
           "transportMode" : "rail",
           "authority" : {
-            "name" : "Vy"
+            "name" : "Flytoget"
           }
         },
         "fromEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:568",
+            "id" : "NSR:Quay:557",
             "name" : "Oslo S"
           },
-          "aimedDepartureTime" : "2025-10-06T08:34:00+02:00",
-          "expectedDepartureTime" : "2025-10-06T08:34:58+02:00"
+          "aimedDepartureTime" : "2025-10-06T09:10:00+02:00",
+          "expectedDepartureTime" : "2025-10-06T09:10:00+02:00"
         },
         "toEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:451",
+            "id" : "NSR:Quay:447",
             "name" : "Oslo lufthavn stasjon"
           },
-          "aimedDepartureTime" : "2025-10-06T08:59:00+02:00",
-          "expectedDepartureTime" : "2025-10-06T08:59:00+02:00"
+          "aimedDepartureTime" : "2025-10-06T09:29:00+02:00",
+          "expectedDepartureTime" : "2025-10-06T09:29:00+02:00"
         }
       }, {
         "mode" : "foot",
-        "distance" : 2296.67,
+        "distance" : 2120.72,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null
       } ]
     }, {
-      "startTime" : "2025-10-06T08:30:53+02:00",
+      "startTime" : "2025-10-06T09:10:53+02:00",
       "duration" : 3572,
       "walkDistance" : 2687.71,
       "legs" : [ {
@@ -79,16 +79,16 @@
             "id" : "NSR:Quay:557",
             "name" : "Oslo S"
           },
-          "aimedDepartureTime" : "2025-10-06T08:40:00+02:00",
-          "expectedDepartureTime" : "2025-10-06T08:40:00+02:00"
+          "aimedDepartureTime" : "2025-10-06T09:20:00+02:00",
+          "expectedDepartureTime" : "2025-10-06T09:20:00+02:00"
         },
         "toEstimatedCall" : {
           "quay" : {
             "id" : "NSR:Quay:447",
             "name" : "Oslo lufthavn stasjon"
           },
-          "aimedDepartureTime" : "2025-10-06T09:02:00+02:00",
-          "expectedDepartureTime" : "2025-10-06T09:02:00+02:00"
+          "aimedDepartureTime" : "2025-10-06T09:42:00+02:00",
+          "expectedDepartureTime" : "2025-10-06T09:42:00+02:00"
         }
       }, {
         "mode" : "foot",
@@ -98,7 +98,7 @@
         "toEstimatedCall" : null
       } ]
     }, {
-      "startTime" : "2025-10-06T08:40:32+02:00",
+      "startTime" : "2025-10-06T09:20:32+02:00",
       "duration" : 3413,
       "walkDistance" : 2683.41,
       "legs" : [ {
@@ -124,16 +124,16 @@
             "id" : "NSR:Quay:569",
             "name" : "Oslo S"
           },
-          "aimedDepartureTime" : "2025-10-06T08:50:00+02:00",
-          "expectedDepartureTime" : "2025-10-06T08:50:00+02:00"
+          "aimedDepartureTime" : "2025-10-06T09:30:00+02:00",
+          "expectedDepartureTime" : "2025-10-06T09:30:00+02:00"
         },
         "toEstimatedCall" : {
           "quay" : {
             "id" : "NSR:Quay:447",
             "name" : "Oslo lufthavn stasjon"
           },
-          "aimedDepartureTime" : "2025-10-06T09:09:00+02:00",
-          "expectedDepartureTime" : "2025-10-06T09:09:00+02:00"
+          "aimedDepartureTime" : "2025-10-06T09:49:00+02:00",
+          "expectedDepartureTime" : "2025-10-06T09:49:00+02:00"
         }
       }, {
         "mode" : "foot",

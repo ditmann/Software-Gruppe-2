@@ -9,7 +9,7 @@ import no.avandra.entur.EnturClient;
 
 public class APIMain {
     public static void main(String[] args) throws Exception {
-        String clientName = System.getenv().getOrDefault("ET_CLIENT_NAME", "HIOFsTUD-AVANDRA");
+        String clientName = "HIOFsTUD-AVANDRA";
         EnturClient entur = new EnturHttpClient(clientName);
 
         entur.planTripCoordsToFile(
