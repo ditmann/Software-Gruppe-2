@@ -13,9 +13,9 @@ public class APIMain {
         EnturClient entur = new EnturHttpClient(clientName);
 
         entur.planTripCoordsToFile(
-                59.128697, 11.352571,   // from (HIOF)
-                63.456743, 11.349487,   // to (tinas mom// )
-                3, // amount of different trips
+                59.129133, 11.352893,   // from (HIOF)
+                59.286139, 11.117261,   // to (tinas mom// )
+                1, // amount of different trips
                 true                // include request metadata in file
         );
     }
