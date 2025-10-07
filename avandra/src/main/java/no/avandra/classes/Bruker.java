@@ -117,13 +117,13 @@ public abstract class Bruker {
                 e.printStackTrace();
             }
     }
-
+/*
     // :bug: brukt for debugging og litt testing lager og skriver en destinasjon til jason (skal fjernes)
     public static void main(String[] args) {
         Destinasjon destinasjon = new Destinasjon(true, 59.9139f, true, 10.7522f, true);
         saveDestinations(destinasjon);
     }
-
+*/
 
 
 

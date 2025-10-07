@@ -6,7 +6,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 import javax.swing.text.Document;
-
+/* code does not work yet
 public class MongoDBHandler implements DBHandler {
     public void sendData(Object title, String content){
         MongoClient mongoClient = MongoClients.create("mongodb+srv://siljemst_db_user:Avandra1234567890@avandra.pix7etx.mongodb.net/dummy");
