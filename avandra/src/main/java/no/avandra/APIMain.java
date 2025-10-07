@@ -13,8 +13,8 @@ public class APIMain {
         EnturClient entur = new EnturHttpClient(clientName);
 
         entur.planTripCoordsToFile(
-                59.9139, 10.7522,   // from (Oslo approx)
-                60.1976, 11.1004,   // to (OSL area approx)
+                59.128697, 11.352571,   // from (HIOF)
+                63.456743, 11.349487,   // to (tinas mom// )
                 3, // amount of different trips
                 true                // include request metadata in file
         );

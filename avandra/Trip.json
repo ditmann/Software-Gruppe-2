@@ -1,19 +1,87 @@
 {
   "request" : {
-    "fromLat" : 59.9139,
-    "fromLon" : 10.7522,
-    "toLat" : 60.1976,
-    "toLon" : 11.1004,
+    "fromLat" : 59.128697,
+    "fromLon" : 11.352571,
+    "toLat" : 63.456743,
+    "toLon" : 11.349487,
     "numPatterns" : 3
   },
   "trip" : {
     "tripPatterns" : [ {
-      "startTime" : "2025-10-06T09:00:53+02:00",
-      "duration" : 3392,
-      "walkDistance" : 2687.71,
+      "startTime" : "2025-10-07T11:40:23+02:00",
+      "duration" : 21290,
+      "walkDistance" : 2104.87,
       "legs" : [ {
         "mode" : "foot",
-        "distance" : 566.99,
+        "distance" : 100.98,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "bus",
+        "distance" : 3858.0,
+        "line" : {
+          "id" : "OST:Line:1_34",
+          "name" : "Remmen-Sykehuset",
+          "publicCode" : "34",
+          "transportMode" : "bus",
+          "authority" : {
+            "name" : "Østfold kollektivtrafikk"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:4699",
+            "name" : "Remmen Høgskolen"
+          },
+          "aimedDepartureTime" : "2025-10-07T11:42:00+02:00",
+          "expectedDepartureTime" : "2025-10-07T11:42:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:107567",
+            "name" : "Halden stasjon"
+          },
+          "aimedDepartureTime" : "2025-10-07T11:53:00+02:00",
+          "expectedDepartureTime" : "2025-10-07T11:53:00+02:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 70.7,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "rail",
+        "distance" : 133661.61,
+        "line" : {
+          "id" : "VYG:Line:RE20",
+          "name" : "Oslo S-Halden-Göteborg (X-Border)",
+          "publicCode" : "RE20",
+          "transportMode" : "rail",
+          "authority" : {
+            "name" : "Vy"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:316",
+            "name" : "Halden stasjon"
+          },
+          "aimedDepartureTime" : "2025-10-07T12:11:00+02:00",
+          "expectedDepartureTime" : "2025-10-07T12:11:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:567",
+            "name" : "Oslo S"
+          },
+          "aimedDepartureTime" : "2025-10-07T13:45:00+02:00",
+          "expectedDepartureTime" : "2025-10-07T13:45:00+02:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 65.12,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null
@@ -34,82 +102,286 @@
             "id" : "NSR:Quay:557",
             "name" : "Oslo S"
           },
-          "aimedDepartureTime" : "2025-10-06T09:10:00+02:00",
-          "expectedDepartureTime" : "2025-10-06T09:10:00+02:00"
+          "aimedDepartureTime" : "2025-10-07T13:50:00+02:00",
+          "expectedDepartureTime" : "2025-10-07T13:50:00+02:00"
         },
         "toEstimatedCall" : {
           "quay" : {
             "id" : "NSR:Quay:447",
             "name" : "Oslo lufthavn stasjon"
           },
-          "aimedDepartureTime" : "2025-10-06T09:29:00+02:00",
-          "expectedDepartureTime" : "2025-10-06T09:29:00+02:00"
+          "aimedDepartureTime" : "2025-10-07T14:09:00+02:00",
+          "expectedDepartureTime" : "2025-10-07T14:09:00+02:00"
         }
       }, {
         "mode" : "foot",
-        "distance" : 2120.72,
-        "line" : null,
-        "fromEstimatedCall" : null,
-        "toEstimatedCall" : null
-      } ]
-    }, {
-      "startTime" : "2025-10-06T09:10:53+02:00",
-      "duration" : 3572,
-      "walkDistance" : 2687.71,
-      "legs" : [ {
-        "mode" : "foot",
-        "distance" : 566.99,
+        "distance" : 249.39,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null
       }, {
-        "mode" : "rail",
-        "distance" : 47629.55,
+        "mode" : "air",
+        "distance" : 362637.97,
         "line" : {
-          "id" : "FLT:Line:FLY1",
-          "name" : "FLY1",
-          "publicCode" : "FLY1",
-          "transportMode" : "rail",
+          "id" : "AVI:Line:DY_OSL-TRD",
+          "name" : "Oslo-Trondheim",
+          "publicCode" : null,
+          "transportMode" : "air",
           "authority" : {
-            "name" : "Flytoget"
+            "name" : "Avinor"
           }
         },
         "fromEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:557",
-            "name" : "Oslo S"
+            "id" : "NSR:Quay:1173",
+            "name" : "Oslo lufthavn"
           },
-          "aimedDepartureTime" : "2025-10-06T09:20:00+02:00",
-          "expectedDepartureTime" : "2025-10-06T09:20:00+02:00"
+          "aimedDepartureTime" : "2025-10-07T15:15:00+02:00",
+          "expectedDepartureTime" : "2025-10-07T15:15:00+02:00"
         },
         "toEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:447",
-            "name" : "Oslo lufthavn stasjon"
+            "id" : "NSR:Quay:1191",
+            "name" : "Trondheim lufthavn"
           },
-          "aimedDepartureTime" : "2025-10-06T09:42:00+02:00",
-          "expectedDepartureTime" : "2025-10-06T09:42:00+02:00"
+          "aimedDepartureTime" : "2025-10-07T16:10:00+02:00",
+          "expectedDepartureTime" : "2025-10-07T16:10:00+02:00"
         }
       }, {
         "mode" : "foot",
-        "distance" : 2120.72,
+        "distance" : 343.65,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "bus",
+        "distance" : 28559.93,
+        "line" : {
+          "id" : "ATB:Line:2_670",
+          "name" : "Stjørdal - Meråker - Storlien",
+          "publicCode" : "670",
+          "transportMode" : "bus",
+          "authority" : {
+            "name" : "ATB"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:76109",
+            "name" : "Trondheim lufthavn"
+          },
+          "aimedDepartureTime" : "2025-10-07T16:45:00+02:00",
+          "expectedDepartureTime" : "2025-10-07T16:45:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:77062",
+            "name" : "Flornes"
+          },
+          "aimedDepartureTime" : "2025-10-07T17:18:00+02:00",
+          "expectedDepartureTime" : "2025-10-07T17:18:00+02:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 1275.03,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null
       } ]
     }, {
-      "startTime" : "2025-10-06T09:20:32+02:00",
-      "duration" : 3413,
-      "walkDistance" : 2683.41,
+      "startTime" : "2025-10-07T10:05:06+02:00",
+      "duration" : 27007,
+      "walkDistance" : 2494.26,
       "legs" : [ {
         "mode" : "foot",
-        "distance" : 562.69,
+        "distance" : 307.07,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "bus",
+        "distance" : 35501.02,
+        "line" : {
+          "id" : "OST:Line:1_633",
+          "name" : "Moss-Sarpsborg-Halden",
+          "publicCode" : "633",
+          "transportMode" : "bus",
+          "authority" : {
+            "name" : "Østfold kollektivtrafikk"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:4415",
+            "name" : "Remmen"
+          },
+          "aimedDepartureTime" : "2025-10-07T10:09:00+02:00",
+          "expectedDepartureTime" : "2025-10-07T10:09:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:5358",
+            "name" : "Sykehuset Østfold Kalnes"
+          },
+          "aimedDepartureTime" : "2025-10-07T11:15:00+02:00",
+          "expectedDepartureTime" : "2025-10-07T11:15:00+02:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 103.68,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "bus",
+        "distance" : 131973.45,
+        "line" : {
+          "id" : "VYX:Line:56",
+          "name" : "FB11 Fredrikstad-Oslo Lufthavn (OSL)",
+          "publicCode" : "FB11",
+          "transportMode" : "bus",
+          "authority" : {
+            "name" : "Vy Buss"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:5360",
+            "name" : "Sykehuset Østfold Kalnes"
+          },
+          "aimedDepartureTime" : "2025-10-07T11:51:00+02:00",
+          "expectedDepartureTime" : "2025-10-07T11:51:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:9775",
+            "name" : "Oslo lufthavn"
+          },
+          "aimedDepartureTime" : "2025-10-07T13:34:00+02:00",
+          "expectedDepartureTime" : "2025-10-07T13:34:00+02:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 464.83,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "air",
+        "distance" : 362637.97,
+        "line" : {
+          "id" : "AVI:Line:SK_OSL-TRD",
+          "name" : "Oslo-Trondheim",
+          "publicCode" : null,
+          "transportMode" : "air",
+          "authority" : {
+            "name" : "Avinor"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:1173",
+            "name" : "Oslo lufthavn"
+          },
+          "aimedDepartureTime" : "2025-10-07T14:25:00+02:00",
+          "expectedDepartureTime" : "2025-10-07T14:25:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:1191",
+            "name" : "Trondheim lufthavn"
+          },
+          "aimedDepartureTime" : "2025-10-07T15:20:00+02:00",
+          "expectedDepartureTime" : "2025-10-07T15:20:00+02:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 343.65,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "bus",
+        "distance" : 28559.93,
+        "line" : {
+          "id" : "ATB:Line:2_670",
+          "name" : "Stjørdal - Meråker - Storlien",
+          "publicCode" : "670",
+          "transportMode" : "bus",
+          "authority" : {
+            "name" : "ATB"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:76109",
+            "name" : "Trondheim lufthavn"
+          },
+          "aimedDepartureTime" : "2025-10-07T16:45:00+02:00",
+          "expectedDepartureTime" : "2025-10-07T16:45:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:77062",
+            "name" : "Flornes"
+          },
+          "aimedDepartureTime" : "2025-10-07T17:18:00+02:00",
+          "expectedDepartureTime" : "2025-10-07T17:18:00+02:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 1275.03,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      } ]
+    }, {
+      "startTime" : "2025-10-07T11:34:23+02:00",
+      "duration" : 21650,
+      "walkDistance" : 4756.87,
+      "legs" : [ {
+        "mode" : "foot",
+        "distance" : 2823.68,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null
       }, {
         "mode" : "rail",
-        "distance" : 47626.76,
+        "distance" : 133661.61,
+        "line" : {
+          "id" : "VYG:Line:RE20",
+          "name" : "Oslo S-Halden-Göteborg (X-Border)",
+          "publicCode" : "RE20",
+          "transportMode" : "rail",
+          "authority" : {
+            "name" : "Vy"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:316",
+            "name" : "Halden stasjon"
+          },
+          "aimedDepartureTime" : "2025-10-07T12:11:00+02:00",
+          "expectedDepartureTime" : "2025-10-07T12:11:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:567",
+            "name" : "Oslo S"
+          },
+          "aimedDepartureTime" : "2025-10-07T13:45:00+02:00",
+          "expectedDepartureTime" : "2025-10-07T13:45:00+02:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 65.12,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "rail",
+        "distance" : 47622.78,
         "line" : {
           "id" : "FLT:Line:FLY2",
           "name" : "FLY2",
@@ -121,23 +393,91 @@
         },
         "fromEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:569",
+            "id" : "NSR:Quay:557",
             "name" : "Oslo S"
           },
-          "aimedDepartureTime" : "2025-10-06T09:30:00+02:00",
-          "expectedDepartureTime" : "2025-10-06T09:30:00+02:00"
+          "aimedDepartureTime" : "2025-10-07T13:50:00+02:00",
+          "expectedDepartureTime" : "2025-10-07T13:50:00+02:00"
         },
         "toEstimatedCall" : {
           "quay" : {
             "id" : "NSR:Quay:447",
             "name" : "Oslo lufthavn stasjon"
           },
-          "aimedDepartureTime" : "2025-10-06T09:49:00+02:00",
-          "expectedDepartureTime" : "2025-10-06T09:49:00+02:00"
+          "aimedDepartureTime" : "2025-10-07T14:09:00+02:00",
+          "expectedDepartureTime" : "2025-10-07T14:09:00+02:00"
         }
       }, {
         "mode" : "foot",
-        "distance" : 2120.72,
+        "distance" : 249.39,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "air",
+        "distance" : 362637.97,
+        "line" : {
+          "id" : "AVI:Line:DY_OSL-TRD",
+          "name" : "Oslo-Trondheim",
+          "publicCode" : null,
+          "transportMode" : "air",
+          "authority" : {
+            "name" : "Avinor"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:1173",
+            "name" : "Oslo lufthavn"
+          },
+          "aimedDepartureTime" : "2025-10-07T15:15:00+02:00",
+          "expectedDepartureTime" : "2025-10-07T15:15:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:1191",
+            "name" : "Trondheim lufthavn"
+          },
+          "aimedDepartureTime" : "2025-10-07T16:10:00+02:00",
+          "expectedDepartureTime" : "2025-10-07T16:10:00+02:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 343.65,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "bus",
+        "distance" : 28559.93,
+        "line" : {
+          "id" : "ATB:Line:2_670",
+          "name" : "Stjørdal - Meråker - Storlien",
+          "publicCode" : "670",
+          "transportMode" : "bus",
+          "authority" : {
+            "name" : "ATB"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:76109",
+            "name" : "Trondheim lufthavn"
+          },
+          "aimedDepartureTime" : "2025-10-07T16:45:00+02:00",
+          "expectedDepartureTime" : "2025-10-07T16:45:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:77062",
+            "name" : "Flornes"
+          },
+          "aimedDepartureTime" : "2025-10-07T17:18:00+02:00",
+          "expectedDepartureTime" : "2025-10-07T17:18:00+02:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 1275.03,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null

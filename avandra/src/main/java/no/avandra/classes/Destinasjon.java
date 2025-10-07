@@ -10,6 +10,9 @@ private Boolean validert_bool;
         this.coordinate = coordinate;
     }
 
+    public Destinasjon(){}
+
+
     public Coordinate getCoordinate() {
         return coordinate;
     }
