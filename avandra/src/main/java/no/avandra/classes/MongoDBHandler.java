@@ -16,4 +16,4 @@ public class MongoDBHandler implements DBHandler {
         collection.insertOne(new Document(title, content));
     }
     public Object retrieveData(){return 0;}
-}
+} */

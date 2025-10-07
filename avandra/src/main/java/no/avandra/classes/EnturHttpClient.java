@@ -80,9 +80,23 @@ public final class EnturHttpClient implements EnturClient {
         // GraphQL query: requests high-level trip info and per-leg details.
         String gql =
                 "query($fromLat:Float!,$fromLon:Float!,$toLat:Float!,$toLon:Float!,$n:Int!){"
-                        + "  trip(from:{coordinates:{latitude:$fromLat,longitude:$fromLon}}"
-                        + "       to:{coordinates:{latitude:$toLat,longitude:$toLon}}"
-                        + "       numTripPatterns:$n){"
+                        + "  trip("
+                        + "    from:{coordinates:{latitude:$fromLat,longitude:$fromLon}}"
+                        + "    to:{coordinates:{latitude:$toLat,longitude:$toLon}}"
+                        + "    numTripPatterns:$n"
+                        + "    modes:{"
+                        + "      accessMode: foot,"
+                        + "      egressMode: foot,"
+                        + "      transportModes:["
+                        + "        {transportMode: bus},"
+                        + "        {transportMode: rail},"
+                        + "        {transportMode: tram},"
+                        + "        {transportMode: metro},"
+                        + "        {transportMode: coach},"
+                        + "        {transportMode: water}"
+                        + "      ]"
+                        + "    }"
+                        + "  ){"
                         + "    tripPatterns{"
                         + "      startTime duration walkDistance"
                         + "      legs{"
@@ -94,6 +108,7 @@ public final class EnturHttpClient implements EnturClient {
                         + "    }"
                         + "  }"
                         + "}";
+
 
         // Variables bound to the GraphQL query above.
         Map<String, Object> vars = Map.of(
