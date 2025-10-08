@@ -11,6 +11,13 @@ public class AdminBruker extends  Bruker {
         this.listOfLite_aList = listOfLite_aList;
     }
 
+    /// SILJE SKAL HUSKE Å SLETTE
+
+    public AdminBruker(String navn_str) {
+        super(navn_str);
+    }
+    /// // END
+
     public void addLiteBruker(LiteBruker liteBruker) {
         listOfLite_aList.add(liteBruker);
     }

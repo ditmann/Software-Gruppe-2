@@ -26,9 +26,21 @@ public abstract class Bruker {
         this.filtreringPreferanse_int = filtreringPreferanse_int;
     }
 
+
     public Bruker() {
 
     }
+    ///  SILJE MÅ HUSK Å FJERN
+
+    public Bruker(String navn_str){
+        this.navn_str = navn_str;
+    }
+
+    @Override
+    public String toString(){
+        return "this.navn_str = " + this.navn_str;
+    }
+    ///
 
     public void addFavReise(Reise reise) {
         favorittReise_aList.add(reise);
