@@ -1,26 +1,29 @@
 package no.avandra.classes;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchOnDestination {
+public class SearchOnDestination implements SearchOnDestinationPort {
 
-    private List<Destinasjon> all;
+    private File getJSON;
+    private ObjectMapper objectMapper = new ObjectMapper();
+    File JSONfile = new File(/no.avandra.classes.)
 
-    public SearchOnDestination() {
-        this.all = loadFromJson();
+    public SearchOnDestination(File getJSON) {
+        this.getJSON = getJSON;
     }
 
-    public List<Destinasjon> searchByName(String search) {
-        if (search == null)
-            return all;
-        search = search.trim();
-        if (search.isEmpty()) return all;
+    @Override
+    public Coordinate destinationCoordinate(){
 
 
 
 
 
+        return null;
+    }
 }
-
