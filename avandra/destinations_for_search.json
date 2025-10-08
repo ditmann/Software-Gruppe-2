@@ -1,0 +1,12 @@
+[
+  {"id":"1","user_id":"kare_demo","destinasjon":"Hjem","adresse":"Dr. Ellertsens Vei","latitudeNum":59.13555,"longitudeNUM":10.59498},
+  {"id":"2","user_id":"kare_demo","destinasjon":"Jobb","adresse":"Ekholtveien 112","latitudeNum":59.412543,"longitudeNUM":10.686654},
+  {"id":"3","user_id":"kare_demo","destinasjon":"Fredrikstad stadion","adresse":"Gamle Stadion 45","latitudeNum":59.212822,"longitudeNUM":10.927676},
+  {"id":"4","user_id":"kare_demo","destinasjon":"Havnelageret","adresse":"Storgata 17","latitudeNum":59.213484,"longitudeNUM":10.934413},
+  {"id":"5","user_id":"kare_demo","destinasjon":"Odins Kro","adresse":"Storveien 83","latitudeNum":59.21669,"longitudeNUM":10.90503},
+  {"id":"6","user_id":"kare_demo","destinasjon":"Borg Bierstube","adresse":"Torget 6","latitudeNum":59.28417,"longitudeNUM":11.11039},
+  {"id":"7","user_id":"kare_demo","destinasjon":"Siste Reis","adresse":"Jernbanetorget 1","latitudeNum":59.12022,"longitudeNUM":11.38544},
+  {"id":"8","user_id":"kare_demo","destinasjon":"Gardermoen","adresse":"Edvard Munchs veg","latitudeNum":60.19827,"longitudeNUM":11.09657},
+  {"id":"9","user_id":"kare_demo","destinasjon":"Oslo","adresse":"Dronning Eufemias gate 4","latitudeNum":59.90948,"longitudeNUM":10.75318},
+  {"id":"10","user_id":"kare_demo","destinasjon":"Systemet","adresse":"Oslovägen 56","latitudeNum":58.94739,"longitudeNUM":11.19204}
+]
