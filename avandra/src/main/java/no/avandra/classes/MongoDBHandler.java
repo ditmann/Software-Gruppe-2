@@ -13,7 +13,9 @@ public class MongoDBHandler implements DBHandler {
     /// 1. append key:value-pair to existing doc V
     /// 2. delete key:value-pair in existing doc V
     /// 3. delete entire doc V
-    /// 4. search by loose value "kåre"
+    /// 4. search by loose value "kåre" V (not tested)
+    /// 5. error handling.
+    /// 6. user error handling :  if no field that is id ? if ID already exists it currently makes duplicate
 
     /// TEST:
     /// 1. all....
@@ -77,7 +79,7 @@ public class MongoDBHandler implements DBHandler {
     }
 
     /// Returns all docs which contain the specified key:value in an array
-    public ArrayList<Document> searchByKeyValue(String key, String value){
+    public ArrayList<Document> retrieveByKeyValue(String key, String value){
         /// Same vars
         String user = "siljemst_db_user";
         String pass = "Avandra1234567890";
@@ -148,7 +150,8 @@ public class MongoDBHandler implements DBHandler {
         mongoClient.close();
     }
 
-    public void deleteDocument(String idValue) {
+    /// Deletes the first document with a specified ID
+    public void deleteOneDocument(String idValue) {
         String user = "siljemst_db_user";
         String pass = "Avandra1234567890";
         String db_name = "dummy";
@@ -166,6 +169,64 @@ public class MongoDBHandler implements DBHandler {
 
         /// DESTROY CONNECTION
         mongoClient.close();
+    }
+
+    /// Deletes all documents with a specified ID (if duplicates exist)
+    public void deleteManyDocuments(String idValue) {
+        String user = "siljemst_db_user";
+        String pass = "Avandra1234567890";
+        String db_name = "dummy";
+        String collection_name = "testdata";
+
+        /// INITIALIZE CONNECTION
+        MongoClient mongoClient = MongoClients.create("mongodb+srv://" + user + ":" + pass + "@avandra.pix7etx.mongodb.net/" + "db");
+
+        /// which db in the client, which collection in the db
+        MongoDatabase db = mongoClient.getDatabase(db_name);
+        MongoCollection<Document> collection = db.getCollection(collection_name);
+
+        /// remove key and value at specified key - actual use of funct
+        collection.deleteMany(Filters.eq("id", idValue));
+
+        /// DESTROY CONNECTION
+        mongoClient.close();
+    }
+
+    /// Searches the entire collection for a term and adds the containing doc to the return array
+    // not tested
+    public ArrayList<Document> retrieveByValue(String searchTerm) {
+        String user = "siljemst_db_user";
+        String pass = "Avandra1234567890";
+        String db_name = "dummy";
+        String collection_name = "testdata";
+
+        /// INITIALIZE CONNECTION
+        MongoClient mongoClient = MongoClients.create("mongodb+srv://" + user + ":" + pass + "@avandra.pix7etx.mongodb.net/" + "db");
+
+        /// which db in the client, which collection in the db
+        MongoDatabase db = mongoClient.getDatabase(db_name);
+        MongoCollection<Document> collection = db.getCollection(collection_name);
+
+        /// Retrieval of data - actual use of funct
+        ArrayList<Document> list = new ArrayList<>();
+        MongoCursor<Document> cursor = collection.find().iterator(); //find() henter alt uten param
+        //iterator() sørger for en returtype som kan behandles av MongoCursor (som behandler data mer effektivt enn å lese inn absolutt alt selv)
+        while (cursor.hasNext()) { //for each item the mongocursor holds
+            Document doc = cursor.next(); //associating the cursor item with a datatype and var
+            for (String key : doc.keySet()) {
+                if (doc.get(key).equals(searchTerm) || key.equals(searchTerm)) { //if value or key of doc matches input-value
+                    list.add(doc); //save for later
+                }
+            }
+            //if list.isEmpty() then create error message ..
+        }
+
+        /// DESTROY CONNECTION
+        mongoClient.close();
+
+        //to satisfy the declaration in interface
+        return list;
+
     }
 
 

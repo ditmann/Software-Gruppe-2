@@ -1,7 +1,10 @@
 package no.avandra.classes;
 
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
+import java.io.IOException;
 
 public class JSONDBHandler implements DBHandler{
 
@@ -17,6 +20,21 @@ public class JSONDBHandler implements DBHandler{
         catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /// Denne gjør ingenting.
+    /// prøvde å legge til noe i objektet "bruker" men det er jo dumt. skal dokumentet VÆRE en versjon av bruker?
+    /// ignore
+    public void appendData(String filepath, String addKey, String addValue) {
+        ObjectMapper mapper = new ObjectMapper();
+        Bruker bruker = new AdminBruker("Moiraine");
+       try {
+           File file = new File(filepath);
+           bruker = mapper.readValue(file, AdminBruker.class);
+
+       } catch (Exception e) {
+           throw new RuntimeException(e);
+       }
     }
 
     /// Returns the JSON doc contents
