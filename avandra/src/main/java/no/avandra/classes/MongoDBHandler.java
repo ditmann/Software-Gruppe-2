@@ -8,6 +8,17 @@ import java.util.ArrayList;
 
 public class MongoDBHandler implements DBHandler {
 
+    /// MAKE:
+    /// 1. append key:value-pair to existing doc
+    /// 2. delete key:value-pair in existing doc
+    /// 3. delete entire doc
+    /// 4. search by loose value "kåre"
+
+    /// TEST:
+    /// 1. all....
+    /// 2. return of retrieveAll
+    /// 3. return of searchByKeyValue when more than 1 pair
+
     /// Creates a doc with the given content at the specified db and collection
     public void sendData(Object title, String content){
         /// for future use: take input?
@@ -32,8 +43,8 @@ public class MongoDBHandler implements DBHandler {
 
     }
 
-    /// Returns all documents in the collection as an iterable
-    public Object retrieveAllData() {
+    /// Returns all documents in the collection as an array
+    public ArrayList<Document> retrieveAllData() {
         /// Same vars
         String user = "siljemst_db_user";
         String pass = "Avandra1234567890";
@@ -49,17 +60,20 @@ public class MongoDBHandler implements DBHandler {
 
         /// Retrieval of data - actual use of funct
         FindIterable<Document> content = collection.find();
+        ArrayList<Document> list = new ArrayList<>();
+        for (Document doc : content) {
+            list.add(doc);
+        }
 
         /// DESTROY CONNECTION
         mongoClient.close();
 
         //to satisfy the declaration in interface
-        return content;
+        return list;
 
     }
 
     /// Returns all docs which contain the specified key:value in an array
-    // cannot return the FindIterable as the stream is closed
     public ArrayList<Document> searchByKeyValue(String key, String value){
         /// Same vars
         String user = "siljemst_db_user";

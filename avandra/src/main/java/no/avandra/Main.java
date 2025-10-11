@@ -34,6 +34,12 @@ public class Main {
             System.out.println(iterable);
         }
 
+        //tryna get it all out
+        ArrayList<Document> S = mongodbhandler.retrieveAllData();
+        for (Document doc : S) {
+            System.out.println("\n" + doc);
+
+        }
 
     }
 }
