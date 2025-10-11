@@ -5,6 +5,8 @@ import java.io.File;
 
 public class JSONDBHandler implements DBHandler{
 
+    ///creates new file /overwrites each time
+    //fine for testing
     public void sendData(Object object, String fileName) {
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -17,7 +19,8 @@ public class JSONDBHandler implements DBHandler{
         }
     }
 
-    public Object retrieveData() {
+    /// Returns the JSON doc contents
+    public Object retrieveAllData() {
         Destinasjon destinasjon = new Destinasjon();
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -30,9 +33,10 @@ public class JSONDBHandler implements DBHandler{
         return destinasjon;
     }
 
+
     public static void main(String[] args) {
         JSONDBHandler handler = new JSONDBHandler();
-        System.out.println(handler.retrieveData());
+        System.out.println(handler.retrieveAllData());
     }
     /*
     {"latitudeN":true,

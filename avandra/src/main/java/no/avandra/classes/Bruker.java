@@ -38,7 +38,7 @@ public abstract class Bruker {
 
     @Override
     public String toString(){
-        return "this.navn_str = " + this.navn_str;
+        return this.navn_str;
     }
     ///
 
