@@ -10,22 +10,29 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) throws Exception {
+
+        MongoDBHandler mongodbhandler = new MongoDBHandler();
+        mongodbhandler.deleteDocument("Moiraine Damodred");
         /*
         //exampledata
-        String string = "Hello World!";
-        Bruker bruker = new AdminBruker("Ida Granskog");
+        String string = "id";
+        Bruker bruker = new AdminBruker("Moiraine Damodred");
 
         MongoDBHandler mongodbhandler = new MongoDBHandler();
 
-        mongodbhandler.sendData(bruker, string);
+        //mongodbhandler.sendData(string, bruker);
 
+        mongodbhandler.appendData("Moiraine Damodred", "age", "42");
+/*
         //another
         String string1 = "Let's go concat!";
         Bruker bruker1 = new AdminBruker("Fang Runin");
 
         MongoDBHandler mongodbh = new MongoDBHandler();
         mongodbh.sendData(bruker1, string1);
-        */
+
+         */
+        /*
 
         //tryna search for something
         MongoDBHandler mongodbhandler = new MongoDBHandler();
@@ -40,6 +47,7 @@ public class Main {
             System.out.println("\n" + doc);
 
         }
+         */
 
     }
 }

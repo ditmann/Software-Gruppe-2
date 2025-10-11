@@ -1,7 +1,9 @@
 package no.avandra.classes;
 
 public interface DBHandler {
-    public void sendData(Object object, String string);
+    public void sendData(String key, Object object);
+
+    /// returns arraylist in mongo, object in json. COULD both be arraylist though pointless for json
     public Object retrieveAllData();
 
 }
