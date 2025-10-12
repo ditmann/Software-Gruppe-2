@@ -18,7 +18,7 @@ public class Main {
         String string = "id"; //Key'en vi søker etter
         String name = "Timmy"; //Value'en vi søker med //som blir satt inn
         String age = "12";
-        String docKey = "Home";
+        String docKey = "Turn";
         String destinationName = "Turn";
         String destinationAdress = "Gymsalen";
         String destinationCoords = "1234";
@@ -33,6 +33,11 @@ public class Main {
         destination.append(destinationName, destinationName);
         destination.append("Adresse", destinationAdress);
         destination.append("Koordinater", destinationCoords);
+
+        Document newDestination = new Document();
+        newDestination.append("Hjem", "Hjem");
+        newDestination.append("Adresse", "Mammas hus 12");
+        newDestination.append("Koordinater", "1223");
 
 
         Bruker bruker = new AdminBruker(name);
@@ -58,8 +63,9 @@ public class Main {
         // add entries to wrapping doc
         /// Is this better solved with a hashmap (NO IT IS NOT DONT DO IT)
         listDoc.append(docKey, destination); //dette gjøres ved hver kjøring og overskriver dermed listen
+        listDoc.append("Hjem", newDestination);
 
-        mongodbhandler.appendData(name, "favorites", listDoc);  
+        mongodbhandler.appendData(name, "favorites", listDoc);
 
 
 
