@@ -30,6 +30,8 @@ public class MongoDBHandler implements DBHandler {
 
 
     /// Creates a doc with the given content at the specified db and collection
+    //TODO: prevent duplicates:
+    //make it use appendData if id already exists? maybe just not work?
     public void sendData(String key, Object object){
         /// for future use: take input?
         // find secure way to assign variables from front end (?) or store securely closer to core(?)
@@ -145,6 +147,7 @@ public class MongoDBHandler implements DBHandler {
 
     /// Identifies a doc with the value of the id-key, adds a new key:value at end
     /// OR overwrites existing value if key already exists
+    //TODO:
     public void appendData(String idValue, String addKey, Object addValue) {
         String user = "siljemst_db_user";
         String pass = "Avandra1234567890";
