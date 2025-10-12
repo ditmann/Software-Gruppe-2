@@ -25,7 +25,7 @@ public class JSONDBHandler implements DBHandler{
     /// Denne gjør ingenting.
     /// prøvde å legge til noe i objektet "bruker" men det er jo dumt. skal dokumentet VÆRE en versjon av bruker?
     /// ignore
-    public void appendData(String filepath, String addKey, String addValue) {
+    public void appendData(String filepath, String addKey, Object addValue) {
         ObjectMapper mapper = new ObjectMapper();
         Bruker bruker = new AdminBruker("Moiraine");
        try {

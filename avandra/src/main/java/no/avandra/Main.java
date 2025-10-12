@@ -12,13 +12,36 @@ public class Main {
     public static void main(String[] args) throws Exception {
         //you can sequentially create then add
         //if duplicates exist will add to first and no others
+        String name = "Galina Caspan";
+        String age = "125";
+        String firstAjah = "red";
+        String secondAjah = "black";
+
         String string = "id";
-        Bruker bruker = new AdminBruker("Moiraine Damodred");
+        Bruker bruker = new AdminBruker(name);
+        ArrayList<Document> listOfDoc = new ArrayList<>();
 
         MongoDBHandler mongodbhandler = new MongoDBHandler();
 
-        mongodbhandler.sendData(string, bruker);
 
-        mongodbhandler.appendData("Moiraine Damodred", "age", "42");
+
+        ///first field: "id":name
+        mongodbhandler.sendData(string, bruker);
+        ///second field: search by "id"-value, "age": age
+        mongodbhandler.appendData(name, "age", age);
+
+        ///third field: list of dicts: "dict": dict
+        // create a dict
+        Document listDoc = new Document();
+        Document doc = new Document();
+        // add entries to doc
+        doc.append("First Ajah", firstAjah);
+        doc.append("Second Ajah", secondAjah);
+        // add entries to wrapping doc
+        listDoc.append(doc);
+
+        mongodbhandler.appendData(name, "Ajahs", listDoc);
+
+
     }
 }
