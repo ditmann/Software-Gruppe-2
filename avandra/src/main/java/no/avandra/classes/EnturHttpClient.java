@@ -46,9 +46,6 @@ public final class EnturHttpClient implements EnturClient {
      * @param clientName Value for the ET-Client-Name header (must be non-blank).
      */
     public EnturHttpClient(String clientName) {
-        if (clientName == null || clientName.isBlank()) {
-            throw new IllegalArgumentException("ET-Client-Name required");
-        }
         this.clientName = clientName;
 
         // Configure HTTP client timeouts:
@@ -80,9 +77,23 @@ public final class EnturHttpClient implements EnturClient {
         // GraphQL query: requests high-level trip info and per-leg details.
         String gql =
                 "query($fromLat:Float!,$fromLon:Float!,$toLat:Float!,$toLon:Float!,$n:Int!){"
-                        + "  trip(from:{coordinates:{latitude:$fromLat,longitude:$fromLon}}"
-                        + "       to:{coordinates:{latitude:$toLat,longitude:$toLon}}"
-                        + "       numTripPatterns:$n){"
+                        + "  trip("
+                        + "    from:{coordinates:{latitude:$fromLat,longitude:$fromLon}}"
+                        + "    to:{coordinates:{latitude:$toLat,longitude:$toLon}}"
+                        + "    numTripPatterns:$n"
+                        + "    modes:{"
+                        + "      accessMode: foot,"
+                        + "      egressMode: foot,"
+                        + "      transportModes:["
+                        + "        {transportMode: bus},"
+                        + "        {transportMode: rail},"
+                        + "        {transportMode: tram},"
+                        + "        {transportMode: metro},"
+                        + "        {transportMode: coach},"
+                        + "        {transportMode: water}"
+                        + "      ]"
+                        + "    }"
+                        + "  ){"
                         + "    tripPatterns{"
                         + "      startTime duration walkDistance"
                         + "      legs{"
@@ -94,6 +105,7 @@ public final class EnturHttpClient implements EnturClient {
                         + "    }"
                         + "  }"
                         + "}";
+
 
         // Variables bound to the GraphQL query above.
         Map<String, Object> vars = Map.of(
@@ -108,7 +120,7 @@ public final class EnturHttpClient implements EnturClient {
 
     /**
      * Same as {@link #planTripCoords}, but writes the response to a file.
-     * You can optionally include the request metadata alongside the trip result
+     * Can optionally include the request metadata alongside the trip result
      *
      * @param fromLat           origin latitude
      * @param fromLon           origin longitude
