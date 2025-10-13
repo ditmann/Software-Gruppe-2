@@ -1,13 +1,13 @@
 
-package no.avandra;
-
-import com.mongodb.client.FindIterable;
-import no.avandra.classes.Coordinate;
-import no.avandra.classes.Destinasjon;
-import no.avandra.classes.*;
-import org.bson.Document;
+package no.avandra.executable;
 
 import java.util.ArrayList;
+
+import org.bson.Document;
+
+import no.avandra.classes.AdminBruker;
+import no.avandra.classes.DBHandling.MongoDBHandler;
+import no.avandra.parents.Bruker;
 
 public class Main {
     public static void main(String[] args) throws Exception {

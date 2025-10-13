@@ -1,10 +1,13 @@
-package no.avandra.classes;
+package no.avandra.classes.DBHandling;
 
-import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.databind.DatabindException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
-import java.io.IOException;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import no.avandra.classes.AdminBruker;
+import no.avandra.classes.Destinasjon;
+import no.avandra.parents.Bruker;
+import no.avandra.ports.DBHandler;
 
 public class JSONDBHandler implements DBHandler{
 

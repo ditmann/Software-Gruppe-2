@@ -1,8 +1,12 @@
-package no.avandra;
+package no.avandra.executable;
 
 
 
-import no.avandra.classes.*;
+import no.avandra.classes.Coordinate;
+import no.avandra.classes.RandomLocationAdapter;
+import no.avandra.classes.api.EnturHttpClient;
+import no.avandra.ports.EnturClient;
+import no.avandra.ports.LocationPort;
 
 
 public class APIMain {

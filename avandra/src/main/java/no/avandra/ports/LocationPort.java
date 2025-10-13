@@ -1,4 +1,4 @@
-package no.avandra.classes;
+package no.avandra.ports;
 import no.avandra.classes.Coordinate;
 
 public interface LocationPort {

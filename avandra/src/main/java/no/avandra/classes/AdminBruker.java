@@ -2,6 +2,8 @@ package no.avandra.classes;
 
 import java.util.ArrayList;
 
+import no.avandra.parents.Bruker;
+
 public class AdminBruker extends  Bruker {
 
     private ArrayList<LiteBruker> listOfLite_aList = new ArrayList<>();

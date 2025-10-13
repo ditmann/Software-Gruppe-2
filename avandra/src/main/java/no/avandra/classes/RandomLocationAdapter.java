@@ -3,6 +3,8 @@ package no.avandra.classes;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import no.avandra.ports.LocationPort;
+
 /** Returns fixed or random coords. */
 public class RandomLocationAdapter implements LocationPort {
 

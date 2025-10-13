@@ -1,9 +1,11 @@
-package no.avandra.classes;
+package no.avandra.parents;
 
 import java.io.File;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import no.avandra.classes.Destinasjon;
 
 public abstract class Bruker {
     private String navn_str;

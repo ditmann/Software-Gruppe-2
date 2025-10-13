@@ -2,6 +2,9 @@ package no.avandra.classes;
 
 import java.time.LocalDate;
 
+import no.avandra.parents.Reise;
+
+
 public class FavReise extends Reise{
 
     private String navn_str;

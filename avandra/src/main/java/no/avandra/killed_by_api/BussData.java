@@ -1,8 +1,8 @@
-package no.avandra.classes;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
+package no.avandra.killed_by_api;
 
 import java.io.File;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class BussData {
 

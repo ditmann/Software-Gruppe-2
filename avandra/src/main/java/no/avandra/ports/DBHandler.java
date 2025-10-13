@@ -1,4 +1,4 @@
-package no.avandra.classes;
+package no.avandra.ports;
 
 public interface DBHandler {
     public void sendData(String key, Object object);

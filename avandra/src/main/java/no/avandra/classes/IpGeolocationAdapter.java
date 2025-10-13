@@ -1,13 +1,15 @@
 package no.avandra.classes;
 
+import java.io.IOException;
+import java.time.Duration;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import no.avandra.ports.LocationPort;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-
-import java.io.IOException;
-import java.time.Duration;
 
 public class IpGeolocationAdapter implements LocationPort {
 

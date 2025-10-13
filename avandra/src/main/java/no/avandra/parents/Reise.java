@@ -1,6 +1,10 @@
-package no.avandra.classes;
+package no.avandra.parents;
 
 import java.time.LocalDate;
+
+import no.avandra.classes.Coordinate;
+import no.avandra.classes.Destinasjon;
+
 
 public class Reise {
 

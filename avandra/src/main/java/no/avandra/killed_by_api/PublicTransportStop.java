@@ -1,4 +1,6 @@
-package no.avandra.classes;
+package no.avandra.killed_by_api;
+
+import no.avandra.classes.Coordinate;
 
 public class PublicTransportStop {
     private String stopID;

@@ -1,4 +1,4 @@
-package no.avandra.classes;
+package no.avandra.classes.DBHandling;
 
 import java.util.ArrayList;
 
@@ -13,6 +13,8 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
+
+import no.avandra.ports.DBHandler;
 
 public class MongoDBHandler implements DBHandler {
 

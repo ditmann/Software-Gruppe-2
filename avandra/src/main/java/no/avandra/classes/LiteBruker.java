@@ -4,6 +4,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import no.avandra.parents.Bruker;
+import no.avandra.parents.Reise;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;

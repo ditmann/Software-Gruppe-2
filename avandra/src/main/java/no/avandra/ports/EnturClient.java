@@ -1,10 +1,9 @@
-package no.avandra.classes;
-
-import com.fasterxml.jackson.databind.JsonNode;
+package no.avandra.ports;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 /** Interface coordinate-based trip planning */
 public interface EnturClient {
