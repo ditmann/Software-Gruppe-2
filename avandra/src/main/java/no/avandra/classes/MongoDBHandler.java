@@ -1,12 +1,18 @@
 package no.avandra.classes;
 
-import com.mongodb.MongoException;
-import com.mongodb.client.*;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Updates;
+import java.util.ArrayList;
+
 import org.bson.Document;
 
-import java.util.ArrayList;
+import com.mongodb.MongoException;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 
 public class MongoDBHandler implements DBHandler {
 

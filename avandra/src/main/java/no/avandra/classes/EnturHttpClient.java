@@ -46,9 +46,6 @@ public final class EnturHttpClient implements EnturClient {
      * @param clientName Value for the ET-Client-Name header (must be non-blank).
      */
     public EnturHttpClient(String clientName) {
-        if (clientName == null || clientName.isBlank()) {
-            throw new IllegalArgumentException("ET-Client-Name required");
-        }
         this.clientName = clientName;
 
         // Configure HTTP client timeouts:
@@ -123,7 +120,7 @@ public final class EnturHttpClient implements EnturClient {
 
     /**
      * Same as {@link #planTripCoords}, but writes the response to a file.
-     * You can optionally include the request metadata alongside the trip result
+     * Can optionally include the request metadata alongside the trip result
      *
      * @param fromLat           origin latitude
      * @param fromLon           origin longitude

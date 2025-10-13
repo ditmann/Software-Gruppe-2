@@ -1,3 +1,4 @@
+
 package no.avandra;
 
 import com.mongodb.client.FindIterable;
@@ -82,4 +83,5 @@ public class Main {
             System.out.println(doc);
         }
     }
+
 }
