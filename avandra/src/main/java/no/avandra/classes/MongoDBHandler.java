@@ -14,7 +14,7 @@ public class MongoDBHandler implements DBHandler {
     /// 1. append key:value-pair to existing doc V
     /// 2. delete key:value-pair in existing doc V
     /// 3. delete entire doc V
-    /// 4. search by loose value "kåre" V (not tested)
+    /// 4. search by loose value "kåre" V
     /// 5. error handling.
     /// 6. user error handling :  if no field that is id ? if ID already exists it currently makes duplicate
 
@@ -256,7 +256,7 @@ public class MongoDBHandler implements DBHandler {
 
     /// Searches the entire collection for a term and adds the containing doc to the return array
     // if alot of data this will take alot of processing time
-    // not tested
+    // not tested, will likely have issues with nested dictionaries but work with direct values
     public ArrayList<Document> retrieveByValue(String searchTerm) {
         String user = "siljemst_db_user";
         String pass = "Avandra1234567890";
@@ -290,17 +290,4 @@ public class MongoDBHandler implements DBHandler {
         return list;
 
     }
-
-
-/*
-{
-    "id":"1",
-    "user_id":"kare_demo",
-    "Hjem":[
-        "adresse":"Dr. Ellertsens Vei",
-        "latitudeNum":59.13555,
-        "longitudeNUM":10.59498
-        ]
-}
-*/
 }
