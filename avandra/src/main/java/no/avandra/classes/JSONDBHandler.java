@@ -10,7 +10,7 @@ public class JSONDBHandler implements DBHandler{
 
     ///creates new file /overwrites each time
     //fine for testing
-    public void sendData(String key, Object object) {
+    public void createUser(String key, Object object) {
         ObjectMapper mapper = new ObjectMapper();
         try {
             mapper.writeValue(new File(key), object);

@@ -14,15 +14,20 @@ public class Main {
 ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^--------^^*****^^----
         /// VARIABLES
 ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^--------^^*****^^----
- /*       //you can sequentially create then add
+     MongoDBHandler mongodbhandler = new MongoDBHandler();
+     Object x = mongodbhandler.retrieveCoordinates("Timmy", "favorites", "Hjem");
+        System.out.println(x);
+
+        /*
+       //you can sequentially create then add
         //if duplicates exist will add to first and no others
         String string = "id"; //Key'en vi søker etter
-        String name = "Timmy"; //Value'en vi søker med //som blir satt inn
-        String age = "12";
-        String docKey = "Turn";
-        String destinationName = "Turn";
-        String destinationAdress = "Gymsalen";
-        String destinationCoords = "1234";
+        String name = "Hjordis"; //Value'en vi søker med //som blir satt inn
+        String age = "78";
+        //String docKey = "Turn";
+        String destinationName = "Kaféen til Turid";
+        String destinationAdress = "Hjerteveien 4";
+        String destinationCoords = "9876";
 
         //list of locations / information related to each other
         /// In Avandra: favorite destinations
@@ -37,18 +42,34 @@ public class Main {
 
         Document newDestination = new Document();
         newDestination.append("Hjem", "Hjem");
-        newDestination.append("Adresse", "Mammas hus 12");
-        newDestination.append("Koordinater", "1223");
+        newDestination.append("Adresse", "Min leilighet 15");
+        newDestination.append("Koordinater", "7654");
 
         Document anotherDestination = new Document();
-        anotherDestination.append("Pappa", "Pappa");
-        anotherDestination.append("Adresse", "Pappas hus 12");
-        anotherDestination.append("Koordinater", "12344");
+        anotherDestination.append("Frisor", "Cutters");
+        anotherDestination.append("Adresse", "Sakseveien 169");
+        anotherDestination.append("Koordinater", "5432");
 
 
         Bruker bruker = new AdminBruker(name);
         ArrayList<Document> listOfDoc = new ArrayList<>();
 
+        /// ------------------------------------------------------
+        MongoDBHandler mongodbhandler = new MongoDBHandler();
+
+        //mongodbhandler.createUser(string, name);
+        mongodbhandler.appendData(string, "age", age);
+
+        //mongodbhandler.deleteOneDocument("Hjordis");
+
+        listDoc.append(destination); //dette gjøres ved hver kjøring og overskriver dermed listen
+        listDoc.append(newDestination);
+        listDoc.append(anotherDestination);
+        System.out.println(listDoc);
+
+        //mongodbhandler.appendData(name, "favorites", listDoc);
+
+        /*
 ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^--------^^*****^^----
         /// THE DOING OF THE THING
 ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^--------^^*****^^----
@@ -84,7 +105,7 @@ public class Main {
         for (Document doc : data) {
             System.out.println(doc);
         }
-*/
+
 
   String id = "id";
   String name = "Kåre";
@@ -93,7 +114,7 @@ public class Main {
   String destinationName = "ELSKE SKOLEN";
   String destinationAdress = "BESTE STEDET";
   Coordinate coords = new Coordinate((float)60.00000, (float)10.00000);
-
+/*
   //adding
     Document liste = new Document();
     Document destination1 = new Document();
@@ -115,7 +136,7 @@ public class Main {
     //handler.removeData("Kåre", "Favoritter");
 
 
-/*
+
 /// Update a destination only if adminUserId is in approvedAdmins.
     /// Returns true if updated or inserted; false otherwise.
     public boolean insertDestinationForUser(

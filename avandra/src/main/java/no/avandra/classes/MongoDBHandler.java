@@ -103,7 +103,7 @@ public class MongoDBHandler implements DBHandler {
     /// Creates a doc with the given content at the specified db and collection
     //TODO: prevent duplicates:
     //make it use appendData if id already exists? maybe just not work?
-    public void sendData(String key, Object object){
+    public void createUser(String key, Object object){
         /// for future use: take input?
         // find secure way to assign variables from front end (?) or store securely closer to core(?)
         try {
@@ -258,15 +258,15 @@ public class MongoDBHandler implements DBHandler {
         }
     }
 
-    /// Deletes the first document with a specified ID
+    /// Deletes the first document with a specified ID //start here
     public void deleteOneDocument(String idValue) {
 
         /// INITIALIZE CONNECTION
-        MongoClient mongoClient = MongoClients.create("mongodb+srv://" + user + ":" + pass + "@avandra.pix7etx.mongodb.net/" + "db");
+        MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
 
         /// which db in the client, which collection in the db
-        MongoDatabase db = mongoClient.getDatabase(db_name);
-        MongoCollection<Document> collection = db.getCollection(collection_name);
+        MongoDatabase db = mongoClient.getDatabase(getDbName());
+        MongoCollection<Document> collection = db.getCollection(getCollectionName());
 
         /// remove key and value at specified key - actual use of funct
         collection.deleteOne(Filters.eq(getIdField(), idValue));
@@ -279,11 +279,11 @@ public class MongoDBHandler implements DBHandler {
     public void deleteManyDocuments(String idValue) {
 
         /// INITIALIZE CONNECTION
-        MongoClient mongoClient = MongoClients.create("mongodb+srv://" + user + ":" + pass + "@avandra.pix7etx.mongodb.net/" + "db");
+        MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
 
         /// which db in the client, which collection in the db
-        MongoDatabase db = mongoClient.getDatabase(db_name);
-        MongoCollection<Document> collection = db.getCollection(collection_name);
+        MongoDatabase db = mongoClient.getDatabase(getDbName());
+        MongoCollection<Document> collection = db.getCollection(getCollectionName());
 
         /// remove key and value at specified key - actual use of funct
         collection.deleteMany(Filters.eq(getIdField(), idValue));
@@ -298,11 +298,11 @@ public class MongoDBHandler implements DBHandler {
     public ArrayList<Document> retrieveByValue(String searchTerm) {
 
         /// INITIALIZE CONNECTION
-        MongoClient mongoClient = MongoClients.create("mongodb+srv://" + user + ":" + pass + "@avandra.pix7etx.mongodb.net/" + "db");
+        MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
 
         /// which db in the client, which collection in the db
-        MongoDatabase db = mongoClient.getDatabase(db_name);
-        MongoCollection<Document> collection = db.getCollection(collection_name);
+        MongoDatabase db = mongoClient.getDatabase(getDbName());
+        MongoCollection<Document> collection = db.getCollection(getCollectionName());
 
         /// Retrieval of data - actual use of funct
         MongoCursor<Document> cursor = collection.find().iterator(); //find() henter alt uten param
@@ -311,7 +311,7 @@ public class MongoDBHandler implements DBHandler {
             Document doc = cursor.next(); //associating the cursor item with a datatype and var
             for (String key : doc.keySet()) {
                 if (doc.get(key).equals(searchTerm) || key.equals(searchTerm)) { //if value or key of doc matches input-value
-                    list.add(doc); //save for later
+                    getList().add(doc); //save for later
                 }
             }
             //if list.isEmpty() then create error message ..
@@ -320,8 +320,9 @@ public class MongoDBHandler implements DBHandler {
         /// DESTROY CONNECTION
         mongoClient.close();
 
-        return list;
+        return getList();
 
     }
+
 
 }
