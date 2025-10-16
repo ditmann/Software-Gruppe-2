@@ -1,15 +1,18 @@
 package no.avandra.classes;
 
 public class Coordinate {
-    private float latitudeNum;
-    private float longitudeNUM;
+    private double latitudeNum;
+    private double longitudeNUM;
 
     public Coordinate(float latitudeNum, float longitudeNUM) {
         this.latitudeNum = latitudeNum;
         this.longitudeNUM = longitudeNUM;
     }
+    public Coordinate() {
 
-    public float getLatitudeNum() {
+    }
+
+    public double getLatitudeNum() {
         return latitudeNum;
     }
 
@@ -17,7 +20,7 @@ public class Coordinate {
         this.latitudeNum = latitudeNum;
     }
 
-    public float getLongitudeNUM() {
+    public double getLongitudeNUM() {
         return longitudeNUM;
     }
 

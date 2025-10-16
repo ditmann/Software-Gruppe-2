@@ -24,9 +24,6 @@ public class SearchOnDestination implements SearchOnDestinationPort {
 
     @Override
     public Coordinate destinationCoordinate(){
-
-
-
         return null;
     }
 }

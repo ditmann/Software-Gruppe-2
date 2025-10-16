@@ -1,9 +1,14 @@
 package no.avandra.classes;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.bson.BsonRegularExpression;
 
+import static com.mongodb.client.model.Filters.regex;
 import com.mongodb.MongoException;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
@@ -13,6 +18,8 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
+
+import javax.print.Doc;
 
 public class MongoDBHandler implements DBHandler {
 
@@ -111,6 +118,104 @@ public class MongoDBHandler implements DBHandler {
 
         return list;
     }
+
+
+
+    public String SearchDestination(String id, String findDest, String destName){
+
+        /// Same vars
+        String user = "siljemst_db_user";
+        String pass = "Avandra1234567890";
+        String db_name = "dummy";
+        String collection_name = "testdata";
+        ArrayList<Document> list = new ArrayList<>();
+
+        try {
+            /// INITIALIZE CONNECTION
+            MongoClient mongoClient = MongoClients.create("mongodb+srv://" + user + ":" + pass + "@avandra.pix7etx.mongodb.net/" + "db");
+
+            /// which db in the client, which collection in the db
+            MongoDatabase db = mongoClient.getDatabase(db_name);
+            MongoCollection<Document> collection = db.getCollection(collection_name);
+
+            /// Retrieval of data - actual use of funct
+            FindIterable<Document> content = collection.find(Filters.eq("id", id));
+            Document target = null;
+            for (Document doc : content) {
+                target = doc;
+            }
+            for (String key : target.keySet()) {
+                if (key.equals(findDest)) {
+                    target = (Document) target.get(key);
+                }
+            }
+            for (String key : target.keySet()) {
+                if (key.equals(destName)) {
+                    target = (Document) target.get(key);
+                }
+            }
+
+            for (String key : target.keySet()) {
+                if (key.equals("Koordinater")) {
+                    return target.getString("Koordinater");
+                }
+            }
+
+            /// DESTROY CONNECTION
+            mongoClient.close();
+        }
+
+        catch (MongoException e) {
+            System.out.println("\nMongoDB exception: ");
+            e.printStackTrace();
+        }
+        catch (Exception e) {
+            System.out.println("\nNon-DB exception: ");
+            e.printStackTrace();
+        }
+
+        return null;
+
+    }
+
+    @Override
+    public Coordinate destinationCoordinate(String name) {
+
+        String user = "siljemst_db_user";
+        String pass = "Avandra1234567890";
+        String db_name = "dummy";
+        String collection_name = "testdata";
+
+        try {
+            /// INITIALIZE CONNECTION
+            MongoClient mongoClient = MongoClients.create("mongodb+srv://" + user + ":" + pass + "@avandra.pix7etx.mongodb.net/" + "db");
+
+            /// which db in the client, which collection in the db
+            MongoDatabase db = mongoClient.getDatabase(db_name);
+            MongoCollection<Document> collection = db.getCollection(collection_name);
+
+            ///  Må finne bruker
+            Document userDoc = collection.find(Filters.eq("id", user)).first();
+            if (userDoc == null) return null;
+
+
+        }
+
+
+        /// Super basic error "handling" + if mongo-specific, notification
+        catch (MongoException e) {
+            System.out.println("\nMongoDB exception: ");
+            e.printStackTrace();
+        }
+        catch (Exception e) {
+            System.out.println("\nNon-DB exception: ");
+            e.printStackTrace();
+        }
+        return null;
+
+        /// DESTROY CONNECTION
+    }
+
 
     /// Returns all docs which contain the specified key:value in an array
     public ArrayList<Document> retrieveByKeyValue(String key, String value){
@@ -296,4 +401,9 @@ public class MongoDBHandler implements DBHandler {
         return list;
 
     }
+/*
+    public Coordinate destinationCoordinate(){
+
+        return new Coordinate(destinationCoordinate().getLatitudeNum(), destinationCoordinate().getLongitudeNUM());
+    } */
 }

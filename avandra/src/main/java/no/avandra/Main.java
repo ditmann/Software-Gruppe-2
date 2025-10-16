@@ -7,10 +7,85 @@ import no.avandra.classes.Destinasjon;
 import no.avandra.classes.*;
 import org.bson.Document;
 
+import javax.print.Doc;
 import java.util.ArrayList;
+import java.util.Dictionary;
 
 public class Main {
     public static void main(String[] args) throws Exception {
+
+        //lag key og value'
+        String id = "id";
+        String name = "Kåre";
+        String age = "28";
+        String docKey = "Hjem";
+        String destinationName = "Hjem";
+        String destinationAdress = "Dr. Ellertsens Vei";
+        Coordinate coords = 59.4433, 11.0008;
+
+
+        //legg til i DOC
+        Document doc = new Document();
+        Document destination1 = new Document();
+        destination1.append(docKey, destinationName);
+        destination1.append("Adresse", destinationAdress);
+        destination1.append("Koordinater", "1");
+        doc.append("Hjem", destination1);
+        ArrayList<Document> favoritter = new ArrayList<>();
+        Document destinasjon = new Document();
+        destinasjon.append("Hjem", destination1);
+        System.out.println(destination1);
+        System.out.println(destinasjon);
+        favoritter.add(destinasjon);
+        System.out.println(favoritter);
+
+
+        //legg så DOC til i LISTE
+        //Bruker kaare = new AdminBruker(name);
+
+        MongoDBHandler dbHandler = new MongoDBHandler();
+        System.out.println(dbHandler.SearchDestination("Timmy", "favorites", "Hjem"));
+
+
+
+        //dbHandler.appendData("Kåre", "Favoritter", favoritter);
+
+        /*
+        Coordinate c = dbHandler.destinationCoordinate("Timmy");
+
+        if (c != null) {
+            System.out.println("Kordinater: " );
+        }
+        else {
+            System.out.println("Fant ikke koordinater.");
+    }
+
+         */
+
+
+
+
+
+
+
+
+
+        //dbHandler.appendData(id, "navn", name);
+        //dbHandler.appendData(name, "age", age);
+
+        //dbHandler.sendData(id, "Kåre");
+        //dbHandler.appendData(name, "age", age);
+        //dbHandler.appendData(docKey, "Favoritter", favoritter);
+
+
+        /*ArrayList<Document> data;
+        data = dbHandler.retrieveAllData();
+        for (Document doc : data) {
+            System.out.println(doc);
+        }*/
+    }
+}
+            /*
 ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^--------^^*****^^----
         /// VARIABLES
 ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^--------^^*****^^----
@@ -77,6 +152,7 @@ public class Main {
 
 
  */
+            /*
         ArrayList<Document> data;
         data = mongodbhandler.retrieveAllData();
         for (Document doc : data) {
@@ -85,3 +161,5 @@ public class Main {
     }
 
 }
+*/
+
