@@ -296,4 +296,93 @@ public class MongoDBHandler implements DBHandler {
         return list;
 
     }
+    /// Oppdater/legg til destinasjon hos lite-bruker, KUN hvis adminId har tilgang i admins.allowedLiteUsers
+    public boolean insertDestinationForLiteUser(
+            String liteUserId,
+            String destId,
+            String name,
+            String address,
+            Double lat,
+            Double lng,
+            String adminId
+    ) {
+        String user = "siljemst_db_user";
+        String pass = "Avandra1234567890";
+        String db_name = "dummy";
+        String collection_name = "testdata";
+
+        try {
+            MongoClient mongoClient = MongoClients.create("mongodb+srv://" + user + ":" + pass + "@avandra.pix7etx.mongodb.net/" + "db");
+            MongoDatabase db = mongoClient.getDatabase(db_name);
+            MongoCollection<Document> users = db.getCollection(collection_name);
+
+            //  Sjekk at admin har tilgang til denne lite-brukeren
+            Document admin = users.find(
+                    Filters.and(
+                            Filters.eq("id", adminId),
+                            Filters.in("allowedLiteUsers", liteUserId)
+                    )
+            ).first();
+            if (admin == null) {
+                mongoClient.close();
+                return false; // ikke autorisert
+            }
+
+            // Forsøk å OPPDATERE eksisterende destinasjon
+            var updateRes = users.updateOne(
+                    Filters.and(
+                            Filters.eq("id", liteUserId),
+                            Filters.eq("favorites.destId", destId)
+                    ),
+                    Updates.combine(
+                            Updates.set("favorites.$.name", name),
+                            Updates.set("favorites.$.address", address),
+                            Updates.set("favorites.$.coords", new Document()
+                                    .append("lat", lat)
+                                    .append("lng", lng)
+                            ),
+                            Updates.set("favorites.$.updatedAt", java.time.Instant.now()),
+                            Updates.set("favorites.$.adminId", adminId)
+                    )
+            );
+            if (updateRes.getModifiedCount() == 1) {
+                mongoClient.close();
+                return true;
+            }
+
+            // Hvis ikke fantes: PUSH ny destinasjon
+            Document coords = new Document();
+            if (lat != null) coords.put("lat", lat);
+            if (lng != null) coords.put("lng", lng);
+
+            Document destDoc = new Document("destId", destId)
+                    .append("name", name)
+                    .append("address", address)
+                    .append("coords", coords)
+                    .append("adminId", adminId)
+                    .append("addedAt", java.time.Instant.now());
+
+            var insertRes = users.updateOne(
+                    Filters.and(
+                            Filters.eq("id", liteUserId),
+                            Filters.ne("favorites.destId", destId) // ingen eksisterende dest med samme id
+                    ),
+                    Updates.push("favorites", destDoc)
+            );
+
+            mongoClient.close();
+            return insertRes.getModifiedCount() == 1;
+
+        } catch (MongoException e) {
+            System.out.println("\nMongoDB exception: ");
+            e.printStackTrace();
+            return false;
+        } catch (Exception e) {
+            System.out.println("\nNon-DB exception: ");
+            e.printStackTrace();
+            return false;
+        }
+
+
+    }
 }
