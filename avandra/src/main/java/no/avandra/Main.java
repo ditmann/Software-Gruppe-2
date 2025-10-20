@@ -1,15 +1,11 @@
 
 package no.avandra;
 
-import com.mongodb.client.FindIterable;
-import no.avandra.classes.Coordinate;
-import no.avandra.classes.Destinasjon;
-import no.avandra.classes.*;
+import java.util.ArrayList;
+
 import org.bson.Document;
 
-import javax.print.Doc;
-import java.util.ArrayList;
-import java.util.Dictionary;
+import no.avandra.classes.MongoDBHandler;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -21,7 +17,7 @@ public class Main {
         String docKey = "Hjem";
         String destinationName = "Hjem";
         String destinationAdress = "Dr. Ellertsens Vei";
-        Coordinate coords = 59.4433, 11.0008;
+        
 
 
         //legg til i DOC

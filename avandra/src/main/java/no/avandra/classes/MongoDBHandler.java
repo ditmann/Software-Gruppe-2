@@ -426,7 +426,6 @@ public class MongoDBHandler implements DBHandler {
         return getList();
 
     }
-<<<<<<< HEAD
 
 
 
@@ -527,8 +526,4 @@ public class MongoDBHandler implements DBHandler {
 
     }
 
-=======
-
-
->>>>>>> feature/sendeTilLiteInfoTilLite
 }
