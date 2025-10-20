@@ -1,14 +1,9 @@
 package no.avandra.classes;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
 
 import org.bson.Document;
-import org.bson.conversions.Bson;
-import org.bson.BsonRegularExpression;
 
-import static com.mongodb.client.model.Filters.regex;
 import com.mongodb.MongoException;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
@@ -18,8 +13,6 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
-
-import javax.print.Doc;
 
 public class MongoDBHandler implements DBHandler {
 
@@ -401,13 +394,16 @@ public class MongoDBHandler implements DBHandler {
         return list;
 
     }
-<<<<<<< HEAD
+
+
+
+
 /*
     public Coordinate destinationCoordinate(){
 
         return new Coordinate(destinationCoordinate().getLatitudeNum(), destinationCoordinate().getLongitudeNUM());
     } */
-=======
+
     /// Oppdater/legg til destinasjon hos lite-bruker, KUN hvis adminId har tilgang i admins.allowedLiteUsers
     public boolean insertDestinationForLiteUser(
             String liteUserId,
@@ -497,5 +493,5 @@ public class MongoDBHandler implements DBHandler {
 
 
     }
->>>>>>> feature/sendeTilLiteInfoTilLite
+
 }
