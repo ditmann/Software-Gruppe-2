@@ -5,5 +5,5 @@ public class PublicTransportStop {
     private String stopTypeID;
     private String stopName;
     private Coordinate stopCoordinate;
-    
+
 }

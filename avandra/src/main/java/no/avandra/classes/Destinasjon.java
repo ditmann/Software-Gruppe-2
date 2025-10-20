@@ -1,13 +1,5 @@
 package no.avandra.classes;
 
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
-import java.io.File;
-import java.util.List;
-
 public class Destinasjon {
 
 private Coordinate coordinate;
@@ -17,6 +9,9 @@ private Boolean validert_bool;
         this.validert_bool = validert_bool;
         this.coordinate = coordinate;
     }
+
+    public Destinasjon(){}
+
 
     public Coordinate getCoordinate() {
         return coordinate;

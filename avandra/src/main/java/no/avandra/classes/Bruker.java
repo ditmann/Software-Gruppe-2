@@ -1,6 +1,9 @@
 package no.avandra.classes;
 
+import java.io.File;
 import java.util.ArrayList;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class Bruker {
     private String navn_str;
@@ -22,6 +25,22 @@ public abstract class Bruker {
         this.hastighetsfaktor_float = hastighetsfaktor_float;
         this.filtreringPreferanse_int = filtreringPreferanse_int;
     }
+
+
+    public Bruker() {
+
+    }
+    ///  SILJE MÅ HUSK Å FJERN
+
+    public Bruker(String navn_str){
+        this.navn_str = navn_str;
+    }
+
+    @Override
+    public String toString(){
+        return this.navn_str;
+    }
+    ///
 
     public void addFavReise(Reise reise) {
         favorittReise_aList.add(reise);
@@ -92,4 +111,33 @@ public abstract class Bruker {
     public void setNavn_str(String navn_str) {
         this.navn_str = navn_str;
     }
+
+    //  funksjon for å lagre destinasjoner til en JSON fil    
+    public static void saveDestinations (Destinasjon destinasjon) {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+                // convert Java object to JSON file
+                mapper.writeValue(new File("saved Destinations.json"), destinasjon);
+                // convert Java object to JSON string
+                String jsonString = mapper.writeValueAsString(destinasjon);
+                
+                System.out.println(jsonString); 
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+    }
+/*
+    // :bug: brukt for debugging og litt testing lager og skriver en destinasjon til jason (skal fjernes)
+    public static void main(String[] args) {
+        Destinasjon destinasjon = new Destinasjon(true, 59.9139f, true, 10.7522f, true);
+        saveDestinations(destinasjon);
+    }
+*/
+
+
+
+
 }
