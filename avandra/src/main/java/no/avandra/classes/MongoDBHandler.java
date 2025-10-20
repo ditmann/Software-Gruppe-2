@@ -39,87 +39,26 @@ public class MongoDBHandler implements DBHandler {
     /// CHANGE:
     /// 1. If Document == class (Bruker) then:
     /// receive, convert, add variable to class - add item to list in class?, then convert back and send
-    /// 2. Gjøre variablene globale, private, get'ers, set'ers
 
-
-    ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
-    /// VARIABLES
-    ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
-
-    private String user = "siljemst_db_user";
-    private String pass = "Avandra1234567890";
-    private String db_name = "dummy";
-    private String collection_name = "testdata";
-    private ArrayList<Document> list = new ArrayList<>();
-    private String idField = "id";
-
-    ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
-    /// GET'ERS & SET'ERS
-    ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
-    public String getUser() {
-        return user;
-    }
-
-    public String getPass() {
-        return pass;
-    }
-
-    public String getDbName() {
-        return db_name;
-    }
-
-    public String getCollectionName() {
-        return collection_name;
-    }
-
-    public ArrayList<Document> getList() {
-        return list;
-    }
-
-    public String getIdField() {
-        return idField;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public void setList(ArrayList<Document> list) {
-        this.list = list;
-    }
-
-    public void setCollectionName(String collection_name) {
-        this.collection_name = collection_name;
-    }
-
-    public void setDbName(String db_name) {
-        this.db_name = db_name;
-    }
-
-    public void setPass(String pass) {
-        this.pass = pass;
-    }
-
-    public void setIdField(String idField) {this.idField = idField;}
-
-    ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
-    /// METHODS
-    ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
 
 
     /// Creates a doc with the given content at the specified db and collection
     //TODO: prevent duplicates:
     //make it use appendData if id already exists? maybe just not work?
-    public void createUser(String key, Object object){
+    public void sendData(String key, Object object){
         /// for future use: take input?
         // find secure way to assign variables from front end (?) or store securely closer to core(?)
+        String user = "siljemst_db_user";
+        String pass = "Avandra1234567890";
+        String db_name = "dummy";
+        String collection_name = "testdata";
         try {
             /// INITIALIZE CONNECTION
-            MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
+            MongoClient mongoClient = MongoClients.create("mongodb+srv://" + user + ":" + pass + "@avandra.pix7etx.mongodb.net/" + "db");
 
             /// which db in the client, which collection in the db
-            MongoDatabase db = mongoClient.getDatabase(getDbName());
-            MongoCollection<Document> collection = db.getCollection(getCollectionName());
+            MongoDatabase db = mongoClient.getDatabase(db_name);
+            MongoCollection<Document> collection = db.getCollection(collection_name);
 
             /// insertion of param - actual use of funct
             collection.insertOne(new Document(key, object.toString()));
@@ -137,23 +76,30 @@ public class MongoDBHandler implements DBHandler {
             System.out.println("\nNon-DB exception: ");
             e.printStackTrace();
         }
+
     }
 
     /// Returns all documents in the collection as an array
     public ArrayList<Document> retrieveAllData() {
+        /// Same vars
+        String user = "siljemst_db_user";
+        String pass = "Avandra1234567890";
+        String db_name = "dummy";
+        String collection_name = "testdata";
+        ArrayList<Document> list = new ArrayList<>();
 
         try {
             /// INITIALIZE CONNECTION
-            MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
+            MongoClient mongoClient = MongoClients.create("mongodb+srv://" + user + ":" + pass + "@avandra.pix7etx.mongodb.net/" + "db");
 
             /// which db in the client, which collection in the db
-            MongoDatabase db = mongoClient.getDatabase(getDbName());
-            MongoCollection<Document> collection = db.getCollection(getCollectionName());
+            MongoDatabase db = mongoClient.getDatabase(db_name);
+            MongoCollection<Document> collection = db.getCollection(collection_name);
 
             /// Retrieval of data - actual use of funct
             FindIterable<Document> content = collection.find();
             for (Document doc : content) {
-                getList().add(doc);
+                list.add(doc);
             }
 
             /// DESTROY CONNECTION
@@ -170,7 +116,7 @@ public class MongoDBHandler implements DBHandler {
             e.printStackTrace();
         }
 
-        return getList();
+        return list;
     }
 
 
@@ -273,19 +219,25 @@ public class MongoDBHandler implements DBHandler {
 
     /// Returns all docs which contain the specified key:value in an array
     public ArrayList<Document> retrieveByKeyValue(String key, String value){
+        /// Same vars
+        String user = "siljemst_db_user";
+        String pass = "Avandra1234567890";
+        String db_name = "dummy";
+        String collection_name = "testdata";
+        ArrayList<Document> list = new ArrayList<>();
 
         try {
             /// INITIALIZE CONNECTION
-            MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
+            MongoClient mongoClient = MongoClients.create("mongodb+srv://" + user + ":" + pass + "@avandra.pix7etx.mongodb.net/" + "db");
 
             /// which db in the client, which collection in the db
-            MongoDatabase db = mongoClient.getDatabase(getDbName());
-            MongoCollection<Document> collection = db.getCollection(getCollectionName());
+            MongoDatabase db = mongoClient.getDatabase(db_name);
+            MongoCollection<Document> collection = db.getCollection(collection_name);
 
             /// Retrieval of data - actual use of funct
             FindIterable<Document> content = collection.find(Filters.eq(key, value));
             for (Document doc : content) {
-                getList().add(doc);
+                list.add(doc);
             }
 
             /// DESTROY CONNECTION
@@ -301,24 +253,28 @@ public class MongoDBHandler implements DBHandler {
             e.printStackTrace();
         }
 
-        return getList();
+        return list;
     }
 
     /// Identifies a doc with the value of the id-key, adds a new key:value at end
     /// OR overwrites existing value if key already exists
     //TODO:
     public void appendData(String idValue, String addKey, Object addValue) {
+        String user = "siljemst_db_user";
+        String pass = "Avandra1234567890";
+        String db_name = "dummy";
+        String collection_name = "testdata";
 
         try {
             /// INITIALIZE CONNECTION
-            MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
+            MongoClient mongoClient = MongoClients.create("mongodb+srv://" + user + ":" + pass + "@avandra.pix7etx.mongodb.net/" + "db");
 
             /// which db in the client, which collection in the db
-            MongoDatabase db = mongoClient.getDatabase(getDbName());
-            MongoCollection<Document> collection = db.getCollection(getCollectionName());
+            MongoDatabase db = mongoClient.getDatabase(db_name);
+            MongoCollection<Document> collection = db.getCollection(collection_name);
 
             /// search by and insertion of param - actual use of funct
-            collection.updateOne(Filters.eq(getIdField(), idValue), Updates.set(addKey, addValue));
+            collection.updateOne(Filters.eq("id", idValue), Updates.set(addKey, addValue));
 
             /// DESTROY CONNECTION
             mongoClient.close();
@@ -337,17 +293,21 @@ public class MongoDBHandler implements DBHandler {
     /// Removes key and value in specified doc at specified key
     //TODO: What if specified key does not exist? (It does nothing), make error message?
     public void removeData(String idValue, String removeKey) {
+        String user = "siljemst_db_user";
+        String pass = "Avandra1234567890";
+        String db_name = "dummy";
+        String collection_name = "testdata";
 
         try {
             /// INITIALIZE CONNECTION
-            MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getUser() + "@avandra.pix7etx.mongodb.net/" + "db");
+            MongoClient mongoClient = MongoClients.create("mongodb+srv://" + user + ":" + pass + "@avandra.pix7etx.mongodb.net/" + "db");
 
             /// which db in the client, which collection in the db
-            MongoDatabase db = mongoClient.getDatabase(getDbName());
-            MongoCollection<Document> collection = db.getCollection(getCollectionName());
+            MongoDatabase db = mongoClient.getDatabase(db_name);
+            MongoCollection<Document> collection = db.getCollection(collection_name);
 
             /// remove key and value at specified key - actual use of funct
-            collection.updateOne(Filters.eq(getIdField(), idValue), Updates.unset(removeKey));
+            collection.updateOne(Filters.eq("id", idValue), Updates.unset(removeKey));
 
             /// DESTROY CONNECTION
             mongoClient.close();
@@ -363,18 +323,22 @@ public class MongoDBHandler implements DBHandler {
         }
     }
 
-    /// Deletes the first document with a specified ID //start here
+    /// Deletes the first document with a specified ID
     public void deleteOneDocument(String idValue) {
+        String user = "siljemst_db_user";
+        String pass = "Avandra1234567890";
+        String db_name = "dummy";
+        String collection_name = "testdata";
 
         /// INITIALIZE CONNECTION
-        MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
+        MongoClient mongoClient = MongoClients.create("mongodb+srv://" + user + ":" + pass + "@avandra.pix7etx.mongodb.net/" + "db");
 
         /// which db in the client, which collection in the db
-        MongoDatabase db = mongoClient.getDatabase(getDbName());
-        MongoCollection<Document> collection = db.getCollection(getCollectionName());
+        MongoDatabase db = mongoClient.getDatabase(db_name);
+        MongoCollection<Document> collection = db.getCollection(collection_name);
 
         /// remove key and value at specified key - actual use of funct
-        collection.deleteOne(Filters.eq(getIdField(), idValue));
+        collection.deleteOne(Filters.eq("id", idValue));
 
         /// DESTROY CONNECTION
         mongoClient.close();
@@ -382,16 +346,20 @@ public class MongoDBHandler implements DBHandler {
 
     /// Deletes all documents with a specified ID (if duplicates exist)
     public void deleteManyDocuments(String idValue) {
+        String user = "siljemst_db_user";
+        String pass = "Avandra1234567890";
+        String db_name = "dummy";
+        String collection_name = "testdata";
 
         /// INITIALIZE CONNECTION
-        MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
+        MongoClient mongoClient = MongoClients.create("mongodb+srv://" + user + ":" + pass + "@avandra.pix7etx.mongodb.net/" + "db");
 
         /// which db in the client, which collection in the db
-        MongoDatabase db = mongoClient.getDatabase(getDbName());
-        MongoCollection<Document> collection = db.getCollection(getCollectionName());
+        MongoDatabase db = mongoClient.getDatabase(db_name);
+        MongoCollection<Document> collection = db.getCollection(collection_name);
 
         /// remove key and value at specified key - actual use of funct
-        collection.deleteMany(Filters.eq(getIdField(), idValue));
+        collection.deleteMany(Filters.eq("id", idValue));
 
         /// DESTROY CONNECTION
         mongoClient.close();
@@ -401,13 +369,18 @@ public class MongoDBHandler implements DBHandler {
     // if alot of data this will take alot of processing time
     // not tested, will likely have issues with nested dictionaries but work with direct values
     public ArrayList<Document> retrieveByValue(String searchTerm) {
+        String user = "siljemst_db_user";
+        String pass = "Avandra1234567890";
+        String db_name = "dummy";
+        String collection_name = "testdata";
+        ArrayList<Document> list = new ArrayList<>();
 
         /// INITIALIZE CONNECTION
-        MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
+        MongoClient mongoClient = MongoClients.create("mongodb+srv://" + user + ":" + pass + "@avandra.pix7etx.mongodb.net/" + "db");
 
         /// which db in the client, which collection in the db
-        MongoDatabase db = mongoClient.getDatabase(getDbName());
-        MongoCollection<Document> collection = db.getCollection(getCollectionName());
+        MongoDatabase db = mongoClient.getDatabase(db_name);
+        MongoCollection<Document> collection = db.getCollection(collection_name);
 
         /// Retrieval of data - actual use of funct
         MongoCursor<Document> cursor = collection.find().iterator(); //find() henter alt uten param
@@ -416,7 +389,7 @@ public class MongoDBHandler implements DBHandler {
             Document doc = cursor.next(); //associating the cursor item with a datatype and var
             for (String key : doc.keySet()) {
                 if (doc.get(key).equals(searchTerm) || key.equals(searchTerm)) { //if value or key of doc matches input-value
-                    getList().add(doc); //save for later
+                    list.add(doc); //save for later
                 }
             }
             //if list.isEmpty() then create error message ..
@@ -425,10 +398,9 @@ public class MongoDBHandler implements DBHandler {
         /// DESTROY CONNECTION
         mongoClient.close();
 
-        return getList();
+        return list;
 
     }
-<<<<<<< HEAD
 <<<<<<< HEAD
 /*
     public Coordinate destinationCoordinate(){
@@ -526,8 +498,4 @@ public class MongoDBHandler implements DBHandler {
 
     }
 >>>>>>> feature/sendeTilLiteInfoTilLite
-=======
-
-
->>>>>>> feature/methodForAdministratingLite
 }

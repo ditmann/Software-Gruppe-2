@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface DBHandler {
-    public void createUser(String key, Object object);
+    public void sendData(String key, Object object);
 
     /// @param addValue is Object to allow appending Documents, ArrayLists and Strings
     public void appendData(String id, String addKey, Object addValue);
