@@ -1,5 +1,8 @@
 package no.avandra.classes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public interface DBHandler {
     public void sendData(String key, Object object);
 
@@ -8,4 +11,10 @@ public interface DBHandler {
 
     /// returns arraylist in mongo, object in json. COULD both be arraylist though pointless for json
     public Object retrieveAllData();
+
+    ///  Returnerer koordinater
+    public Coordinate destinationCoordinate(String name);
+
+
 }
+

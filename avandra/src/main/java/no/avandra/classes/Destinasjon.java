@@ -5,12 +5,14 @@ public class Destinasjon {
 private Coordinate coordinate;
 private Boolean validert_bool;
 
+
     public Destinasjon(Boolean validert_bool, Coordinate coordinate) {
         this.validert_bool = validert_bool;
         this.coordinate = coordinate;
     }
 
     public Destinasjon(){}
+
 
 
     public Coordinate getCoordinate() {
@@ -28,4 +30,6 @@ private Boolean validert_bool;
     public void setValidert_bool(Boolean validert_bool) {
         this.validert_bool = validert_bool;
     }
+
+
 }
