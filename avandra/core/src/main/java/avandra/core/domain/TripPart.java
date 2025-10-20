@@ -1,4 +1,4 @@
-package no.avandra.classes;
+package avandra.core.domain;
 
 
 import java.time.LocalDateTime;

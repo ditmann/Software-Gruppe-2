@@ -1,9 +1,14 @@
-package no.avandra.classes;
+package avandra.core.domain;
 
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import avandra.core.domain.Coordinate;
+import avandra.core.port.SearchOnDestinationPort;
+
+
 
 import java.io.File;
 import java.io.IOException;

@@ -1,4 +1,6 @@
-package no.avandra.classes;
+package avandra.core.port;
+
+import avandra.core.domain.Coordinate;
 
 public interface SearchOnDestinationPort {
 

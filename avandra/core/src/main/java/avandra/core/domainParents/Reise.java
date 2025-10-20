@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import avandra.core.domain.Coordinate;
 import avandra.core.domain.Destinasjon;
+import avandra.core.domain.TripPart;
 
 
 public class Reise {
