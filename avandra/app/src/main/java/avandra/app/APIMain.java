@@ -2,11 +2,10 @@ package avandra.app;
 
 
 
-import avandra.core.port.EnturClient;
-import avandra.core.domain.Coordinate;
-import avandra.core.domain.RandomLocationAdapter;
 import avandra.api.EnturHttpClient;
-
+import avandra.core.domain.Coordinate;
+import avandra.core.domain.IpGeolocationAdapter;
+import avandra.core.port.EnturClient;
 import avandra.core.port.LocationPort;
 
 

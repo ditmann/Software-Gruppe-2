@@ -1,5 +1,4 @@
-
-package avandra.app.src.main.java.avandra.app;
+package avandra.app;
 
 import java.util.ArrayList;
 

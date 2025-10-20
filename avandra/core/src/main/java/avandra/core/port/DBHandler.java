@@ -1,7 +1,6 @@
 package avandra.core.port;
 
-import java.util.ArrayList;
-import java.util.List;
+import avandra.core.domain.Coordinate;
 
 public interface DBHandler {
     public void sendData(String key, Object object);

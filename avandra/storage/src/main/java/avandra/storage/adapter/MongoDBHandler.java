@@ -14,6 +14,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 
+import avandra.core.domain.Coordinate;
 import avandra.core.port.DBHandler;
 
 public class MongoDBHandler implements DBHandler {
