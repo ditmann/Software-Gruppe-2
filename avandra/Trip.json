@@ -1,29 +1,29 @@
 {
   "request" : {
-    "fromLat" : 59.129133,
-    "fromLon" : 11.352893,
-    "toLat" : 59.286139,
-    "toLon" : 11.117261,
-    "numPatterns" : 1
+    "fromLat" : 59.1327018737793,
+    "fromLon" : 11.34469985961914,
+    "toLat" : 59.136205,
+    "toLon" : 11.382195,
+    "numPatterns" : 3
   },
   "trip" : {
     "tripPatterns" : [ {
-      "startTime" : "2025-10-07T16:22:47+02:00",
-      "duration" : 2946,
-      "walkDistance" : 917.28,
+      "startTime" : "2025-10-08T10:34:18+02:00",
+      "duration" : 1939,
+      "walkDistance" : 852.0799999999999,
       "legs" : [ {
         "mode" : "foot",
-        "distance" : 363.04,
+        "distance" : 776.14,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null
       }, {
         "mode" : "bus",
-        "distance" : 27876.13,
+        "distance" : 4648.91,
         "line" : {
-          "id" : "OST:Line:1_633",
-          "name" : "Moss-Sarpsborg-Halden",
-          "publicCode" : "633",
+          "id" : "OST:Line:1_34",
+          "name" : "Remmen-Sykehuset",
+          "publicCode" : "34",
           "transportMode" : "bus",
           "authority" : {
             "name" : "Østfold kollektivtrafikk"
@@ -31,23 +31,169 @@
         },
         "fromEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:4415",
-            "name" : "Remmen"
+            "id" : "NSR:Quay:4692",
+            "name" : "Odde bro"
           },
-          "aimedDepartureTime" : "2025-10-07T16:11:00+02:00",
-          "expectedDepartureTime" : "2025-10-07T16:27:23+02:00"
+          "aimedDepartureTime" : "2025-10-08T10:41:00+02:00",
+          "expectedDepartureTime" : "2025-10-08T10:45:06+02:00"
         },
         "toEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:4486",
-            "name" : "Sarpsborg rådhus"
+            "id" : "NSR:Quay:4462",
+            "name" : "Halden bussterminal"
           },
-          "aimedDepartureTime" : "2025-10-07T16:46:00+02:00",
-          "expectedDepartureTime" : "2025-10-07T17:05:00+02:00"
+          "aimedDepartureTime" : "2025-10-08T10:55:00+02:00",
+          "expectedDepartureTime" : "2025-10-08T10:55:38+02:00"
+        }
+      }, {
+        "mode" : "bus",
+        "distance" : 2740.93,
+        "line" : {
+          "id" : "OST:Line:1_32",
+          "name" : "Brekkerød-Stenrød",
+          "publicCode" : "32",
+          "transportMode" : "bus",
+          "authority" : {
+            "name" : "Østfold kollektivtrafikk"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:4462",
+            "name" : "Halden bussterminal"
+          },
+          "aimedDepartureTime" : "2025-10-08T11:00:00+02:00",
+          "expectedDepartureTime" : "2025-10-08T11:00:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:5224",
+            "name" : "Kullveien"
+          },
+          "aimedDepartureTime" : "2025-10-08T11:06:00+02:00",
+          "expectedDepartureTime" : "2025-10-08T11:05:27+02:00"
         }
       }, {
         "mode" : "foot",
-        "distance" : 554.24,
+        "distance" : 75.94,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      } ]
+    }, {
+      "startTime" : "2025-10-08T11:01:30+02:00",
+      "duration" : 1812,
+      "walkDistance" : 1342.67,
+      "legs" : [ {
+        "mode" : "foot",
+        "distance" : 774.55,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "bus",
+        "distance" : 4262.29,
+        "line" : {
+          "id" : "OST:Line:1_34",
+          "name" : "Remmen-Sykehuset",
+          "publicCode" : "34",
+          "transportMode" : "bus",
+          "authority" : {
+            "name" : "Østfold kollektivtrafikk"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:4693",
+            "name" : "Odde bro"
+          },
+          "aimedDepartureTime" : "2025-10-08T11:11:00+02:00",
+          "expectedDepartureTime" : "2025-10-08T11:12:10+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:4645",
+            "name" : "Busterudkleiva 38"
+          },
+          "aimedDepartureTime" : "2025-10-08T11:22:00+02:00",
+          "expectedDepartureTime" : "2025-10-08T11:23:10+02:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 568.12,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      } ]
+    }, {
+      "startTime" : "2025-10-08T11:01:30+02:00",
+      "duration" : 2440,
+      "walkDistance" : 850.49,
+      "legs" : [ {
+        "mode" : "foot",
+        "distance" : 774.55,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "bus",
+        "distance" : 6602.05,
+        "line" : {
+          "id" : "OST:Line:1_34",
+          "name" : "Remmen-Sykehuset",
+          "publicCode" : "34",
+          "transportMode" : "bus",
+          "authority" : {
+            "name" : "Østfold kollektivtrafikk"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:4693",
+            "name" : "Odde bro"
+          },
+          "aimedDepartureTime" : "2025-10-08T11:11:00+02:00",
+          "expectedDepartureTime" : "2025-10-08T11:12:10+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:4462",
+            "name" : "Halden bussterminal"
+          },
+          "aimedDepartureTime" : "2025-10-08T11:30:00+02:00",
+          "expectedDepartureTime" : "2025-10-08T11:27:39+02:00"
+        }
+      }, {
+        "mode" : "bus",
+        "distance" : 2740.95,
+        "line" : {
+          "id" : "OST:Line:1_32",
+          "name" : "Brekkerød-Stenrød",
+          "publicCode" : "32",
+          "transportMode" : "bus",
+          "authority" : {
+            "name" : "Østfold kollektivtrafikk"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:4462",
+            "name" : "Halden bussterminal"
+          },
+          "aimedDepartureTime" : "2025-10-08T11:35:00+02:00",
+          "expectedDepartureTime" : "2025-10-08T11:35:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:5224",
+            "name" : "Kullveien"
+          },
+          "aimedDepartureTime" : "2025-10-08T11:41:00+02:00",
+          "expectedDepartureTime" : "2025-10-08T11:41:00+02:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 75.94,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null

@@ -1,8 +1,17 @@
 package no.avandra.classes;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class Reise {
+
+
+    private String startTime;
+    private int durationInSeconds;
+    private int walkDistanceInMeters;
+
+    //Liste over LEGS:
+    private ArrayList<TripPart> tripParts;
 
     private Destinasjon destinasjon_obj;
     private String reiseNavn_str;
