@@ -1,29 +1,30 @@
 package avandra.core.port;
 
-import java.io.File;
+import com.fasterxml.jackson.databind.JsonNode;
 import java.io.IOException;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
-/** Interface coordinate-based trip planning */
+/**
+ * - Build and execute trip-planning requests (GraphQL under the hood).
+ * - Provide a simple API for trip planning by coordinates.
+ * Notes:
+ * - Implementations should set Entur-required headers (e.g., "ET-Client-Name").
+ * - Return the "trip" node (i.e., GraphQL data.trip) as a JsonNode.
+ * - Do not perform file I/O here—keep this port purely about fetching data.
+ */
 public interface EnturClient {
-    /** Call Entur and return the "trip" node */
+
+    /**
+     * Query Entur for trip plans between two coordinates.
+     *
+     * @param fromLat     origin latitude
+     * @param fromLon     origin longitude
+     * @param toLat       destination latitude
+     * @param toLon       destination longitude
+     * @param numPatterns number of alternative trip patterns to request
+     * @return the "trip" JsonNode from the GraphQL response (i.e., data.trip)
+     * @throws IOException if the transport fails or the backend reports errors
+     */
     JsonNode planTripCoords(double fromLat, double fromLon,
                             double toLat, double toLon,
                             int numPatterns) throws IOException;
-
-    /**
-     * Call Entur and write the JSON to a file (inside the client)
-     * @param fromLat start latitude
-     * @param fromLon start longitude
-     * @param toLat   end latitude
-     * @param toLon   end longitude
-     * @param numPatterns number of itineraries to request
-     * @param includeRequestMeta include the request (coords/numPatterns) alongside the trip in the file
-     * @return the output file path
-     */
-    File planTripCoordsToFile(double fromLat, double fromLon,
-                              double toLat, double toLon,
-                              int numPatterns,
-                              boolean includeRequestMeta) throws IOException;
 }

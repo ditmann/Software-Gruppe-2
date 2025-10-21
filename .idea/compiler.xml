@@ -6,7 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="avandra" />
+        <module name="app" />
+        <module name="core" />
+        <module name="api" />
+        <module name="storage" />
+        <module name="test" />
+        <module name="avandra (1) (no.avandra)" />
       </profile>
     </annotationProcessing>
   </component>
