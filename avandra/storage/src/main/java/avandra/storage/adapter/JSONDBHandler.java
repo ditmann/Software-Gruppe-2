@@ -1,16 +1,21 @@
 package avandra.storage.adapter;
 
 import java.io.File;
+import java.util.List;
 
+import avandra.core.domainParents.Reise;
+import avandra.core.port.DBHandler;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import avandra.core.domain.AdminBruker;
 import avandra.core.domain.Coordinate;
 import avandra.core.domain.Destinasjon;
 import avandra.core.domainParents.Bruker;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 
-public class JSONDBHandler {
+public class JSONDBHandler implements DBHandler {
 
     ///creates new file /overwrites each time
     //fine for testing
@@ -65,8 +70,41 @@ public class JSONDBHandler {
         System.out.println(handler.retrieveAllData());
     }
 
+    @Override
+    public void createUser(String key, Object object) {
 
-    /*
+    }
+
+    @Override
+    public Object searchDestination(String userID, String destinationType, String destinationID) {
+        return null;
+    }
+
+    @Override
+    public void removeData(String userID) {
+
+    }
+
+    @Override
+    public void removeData(String userID, String keyToRemove) {
+
+    }
+
+    @Override
+    public void removeData(String userID, String keyToRemove, String destinationType) {
+
+    }
+
+    @Override
+    public void removeData(String userID, String keyToRemove, String destinationType, String destinationKey) {
+
+    }
+
+    @Override
+    public boolean insertDestinationForLiteUser(String liteUserId, String destId, String name, String address, Double lat, Double lng, String adminId) {
+      return false;
+    }
+/*
     {"latitudeN":true,
     "latitudeNum":59.9139,
     "longitudeE":true,

@@ -1,8 +1,9 @@
 
-package avandra.core.domain;
+package avandra.core.adapter;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import avandra.core.domain.Coordinate;
 import avandra.core.port.LocationPort;
 
 /** Returns fixed or random coords. */

@@ -27,14 +27,7 @@ public class LiteBruker extends Bruker{
 
 
     private void getInfoFromAdmin(File file) {
-        ObjectMapper objectMapper = new ObjectMapper()
-                .registerModule(new JavaTimeModule());
-        try {
-            List<Reise> reiser = objectMapper.readValue(file, new TypeReference<List<Reise>>() {});
-            for (Reise r : reiser) this.addFavReise(r);
-        }catch (Exception e){
-            System.err.println(e.getMessage());
-        }
+
 
 
     }
