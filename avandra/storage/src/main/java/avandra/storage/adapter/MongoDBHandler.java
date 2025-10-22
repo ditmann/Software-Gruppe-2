@@ -171,43 +171,39 @@ public class MongoDBHandler implements DBHandler {
 
 
 
-    public String SearchDestination(String id, String findDest, String destName){
+    public String searchDestination(String userID, String destinationType, String destinationID){
 
         /// Same vars
-        String user = "siljemst_db_user";
-        String pass = "Avandra1234567890";
-        String db_name = "dummy";
-        String collection_name = "testdata";
-        ArrayList<Document> list = new ArrayList<>();
+        String coardinateFieldName = "Koordinater";
 
         try {
             /// INITIALIZE CONNECTION
             MongoClient mongoClient = MongoClients.create("mongodb+srv://" + user + ":" + pass + "@avandra.pix7etx.mongodb.net/" + "db");
 
             /// which db in the client, which collection in the db
-            MongoDatabase db = mongoClient.getDatabase(db_name);
-            MongoCollection<Document> collection = db.getCollection(collection_name);
+            MongoDatabase db = mongoClient.getDatabase(getDbName());
+            MongoCollection<Document> collection = db.getCollection(getCollectionName());
 
             /// Retrieval of data - actual use of funct
-            FindIterable<Document> content = collection.find(Filters.eq("id", id));
+            FindIterable<Document> content = collection.find(Filters.eq("id", userID));
             Document target = null;
             for (Document doc : content) {
                 target = doc;
             }
             for (String key : target.keySet()) {
-                if (key.equals(findDest)) {
+                if (key.equals(destinationType)) {
                     target = (Document) target.get(key);
                 }
             }
             for (String key : target.keySet()) {
-                if (key.equals(destName)) {
+                if (key.equals(destinationID)) {
                     target = (Document) target.get(key);
                 }
             }
 
             for (String key : target.keySet()) {
-                if (key.equals("Koordinater")) {
-                    return target.getString("Koordinater");
+                if (key.equals(coardinateFieldName)) {
+                    return target.getString(coardinateFieldName);
                 }
             }
 
@@ -238,14 +234,14 @@ public class MongoDBHandler implements DBHandler {
 
         try {
             /// INITIALIZE CONNECTION
-            MongoClient mongoClient = MongoClients.create("mongodb+srv://" + user + ":" + pass + "@avandra.pix7etx.mongodb.net/" + "db");
+            MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
 
             /// which db in the client, which collection in the db
-            MongoDatabase db = mongoClient.getDatabase(db_name);
-            MongoCollection<Document> collection = db.getCollection(collection_name);
+            MongoDatabase db = mongoClient.getDatabase(getDbName());
+            MongoCollection<Document> collection = db.getCollection(getCollectionName());
 
             ///  Må finne bruker
-            Document userDoc = collection.find(Filters.eq("id", user)).first();
+            Document userDoc = collection.find(Filters.eq("id", getUser())).first();
             if (userDoc == null) return null;
 
 
@@ -300,11 +296,7 @@ public class MongoDBHandler implements DBHandler {
         return getList();
     }
 
-    @Override
-    public void sendData(String key, Object object) {
-        
-    }
-
+    
     /// Identifies a doc with the value of the id-key, adds a new key:value at end
     /// OR overwrites existing value if key already exists
     //TODO:
@@ -337,18 +329,18 @@ public class MongoDBHandler implements DBHandler {
 
     /// Removes key and value in specified doc at specified key
     //TODO: What if specified key does not exist? (It does nothing), make error message?
-    public void removeData(String idValue, String removeKey) {
+    public void removeData(String userID, String removeKey) {
 
         try {
             /// INITIALIZE CONNECTION
-            MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getUser() + "@avandra.pix7etx.mongodb.net/" + "db");
+            MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
 
             /// which db in the client, which collection in the db
             MongoDatabase db = mongoClient.getDatabase(getDbName());
             MongoCollection<Document> collection = db.getCollection(getCollectionName());
 
             /// remove key and value at specified key - actual use of funct
-            collection.updateOne(Filters.eq(getIdField(), idValue), Updates.unset(removeKey));
+            collection.updateOne(Filters.eq(getIdField(), userID), Updates.unset(removeKey));
 
             /// DESTROY CONNECTION
             mongoClient.close();
@@ -364,8 +356,18 @@ public class MongoDBHandler implements DBHandler {
         }
     }
 
+    //TODO: make:
+    public void removeData(String userID, String removeKey, String destinationType) {}
+    public void removeData(String userID, String keyToRemove, String destinationType, String destinationKey) {}
+
+
+
+
+
+
+
     /// Deletes the first document with a specified ID //start here
-    public void deleteOneDocument(String idValue) {
+    public void removeData(String userID) {
 
         /// INITIALIZE CONNECTION
         MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
@@ -375,60 +377,14 @@ public class MongoDBHandler implements DBHandler {
         MongoCollection<Document> collection = db.getCollection(getCollectionName());
 
         /// remove key and value at specified key - actual use of funct
-        collection.deleteOne(Filters.eq(getIdField(), idValue));
+        collection.deleteOne(Filters.eq(getIdField(), userID));
 
         /// DESTROY CONNECTION
         mongoClient.close();
     }
 
-    /// Deletes all documents with a specified ID (if duplicates exist)
-    public void deleteManyDocuments(String idValue) {
-
-        /// INITIALIZE CONNECTION
-        MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
-
-        /// which db in the client, which collection in the db
-        MongoDatabase db = mongoClient.getDatabase(getDbName());
-        MongoCollection<Document> collection = db.getCollection(getCollectionName());
-
-        /// remove key and value at specified key - actual use of funct
-        collection.deleteMany(Filters.eq(getIdField(), idValue));
-
-        /// DESTROY CONNECTION
-        mongoClient.close();
-    }
-
-    /// Searches the entire collection for a term and adds the containing doc to the return array
-    // if alot of data this will take alot of processing time
-    // not tested, will likely have issues with nested dictionaries but work with direct values
-    public ArrayList<Document> retrieveByValue(String searchTerm) {
-
-        /// INITIALIZE CONNECTION
-        MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
-
-        /// which db in the client, which collection in the db
-        MongoDatabase db = mongoClient.getDatabase(getDbName());
-        MongoCollection<Document> collection = db.getCollection(getCollectionName());
-
-        /// Retrieval of data - actual use of funct
-        MongoCursor<Document> cursor = collection.find().iterator(); //find() henter alt uten param
-        //iterator() sørger for en returtype som kan behandles av MongoCursor (som behandler data mer effektivt enn å lese inn absolutt alt selv)
-        while (cursor.hasNext()) { //for each item the mongocursor holds
-            Document doc = cursor.next(); //associating the cursor item with a datatype and var
-            for (String key : doc.keySet()) {
-                if (doc.get(key).equals(searchTerm) || key.equals(searchTerm)) { //if value or key of doc matches input-value
-                    getList().add(doc); //save for later
-                }
-            }
-            //if list.isEmpty() then create error message ..
-        }
-
-        /// DESTROY CONNECTION
-        mongoClient.close();
-
-        return getList();
-
-    }
+    
+    
 
 
 
@@ -449,15 +405,11 @@ public class MongoDBHandler implements DBHandler {
             Double lng,
             String adminId
     ) {
-        String user = "siljemst_db_user";
-        String pass = "Avandra1234567890";
-        String db_name = "dummy";
-        String collection_name = "testdata";
-
+        
         try {
-            MongoClient mongoClient = MongoClients.create("mongodb+srv://" + user + ":" + pass + "@avandra.pix7etx.mongodb.net/" + "db");
-            MongoDatabase db = mongoClient.getDatabase(db_name);
-            MongoCollection<Document> users = db.getCollection(collection_name);
+            MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
+            MongoDatabase db = mongoClient.getDatabase(getDbName());
+            MongoCollection<Document> users = db.getCollection(getCollectionName());
 
             //  Sjekk at admin har tilgang til denne lite-brukeren
             Document admin = users.find(
@@ -526,6 +478,62 @@ public class MongoDBHandler implements DBHandler {
             return false;
         }
 
+
+    }
+
+
+/*
+ * ----------------------------------------------------------------------------------------------------------------------
+ * ting som ikke er i iterface
+ * --------------------------------------------------------------------------------------------------------------------------
+ */
+/// Deletes all documents with a specified ID (if duplicates exist)
+    public void deleteManyDocuments(String idValue) {
+
+        /// INITIALIZE CONNECTION
+        MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
+
+        /// which db in the client, which collection in the db
+        MongoDatabase db = mongoClient.getDatabase(getDbName());
+        MongoCollection<Document> collection = db.getCollection(getCollectionName());
+
+        /// remove key and value at specified key - actual use of funct
+        collection.deleteMany(Filters.eq(getIdField(), idValue));
+
+        /// DESTROY CONNECTION
+        mongoClient.close();
+    }
+
+  
+    /// Searches the entire collection for a term and adds the containing doc to the return array
+    // if alot of data this will take alot of processing time
+    // not tested, will likely have issues with nested dictionaries but work with direct values
+    public ArrayList<Document> retrieveByValue(String searchTerm) {
+
+        /// INITIALIZE CONNECTION
+        MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
+
+        /// which db in the client, which collection in the db
+        MongoDatabase db = mongoClient.getDatabase(getDbName());
+        MongoCollection<Document> collection = db.getCollection(getCollectionName());
+
+        /// Retrieval of data - actual use of funct
+        MongoCursor<Document> cursor = collection.find().iterator(); //find() henter alt uten param
+        //iterator() sørger for en returtype som kan behandles av MongoCursor (som behandler data mer effektivt enn å lese inn absolutt alt selv)
+        while (cursor.hasNext()) { //for each item the mongocursor holds
+            Document doc = cursor.next(); //associating the cursor item with a datatype and var
+            for (String key : doc.keySet()) {
+                if (doc.get(key).equals(searchTerm) || key.equals(searchTerm)) { //if value or key of doc matches input-value
+                    getList().add(doc); //save for later
+                }
+            }
+            //if list.isEmpty() then create error message ..
+        }
+
+        /// DESTROY CONNECTION
+        mongoClient.close();
+
+        return getList();
 
     }
 
