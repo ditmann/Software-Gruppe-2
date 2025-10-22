@@ -16,8 +16,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-//dette er ennkommentar for å se om .gitignore funker
-
 /**
  * - Build and execute GraphQL requests against Entur.
  * - Provide a simple API for trip planning by coordinates.
