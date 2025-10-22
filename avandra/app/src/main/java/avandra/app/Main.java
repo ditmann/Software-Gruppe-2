@@ -40,11 +40,12 @@ public class Main {
         //Bruker kaare = new AdminBruker(name);
 
         MongoDBHandler dbHandler = new MongoDBHandler();
-        System.out.println(dbHandler.SearchDestination("Timmy", "favorites", "Hjem"));
+        System.out.println(dbHandler.searchDestination("Timmy", "favorites", "Hjem"));
+
+        
 
 
-
-        //dbHandler.appendData("Kåre", "Favoritter", favoritter);
+     //dbHandler.appendData("Kåre", "Favoritter", favoritter);
 
         /*
         Coordinate c = dbHandler.destinationCoordinate("Timmy");

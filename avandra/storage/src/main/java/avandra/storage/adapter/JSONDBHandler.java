@@ -8,10 +8,9 @@ import avandra.core.domain.AdminBruker;
 import avandra.core.domain.Coordinate;
 import avandra.core.domain.Destinasjon;
 import avandra.core.domainParents.Bruker;
-import avandra.core.port.DBHandler;
 
 
-public class JSONDBHandler implements DBHandler{
+public class JSONDBHandler {
 
     ///creates new file /overwrites each time
     //fine for testing
@@ -74,4 +73,5 @@ public class JSONDBHandler implements DBHandler{
     "longitudeNUM":10.7522,
     "validert_bool":true}*/
 
+    
 }
