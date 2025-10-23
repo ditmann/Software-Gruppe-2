@@ -4,12 +4,17 @@ public class Coordinate {
     private double latitudeNum;
     private double longitudeNUM;
 
-    public Coordinate(float latitudeNum, float longitudeNUM) {
+    public Coordinate(double latitudeNum, double longitudeNUM) {
         this.latitudeNum = latitudeNum;
         this.longitudeNUM = longitudeNUM;
     }
     public Coordinate() {
 
+    }
+
+    @Override
+    public String toString() {
+        return latitudeNum + " " + longitudeNUM;
     }
 
     public double getLatitudeNum() {

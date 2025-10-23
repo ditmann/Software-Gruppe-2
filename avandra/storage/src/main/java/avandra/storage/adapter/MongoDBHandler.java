@@ -1,6 +1,7 @@
 package avandra.storage.adapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bson.Document;
 
@@ -106,7 +107,8 @@ public class MongoDBHandler implements DBHandler {
     /// Creates a doc with the given content at the specified db and collection
     //TODO: prevent duplicates:
     //make it use appendData if id already exists? maybe just not work?
-    public void createUser(String key, Object object){
+
+    public void createUser(String key, String userID, boolean adminUser, List<String> liteUsers){
         /// for future use: take input?
         // find secure way to assign variables from front end (?) or store securely closer to core(?)
         try {
@@ -118,7 +120,11 @@ public class MongoDBHandler implements DBHandler {
             MongoCollection<Document> collection = db.getCollection(getCollectionName());
 
             /// insertion of param - actual use of funct
-            collection.insertOne(new Document(key, object.toString()));
+            Document userDoc = new Document(key, userID)
+                    .append("admin", adminUser)
+                    .append("Litebrukere", liteUsers);
+
+            collection.insertOne(userDoc);
 
             /// DESTROY CONNECTION
             mongoClient.close();
@@ -134,6 +140,107 @@ public class MongoDBHandler implements DBHandler {
             e.printStackTrace();
         }
     }
+
+    public void createUser(String key, String userID, boolean adminUser, String age, List<String> liteUsers, String favoriteDestination, String address){
+
+        try {
+            /// INITIALIZE CONNECTION
+            MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
+
+            /// which db in the client, which collection in the db
+            MongoDatabase db = mongoClient.getDatabase(getDbName());
+            MongoCollection<Document> collection = db.getCollection(getCollectionName());
+
+            Document destination = new Document("adresse", address);
+
+            Document favorites = new Document(favoriteDestination, destination);
+
+            Document userDoc = new Document(key, userID)
+                    .append("admin", adminUser)
+                    .append("alder", age)
+                    .append("litebrukere", liteUsers)
+                    .append("favoritter", favorites);
+
+            collection.insertOne(userDoc);
+
+        }
+        /// Super basic error "handling" + if mongo-specific, notification
+        catch (MongoException e) {
+            System.out.println("\nMongoDB exception: ");
+            e.printStackTrace();
+        }
+        catch (Exception e) {
+            System.out.println("\nNon-DB exception: ");
+            e.printStackTrace();
+        }
+
+    }
+
+    public void createUser(String key, String userID, boolean adminUser, String age, List<String> liteUsers, String favoriteDestination, String address, double latitude, double longitude){
+
+        try {
+            /// INITIALIZE CONNECTION
+            MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
+
+            /// which db in the client, which collection in the db
+            MongoDatabase db = mongoClient.getDatabase(getDbName());
+            MongoCollection<Document> collection = db.getCollection(getCollectionName());
+
+            Document coordinates = new Document("latitude", latitude).append("longitude", longitude);
+
+            Document destination = new Document("adresse", address).append("koordinater", coordinates);
+
+            Document favorites = new Document(favoriteDestination, destination);
+
+            Document userDoc = new Document(key, userID)
+                    .append("admin", adminUser)
+                    .append("alder", age)
+                    .append("litebrukere", liteUsers)
+                    .append("favoritter", favorites);
+
+            collection.insertOne(userDoc);
+
+        }
+        /// Super basic error "handling" + if mongo-specific, notification
+        catch (MongoException e) {
+            System.out.println("\nMongoDB exception: ");
+            e.printStackTrace();
+        }
+        catch (Exception e) {
+            System.out.println("\nNon-DB exception: ");
+            e.printStackTrace();
+        }
+    }
+
+    public void addCoordinatesToDestination(String userID, String destinationName, double latitude, double longitude) {
+
+        try {
+            MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
+
+            /// which db in the client, which collection in the db
+            MongoDatabase db = mongoClient.getDatabase(getDbName());
+            MongoCollection<Document> collection = db.getCollection(getCollectionName());
+
+            Document coordinates = new Document("latitude", latitude).append("longitude", longitude);
+
+            Document update = new Document("$set", new Document("favoritter." + destinationName + ".koordinater", coordinates));
+
+            collection.updateOne(Filters.eq("id", userID), update);
+
+            mongoClient.close();
+
+        }
+        catch (MongoException e) {
+            System.out.println("\nMongoDB exception: ");
+            e.printStackTrace();
+        }
+        catch (Exception e) {
+            System.out.println("\nNon-DB exception: ");
+            e.printStackTrace();
+        }
+    }
+
+
 
     /// Returns all documents in the collection as an array
     public ArrayList<Document> retrieveAllData() {
@@ -171,10 +278,10 @@ public class MongoDBHandler implements DBHandler {
 
 
 
-    public String searchDestination(String userID, String destinationType, String destinationID){
+    public Coordinate searchDestination(String userID, String destinationType, String destinationID){
 
         /// Same vars
-        String coardinateFieldName = "Koordinater";
+        String coordinateFieldName = "koordinater";
 
         try {
             /// INITIALIZE CONNECTION
@@ -185,32 +292,29 @@ public class MongoDBHandler implements DBHandler {
             MongoCollection<Document> collection = db.getCollection(getCollectionName());
 
             /// Retrieval of data - actual use of funct
-            FindIterable<Document> content = collection.find(Filters.eq("id", userID));
-            Document target = null;
-            for (Document doc : content) {
-                target = doc;
-            }
-            for (String key : target.keySet()) {
-                if (key.equals(destinationType)) {
-                    target = (Document) target.get(key);
-                }
-            }
-            for (String key : target.keySet()) {
-                if (key.equals(destinationID)) {
-                    target = (Document) target.get(key);
-                }
-            }
+            Document userDoc = collection.find(Filters.eq("id", userID)).first();
+            if (userDoc == null) return null;
 
-            for (String key : target.keySet()) {
-                if (key.equals(coardinateFieldName)) {
-                    return target.getString(coardinateFieldName);
-                }
-            }
+            Document destinationTypeDoc = (Document)
+            userDoc.get(destinationType);
+            if (destinationTypeDoc == null) return null;
+
+            Document destinationDoc = (Document)
+            destinationTypeDoc.get(destinationID);
+            if (destinationDoc == null) return null;
+
+            Document coordinates = (Document)
+            destinationDoc.get("koordinater");
+            if (coordinates == null) return null;
+
+            double lat = coordinates.getDouble("latitude");
+            double lon = coordinates.getDouble("longitude");
 
             /// DESTROY CONNECTION
             mongoClient.close();
-        }
 
+            return new Coordinate(lat, lon);
+        }
         catch (MongoException e) {
             System.out.println("\nMongoDB exception: ");
             e.printStackTrace();
@@ -221,7 +325,6 @@ public class MongoDBHandler implements DBHandler {
         }
 
         return null;
-
     }
 
     @Override

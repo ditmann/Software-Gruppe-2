@@ -4,24 +4,27 @@ package avandra.app;
 
 import avandra.api.EnturHttpClient;
 import avandra.core.domain.Coordinate;
-import avandra.core.adapter.RandomLocationAdapter;
+import avandra.core.domain.IpGeolocationAdapter;
+import avandra.core.port.DBHandler;
+import avandra.core.port.EnturClient;
 import avandra.core.port.LocationPort;
-import avandra.storage.adapter.TripFileHandler;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import avandra.storage.adapter.MongoDBHandler;
 
 
 public class APIMain {
-    public static <TripFileService> void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         String clientName = "HIOFsTUD-AVANDRA";
-        LocationPort location = new RandomLocationAdapter();
+        LocationPort location = new IpGeolocationAdapter(clientName);
         Coordinate me = location.currentCoordinate();
-        EnturHttpClient entur = new EnturHttpClient(clientName);
-        TripFileHandler files = new TripFileHandler(entur, new ObjectMapper());
-        files.planTripCoordsToFile(
-                me.getLatitudeNum(), me.getLongitudeNUM(),
-                59.553999, 11.334520,
-                1,
-                true
+        EnturClient entur = new EnturHttpClient(clientName);
+        DBHandler handler = new MongoDBHandler();
+        Coordinate to = (Coordinate) handler.searchDestination("Kåre", "favoritter","hjem");
+
+        entur.planTripCoordsToFile(
+                me.getLatitudeNum(), me.getLongitudeNUM(),   // from you
+                to.getLatitudeNum(), to.getLongitudeNUM(),   // to mysen// )
+                1, // amount of different trips
+                true                // include request metadata in file
         );
     }
 }
