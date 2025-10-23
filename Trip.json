@@ -1,12 +1,85 @@
 {
   "request" : {
-    "fromLat" : 59.86529541015625,
-    "fromLon" : 10.659451484680176,
-    "toLat" : 59.136205,
-    "toLon" : 11.382195,
-    "numPatterns" : 3
+    "fromLat" : 59.1327018737793,
+    "fromLon" : 11.34469985961914,
+    "toLat" : 59.553999,
+    "toLon" : 11.33452,
+    "numPatterns" : 1
   },
   "trip" : {
-    "tripPatterns" : [ ]
+    "tripPatterns" : [ {
+      "startTime" : "2025-10-22T09:47:15+02:00",
+      "duration" : 8956,
+      "walkDistance" : 2221.88,
+      "legs" : [ {
+        "mode" : "foot",
+        "distance" : 1569.02,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "bus",
+        "distance" : 29678.96,
+        "line" : {
+          "id" : "OST:Line:1_633",
+          "name" : "Moss-Sarpsborg-Halden",
+          "publicCode" : "633",
+          "transportMode" : "bus",
+          "authority" : {
+            "name" : "Østfold kollektivtrafikk"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:4415",
+            "name" : "Remmen"
+          },
+          "aimedDepartureTime" : "2025-10-22T10:09:00+02:00",
+          "expectedDepartureTime" : "2025-10-22T10:09:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:5204",
+            "name" : "Valaskjold bru"
+          },
+          "aimedDepartureTime" : "2025-10-22T10:52:00+02:00",
+          "expectedDepartureTime" : "2025-10-22T10:52:00+02:00"
+        }
+      }, {
+        "mode" : "bus",
+        "distance" : 54689.87,
+        "line" : {
+          "id" : "OST:Line:1_640",
+          "name" : "Sarpsborg-Askim-Mysen",
+          "publicCode" : "640",
+          "transportMode" : "bus",
+          "authority" : {
+            "name" : "Østfold kollektivtrafikk"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:5204",
+            "name" : "Valaskjold bru"
+          },
+          "aimedDepartureTime" : "2025-10-22T11:03:00+02:00",
+          "expectedDepartureTime" : "2025-10-22T11:03:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:3926",
+            "name" : "Folkenborgveien"
+          },
+          "aimedDepartureTime" : "2025-10-22T12:08:00+02:00",
+          "expectedDepartureTime" : "2025-10-22T12:08:00+02:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 652.86,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      } ]
+    } ]
   }
 }
