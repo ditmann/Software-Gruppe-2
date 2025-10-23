@@ -26,7 +26,7 @@ public class APIMain {
         files.planTripCoordsToFile(
                 me.getLatitudeNum(), me.getLongitudeNUM(),   // from you
                 to.getLatitudeNum(), to.getLongitudeNUM(),
-                1, // amount of different trips
+                1,        // amount of different trips
                 true                // include request metadata in file
         );
     }

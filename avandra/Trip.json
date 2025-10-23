@@ -1,29 +1,29 @@
 {
   "request" : {
-    "fromLat" : 59.951805671706566,
-    "fromLon" : 10.832363900263797,
-    "toLat" : 59.212822,
-    "toLon" : 10.927676,
-    "numPatterns" : 1
+    "fromLat" : 59.90773617858819,
+    "fromLon" : 10.70623628021029,
+    "toLat" : 59.2313,
+    "toLon" : 10.9968,
+    "numPatterns" : 3
   },
   "trip" : {
     "tripPatterns" : [ {
-      "startTime" : "2025-10-23T12:30:12+02:00",
-      "duration" : 7494,
-      "walkDistance" : 2791.95,
+      "startTime" : "2025-10-23T14:45:28+02:00",
+      "duration" : 6464,
+      "walkDistance" : 1547.07,
       "legs" : [ {
         "mode" : "foot",
-        "distance" : 734.19,
+        "distance" : 488.93,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null
       }, {
         "mode" : "bus",
-        "distance" : 7172.5,
+        "distance" : 3203.99,
         "line" : {
-          "id" : "RUT:Line:31",
-          "name" : "Snarøya - Fornebu - Tonsenhagen - Grorud",
-          "publicCode" : "31",
+          "id" : "RUT:Line:81",
+          "name" : "Fornebu - Myrvoll stasjon",
+          "publicCode" : "81",
           "transportMode" : "bus",
           "authority" : {
             "name" : "Ruter"
@@ -31,29 +31,29 @@
         },
         "fromEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:11025",
-            "name" : "Tonsenhagen"
+            "id" : "NSR:Quay:7716",
+            "name" : "Filipstadveien"
           },
-          "aimedDepartureTime" : "2025-10-23T12:40:00+02:00",
-          "expectedDepartureTime" : "2025-10-23T12:40:00+02:00"
+          "aimedDepartureTime" : "2025-10-23T14:52:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T14:52:00+02:00"
         },
         "toEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:7203",
+            "id" : "NSR:Quay:7158",
             "name" : "Jernbanetorget"
           },
-          "aimedDepartureTime" : "2025-10-23T13:03:00+02:00",
-          "expectedDepartureTime" : "2025-10-23T13:03:00+02:00"
+          "aimedDepartureTime" : "2025-10-23T15:05:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T15:05:00+02:00"
         }
       }, {
         "mode" : "foot",
-        "distance" : 345.7,
+        "distance" : 400.06,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null
       }, {
         "mode" : "rail",
-        "distance" : 91414.04,
+        "distance" : 91416.94,
         "line" : {
           "id" : "VYG:Line:RE20",
           "name" : "Oslo S-Halden-Göteborg (X-Border)",
@@ -65,23 +65,277 @@
         },
         "fromEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:562",
+            "id" : "NSR:Quay:567",
             "name" : "Oslo S"
           },
-          "aimedDepartureTime" : "2025-10-23T13:14:00+02:00",
-          "expectedDepartureTime" : "2025-10-23T13:14:00+02:00"
+          "aimedDepartureTime" : "2025-10-23T15:14:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T15:14:00+02:00"
         },
         "toEstimatedCall" : {
           "quay" : {
             "id" : "NSR:Quay:392",
             "name" : "Fredrikstad stasjon"
           },
-          "aimedDepartureTime" : "2025-10-23T14:14:00+02:00",
-          "expectedDepartureTime" : "2025-10-23T14:14:00+02:00"
+          "aimedDepartureTime" : "2025-10-23T16:14:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T16:14:00+02:00"
         }
       }, {
         "mode" : "foot",
-        "distance" : 1712.06,
+        "distance" : 275.84,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "bus",
+        "distance" : 5141.7,
+        "line" : {
+          "id" : "OST:Line:1_7",
+          "name" : "Moum-Ambjørnrød",
+          "publicCode" : "7",
+          "transportMode" : "bus",
+          "authority" : {
+            "name" : "Østfold kollektivtrafikk"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:4032",
+            "name" : "St. Croixundergangen"
+          },
+          "aimedDepartureTime" : "2025-10-23T16:18:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T16:18:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:4197",
+            "name" : "Borgehallen"
+          },
+          "aimedDepartureTime" : "2025-10-23T16:28:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T16:28:00+02:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 382.24,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      } ]
+    }, {
+      "startTime" : "2025-10-23T14:29:14+02:00",
+      "duration" : 7438,
+      "walkDistance" : 3964.25,
+      "legs" : [ {
+        "mode" : "foot",
+        "distance" : 3306.17,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "rail",
+        "distance" : 91416.94,
+        "line" : {
+          "id" : "VYG:Line:RE20",
+          "name" : "Oslo S-Halden-Göteborg (X-Border)",
+          "publicCode" : "RE20",
+          "transportMode" : "rail",
+          "authority" : {
+            "name" : "Vy"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:567",
+            "name" : "Oslo S"
+          },
+          "aimedDepartureTime" : "2025-10-23T15:14:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T15:14:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:392",
+            "name" : "Fredrikstad stasjon"
+          },
+          "aimedDepartureTime" : "2025-10-23T16:14:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T16:14:00+02:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 275.84,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "bus",
+        "distance" : 5141.7,
+        "line" : {
+          "id" : "OST:Line:1_7",
+          "name" : "Moum-Ambjørnrød",
+          "publicCode" : "7",
+          "transportMode" : "bus",
+          "authority" : {
+            "name" : "Østfold kollektivtrafikk"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:4032",
+            "name" : "St. Croixundergangen"
+          },
+          "aimedDepartureTime" : "2025-10-23T16:18:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T16:18:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:4197",
+            "name" : "Borgehallen"
+          },
+          "aimedDepartureTime" : "2025-10-23T16:28:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T16:28:00+02:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 382.24,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      } ]
+    }, {
+      "startTime" : "2025-10-23T14:25:28+02:00",
+      "duration" : 8564,
+      "walkDistance" : 1205.21,
+      "legs" : [ {
+        "mode" : "foot",
+        "distance" : 488.93,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "bus",
+        "distance" : 1984.28,
+        "line" : {
+          "id" : "RUT:Line:81",
+          "name" : "Fornebu - Myrvoll stasjon",
+          "publicCode" : "81",
+          "transportMode" : "bus",
+          "authority" : {
+            "name" : "Ruter"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:7716",
+            "name" : "Filipstadveien"
+          },
+          "aimedDepartureTime" : "2025-10-23T14:32:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T14:32:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:7349",
+            "name" : "Nationaltheatret"
+          },
+          "aimedDepartureTime" : "2025-10-23T14:36:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T14:36:00+02:00"
+        }
+      }, {
+        "mode" : "bus",
+        "distance" : 2003.94,
+        "line" : {
+          "id" : "RUT:Line:37",
+          "name" : "Nydalen T - Helsfyr",
+          "publicCode" : "37",
+          "transportMode" : "bus",
+          "authority" : {
+            "name" : "Ruter"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:7349",
+            "name" : "Nationaltheatret"
+          },
+          "aimedDepartureTime" : "2025-10-23T14:40:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T14:40:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:104029",
+            "name" : "Oslo bussterminal"
+          },
+          "aimedDepartureTime" : "2025-10-23T14:49:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T14:49:00+02:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 141.72,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "coach",
+        "distance" : 93444.25,
+        "line" : {
+          "id" : "VYX:Line:12",
+          "name" : "VY6 Hvaler-Fredrikstad-Oslo",
+          "publicCode" : "VY6",
+          "transportMode" : "coach",
+          "authority" : {
+            "name" : "Vy Buss"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:99376",
+            "name" : "Oslo bussterminal"
+          },
+          "aimedDepartureTime" : "2025-10-23T15:00:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T15:00:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:2845",
+            "name" : "Fredrikstad bussterminal"
+          },
+          "aimedDepartureTime" : "2025-10-23T16:30:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T16:30:00+02:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 192.32,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "bus",
+        "distance" : 6005.11,
+        "line" : {
+          "id" : "OST:Line:1_2",
+          "name" : "Fredrikstad rv.22  Sarpsborg ny",
+          "publicCode" : "2",
+          "transportMode" : "bus",
+          "authority" : {
+            "name" : "Østfold kollektivtrafikk"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:2848",
+            "name" : "Fredrikstad bussterminal"
+          },
+          "aimedDepartureTime" : "2025-10-23T16:30:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T16:30:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:4197",
+            "name" : "Borgehallen"
+          },
+          "aimedDepartureTime" : "2025-10-23T16:43:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T16:43:00+02:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 382.24,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null
