@@ -3,16 +3,13 @@ package avandra.storage.adapter;
 import java.io.File;
 import java.util.List;
 
-import avandra.core.domainParents.Reise;
 import avandra.core.port.DBHandler;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import avandra.core.domain.AdminBruker;
 import avandra.core.domain.Coordinate;
 import avandra.core.domain.Destinasjon;
 import avandra.core.domainParents.Bruker;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 
 public class JSONDBHandler implements DBHandler {
@@ -29,6 +26,21 @@ public class JSONDBHandler implements DBHandler {
         catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void createUser(String key, String userID, boolean adminUser, List<String> liteUsers) {
+
+    }
+
+    @Override
+    public void createUser(String key, String userID, boolean adminUser, String age, List<String> liteUsers, String favoriteDestination, String address) {
+
+    }
+
+    @Override
+    public void createUser(String key, String userID, boolean adminUser, String age, List<String> liteUsers, String favoriteDestination, String address, double latitude, double longitude) {
+
     }
 
     /// Denne gjør ingenting.
@@ -64,19 +76,15 @@ public class JSONDBHandler implements DBHandler {
         return null;
     }
 
-
-    public static void main(String[] args) {
-        JSONDBHandler handler = new JSONDBHandler();
-        System.out.println(handler.retrieveAllData());
-    }
-
     @Override
-    public void createUser(String key, Object object) {
+    public void addCoordinatesToDestination(String userID, String destinationName, double latitude, double longitude) {
 
     }
 
+
+
     @Override
-    public Object searchDestination(String userID, String destinationType, String destinationID) {
+    public Coordinate searchDestination(String userID, String destinationType, String destinationID) {
         return null;
     }
 

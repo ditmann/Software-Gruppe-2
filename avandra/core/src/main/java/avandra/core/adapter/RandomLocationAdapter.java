@@ -29,6 +29,6 @@ public class RandomLocationAdapter implements LocationPort {
                 : ThreadLocalRandom.current().nextDouble(minLat, maxLat);
         double lon = fixedLon != null ? fixedLon
                 : ThreadLocalRandom.current().nextDouble(minLon, maxLon);
-        return new Coordinate((float) lat, (float)lon);
+        return new Coordinate( lat, lon);
     }
 }

@@ -2,8 +2,6 @@ package avandra.core.port;
 
 import avandra.core.domain.Coordinate;
 
-import javax.print.Doc;
-import javax.swing.text.Document;
 import java.util.List;
 
 public interface DBHandler {
@@ -26,7 +24,7 @@ public interface DBHandler {
     public void addCoordinatesToDestination(String userID, String destinationName, double latitude, double longitude);
 
     //search with ID to find specific document
-    public Object searchDestination(String userID, String destinationType, String destinationID);
+    public Coordinate searchDestination(String userID, String destinationType, String destinationID);
 
     //Removes data (dkument id, what to delete, path, path, path) %overloading skal brukes%
     public void removeData(String userID); //sletter topp nivå i dokument
