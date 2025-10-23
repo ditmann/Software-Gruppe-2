@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import avandra.storage.adapter.MongoDBHandler;
 import com.mongodb.MongoException;
@@ -76,11 +77,12 @@ class MongoDBHandlerTest {
      * createUser(): verifies that a single document is inserted
      * with the expected key/value, and that the MongoClient is closed.
      */
-   /* @Test
+    @Test
     void createUser_insertsOneDocument() {
         Wiring w = new Wiring();
         try {
-            handler.createUser("foo", "bar");
+            List<String> lite = new ArrayList<>();
+            handler.createUser( "bar",true,lite);
 
             verify(w.coll, times(1)).insertOne(argThat(d ->
                     "bar".equals(d.getString("foo"))));
@@ -88,7 +90,7 @@ class MongoDBHandlerTest {
         } finally {
             w.close();
         }
-    }*/
+    }
 
     // -----------------------------
     // retrieveAllData

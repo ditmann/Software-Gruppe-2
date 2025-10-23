@@ -20,13 +20,13 @@ public class APIMain {
         Coordinate me = location.currentCoordinate();
         EnturClient entur = new EnturHttpClient(clientName);
         DBHandler handler1 = new MongoDBHandler();
-        Coordinate to = handler1.searchDestination("Kåre", "favoritter","FFK");
+        Coordinate to = handler1.searchDestination("Kåre", "favoritter","hjem");
         TripFileHandler files = new TripFileHandler(entur, new ObjectMapper());
 
         files.planTripCoordsToFile(
                 me.getLatitudeNum(), me.getLongitudeNUM(),   // from you
                 to.getLatitudeNum(), to.getLongitudeNUM(),
-                1, // amount of different trips
+                1,        // amount of different trips
                 true                // include request metadata in file
         );
     }
