@@ -2,9 +2,16 @@ package avandra.core.port;
 
 import avandra.core.domain.Coordinate;
 
+import javax.print.Doc;
+import javax.swing.text.Document;
+import java.util.List;
+
 public interface DBHandler {
-    // make user in DB
-    public void createUser(String key, Object object);
+    // make user in DB %overloading skal brukes%
+    public void createUser(String key, String userID, boolean adminUser, List<String> liteUsers);
+    public void createUser(String key, String userID, boolean adminUser, String age, List<String> liteUsers, String favoriteDestination, String address);
+    public void createUser(String key, String userID, boolean adminUser, String age, List<String> liteUsers, String favoriteDestination, String address, double latitude, double longitude);
+
 
     /// @param addValue is Object to allow appending Documents, ArrayLists and Strings
     public void appendData(String id, String addKey, Object addValue);
@@ -14,6 +21,9 @@ public interface DBHandler {
 
     ///  Returnerer koordinater
     public Coordinate destinationCoordinate(String name);
+
+    /// Legger til koordinater i lagret destinasjon
+    public void addCoordinatesToDestination(String userID, String destinationName, double latitude, double longitude);
 
     //search with ID to find specific document
     public Object searchDestination(String userID, String destinationType, String destinationID);

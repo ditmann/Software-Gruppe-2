@@ -2,6 +2,8 @@ package avandra.app;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.bson.Document;
 
@@ -10,39 +12,16 @@ import avandra.storage.adapter.MongoDBHandler;
 public class Main {
     public static void main(String[] args) throws Exception {
 
-        //lag key og value'
-        String id = "id";
-        String name = "Kåre";
-        String age = "28";
-        String docKey = "Hjem";
-        String destinationName = "Hjem";
-        String destinationAdress = "Dr. Ellertsens Vei";
-        
-
-
-        //legg til i DOC
-        Document doc = new Document();
-        Document destination1 = new Document();
-        destination1.append(docKey, destinationName);
-        destination1.append("Adresse", destinationAdress);
-        destination1.append("Koordinater", "1");
-        doc.append("Hjem", destination1);
-        ArrayList<Document> favoritter = new ArrayList<>();
-        Document destinasjon = new Document();
-        destinasjon.append("Hjem", destination1);
-        System.out.println(destination1);
-        System.out.println(destinasjon);
-        favoritter.add(destinasjon);
-        System.out.println(favoritter);
-
-
-        //legg så DOC til i LISTE
-        //Bruker kaare = new AdminBruker(name);
 
         MongoDBHandler dbHandler = new MongoDBHandler();
-        System.out.println(dbHandler.searchDestination("Timmy", "favorites", "Hjem"));
+        //dbHandler.createUser("id", "Tina", true, "27", "hjem", "theodor vei :p");
+        //dbHandler.addCoordinatesToDestination("Tina", "hjem", 59.3333, 10.3394);
 
-        
+        //List<String> liteUsers = List.of("Timmy");
+
+        //dbHandler.createUser("id", "Silje", true, "20", liteUsers, "Remmen", "skola en plass", 59.34, 11.23);
+
+        System.out.println(dbHandler.searchDestination("Kåre", "favoritter", "siste reis"));
 
 
      //dbHandler.appendData("Kåre", "Favoritter", favoritter);
