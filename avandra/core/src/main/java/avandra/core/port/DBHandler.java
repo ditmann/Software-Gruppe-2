@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface DBHandler {
     // make user in DB %overloading skal brukes%
-    public void createUser(String key, String userID, boolean adminUser, List<String> liteUsers);
-    public void createUser(String key, String userID, boolean adminUser, String age, List<String> liteUsers, String favoriteDestination, String address);
-    public void createUser(String key, String userID, boolean adminUser, String age, List<String> liteUsers, String favoriteDestination, String address, double latitude, double longitude);
+    public void createUser( String userID, boolean adminUser, List<String> liteUsers);
+    public void createUser( String userID, boolean adminUser, String age, List<String> liteUsers, String favoriteDestination, String address);
+    public void createUser( String userID, boolean adminUser, String age, List<String> liteUsers, String favoriteDestination, String address, double latitude, double longitude);
 
 
     /// @param addValue is Object to allow appending Documents, ArrayLists and Strings

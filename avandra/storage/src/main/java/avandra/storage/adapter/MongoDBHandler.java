@@ -108,7 +108,7 @@ public class MongoDBHandler implements DBHandler {
     //TODO: prevent duplicates:
     //make it use appendData if id already exists? maybe just not work?
 
-    public void createUser(String key, String userID, boolean adminUser, List<String> liteUsers){
+    public void createUser(String userID, boolean adminUser){
         /// for future use: take input?
         // find secure way to assign variables from front end (?) or store securely closer to core(?)
         try {
@@ -120,9 +120,15 @@ public class MongoDBHandler implements DBHandler {
             MongoCollection<Document> collection = db.getCollection(getCollectionName());
 
             /// insertion of param - actual use of funct
-            Document userDoc = new Document(key, userID)
-                    .append("admin", adminUser)
-                    .append("Litebrukere", liteUsers);
+            Document userDoc = new Document("id", userID)
+                    .append("admin", adminUser);
+
+            Document favorites = new Document();
+            List<String> litebrukere = new ArrayList<>();
+
+            userDoc.append("favoritter", favorites);
+            userDoc.append("litebrukere", litebrukere);
+
 
             collection.insertOne(userDoc);
 
@@ -141,7 +147,7 @@ public class MongoDBHandler implements DBHandler {
         }
     }
 
-    public void createUser(String key, String userID, boolean adminUser, String age, List<String> liteUsers, String favoriteDestination, String address){
+    public void createUser(String userID, boolean adminUser, String age, List<String> liteUsers, String favoriteDestination, String address){
 
         try {
             /// INITIALIZE CONNECTION
@@ -155,7 +161,7 @@ public class MongoDBHandler implements DBHandler {
 
             Document favorites = new Document(favoriteDestination, destination);
 
-            Document userDoc = new Document(key, userID)
+            Document userDoc = new Document("id", userID)
                     .append("admin", adminUser)
                     .append("alder", age)
                     .append("litebrukere", liteUsers)
@@ -176,7 +182,7 @@ public class MongoDBHandler implements DBHandler {
 
     }
 
-    public void createUser(String key, String userID, boolean adminUser, String age, List<String> liteUsers, String favoriteDestination, String address, double latitude, double longitude){
+    public void createUser( String userID, boolean adminUser, String age, List<String> liteUsers, String favoriteDestination, String address, double latitude, double longitude){
 
         try {
             /// INITIALIZE CONNECTION
@@ -192,7 +198,7 @@ public class MongoDBHandler implements DBHandler {
 
             Document favorites = new Document(favoriteDestination, destination);
 
-            Document userDoc = new Document(key, userID)
+            Document userDoc = new Document("id", userID)
                     .append("admin", adminUser)
                     .append("alder", age)
                     .append("litebrukere", liteUsers)
@@ -278,7 +284,7 @@ public class MongoDBHandler implements DBHandler {
 
 
 
-    public Coordinate searchDestination(String userID, String destinationType, String destinationID){
+    public Coordinate searchDestination(String userID, String destinationID){
 
         /// Same vars
         String coordinateFieldName = "koordinater";
@@ -296,7 +302,7 @@ public class MongoDBHandler implements DBHandler {
             if (userDoc == null) return null;
 
             Document destinationTypeDoc = (Document)
-            userDoc.get(destinationType);
+            userDoc.get("favoritter");
             if (destinationTypeDoc == null) return null;
 
             Document destinationDoc = (Document)
@@ -304,7 +310,7 @@ public class MongoDBHandler implements DBHandler {
             if (destinationDoc == null) return null;
 
             Document coordinates = (Document)
-            destinationDoc.get("koordinater");
+            destinationDoc.get(coordinateFieldName);
             if (coordinates == null) return null;
 
             double lat = coordinates.getDouble("latitude");

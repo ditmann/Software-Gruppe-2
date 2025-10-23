@@ -1,12 +1,187 @@
 {
   "request" : {
-    "fromLat" : 59.211299896240234,
-    "fromLon" : 10.936300277709961,
-    "toLat" : 59.13555,
-    "toLon" : 10.59498,
+    "fromLat" : 59.95493604190007,
+    "fromLon" : 10.614196244357865,
+    "toLat" : 59.2313,
+    "toLon" : 10.9968,
     "numPatterns" : 1
   },
   "trip" : {
-    "tripPatterns" : [ ]
+    "tripPatterns" : [ {
+      "startTime" : "2025-10-23T14:18:40+02:00",
+      "duration" : 8072,
+      "walkDistance" : 1269.58,
+      "legs" : [ {
+        "mode" : "foot",
+        "distance" : 181.47,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "bus",
+        "distance" : 3114.23,
+        "line" : {
+          "id" : "RUT:Line:230",
+          "name" : "Sandvika - Bekkestua - Østerås - Ila",
+          "publicCode" : "230",
+          "transportMode" : "bus",
+          "authority" : {
+            "name" : "Ruter"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:6705",
+            "name" : "Listuveien"
+          },
+          "aimedDepartureTime" : "2025-10-23T14:21:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T14:21:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:6600",
+            "name" : "Eiksmarka T"
+          },
+          "aimedDepartureTime" : "2025-10-23T14:27:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T14:27:00+02:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 67.01,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "bus",
+        "distance" : 5273.38,
+        "line" : {
+          "id" : "RUT:Line:140",
+          "name" : "Bekkestua - Østerås - Skøyen",
+          "publicCode" : "140",
+          "transportMode" : "bus",
+          "authority" : {
+            "name" : "Ruter"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:6596",
+            "name" : "Eiksmarka T"
+          },
+          "aimedDepartureTime" : "2025-10-23T14:36:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T14:36:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:7905",
+            "name" : "Lysaker stasjon"
+          },
+          "aimedDepartureTime" : "2025-10-23T14:48:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T14:48:00+02:00"
+        }
+      }, {
+        "mode" : "bus",
+        "distance" : 7838.63,
+        "line" : {
+          "id" : "RUT:Line:2031",
+          "name" : "Fornebu - Kalbakken",
+          "publicCode" : "31E",
+          "transportMode" : "bus",
+          "authority" : {
+            "name" : "Ruter"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:7905",
+            "name" : "Lysaker stasjon"
+          },
+          "aimedDepartureTime" : "2025-10-23T14:50:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T14:50:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:7202",
+            "name" : "Jernbanetorget"
+          },
+          "aimedDepartureTime" : "2025-10-23T15:06:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T15:06:00+02:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 363.02,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "rail",
+        "distance" : 91416.94,
+        "line" : {
+          "id" : "VYG:Line:RE20",
+          "name" : "Oslo S-Halden-Göteborg (X-Border)",
+          "publicCode" : "RE20",
+          "transportMode" : "rail",
+          "authority" : {
+            "name" : "Vy"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:567",
+            "name" : "Oslo S"
+          },
+          "aimedDepartureTime" : "2025-10-23T15:14:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T15:14:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:392",
+            "name" : "Fredrikstad stasjon"
+          },
+          "aimedDepartureTime" : "2025-10-23T16:14:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T16:14:00+02:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 275.84,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "bus",
+        "distance" : 5141.7,
+        "line" : {
+          "id" : "OST:Line:1_7",
+          "name" : "Moum-Ambjørnrød",
+          "publicCode" : "7",
+          "transportMode" : "bus",
+          "authority" : {
+            "name" : "Østfold kollektivtrafikk"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:4032",
+            "name" : "St. Croixundergangen"
+          },
+          "aimedDepartureTime" : "2025-10-23T16:18:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T16:18:00+02:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:4197",
+            "name" : "Borgehallen"
+          },
+          "aimedDepartureTime" : "2025-10-23T16:28:00+02:00",
+          "expectedDepartureTime" : "2025-10-23T16:28:00+02:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 382.24,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      } ]
+    } ]
   }
 }
