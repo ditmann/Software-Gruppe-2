@@ -28,11 +28,11 @@ public class JSONDBHandler implements DBHandler {
         }
     }
 
+
     @Override
-    public void createUser(String userID, boolean adminUser) {
+    public void createUser(String userID, boolean adminUser, String favoriteDestination, String address, double latitude, double longitude) {
 
     }
-
 
     /// Denne gjør ingenting.
     /// prøvde å legge til noe i objektet "bruker" men det er jo dumt. skal dokumentet VÆRE en versjon av bruker?

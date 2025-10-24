@@ -94,6 +94,7 @@ class MongoDBHandlerTest {
      * createUser(): verifies that a single document is inserted
      * with the expected key/value, and that the MongoClient is closed.
      */
+
     @Test
     void createUser_insertsOneDocument() {
         Wiring w = new Wiring();

@@ -5,7 +5,7 @@ import avandra.core.domain.Coordinate;
 
 public interface DBHandler {
     // make user in DB %overloading skal brukes%
-    public void createUser( String userID, boolean adminUser);
+    public void createUser( String userID, boolean adminUser, String favoriteDestination, String address, double latitude, double longitude);
 
     /// @param addValue is Object to allow appending Documents, ArrayLists and Strings
     public void appendData(String id, String addKey, Object addValue);

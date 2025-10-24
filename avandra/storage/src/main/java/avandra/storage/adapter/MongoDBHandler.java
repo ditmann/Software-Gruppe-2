@@ -148,7 +148,45 @@ public class MongoDBHandler implements DBHandler {
         }
     }
 
-    /// Funksjon for å legge til destinasjoner til favoritter
+    public void createUser( String userID, boolean adminUser, String favoriteDestination, String address, double latitude, double longitude) {
+
+        try {
+            /// INITIALIZE CONNECTION
+            MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
+
+            /// which db in the client, which collection in the db
+            MongoDatabase db = mongoClient.getDatabase(getDbName());
+            MongoCollection<Document> collection = db.getCollection(getCollectionName());
+
+            Document userDoc = new Document("id", userID)
+                    .append("admin", adminUser);
+
+            List<String> liteUsers = new ArrayList<>();
+            Document planned_trips = new Document();
+            Document favorites = new Document(favoriteDestination, address);
+            Document coordinates = new Document("latitude", latitude).append("longitude", longitude);
+            Document destination = new Document("adresse", address).append("koordinater", coordinates);
+            favorites.append(favoriteDestination, destination);
+
+
+            userDoc.append("litebrukere", liteUsers)
+                    .append("planlagte reiser", planned_trips)
+                    .append("favoritter", favorites);
+
+            collection.insertOne(userDoc);
+
+        /// Super basic error "handling" + if mongo-specific, notification catch (MongoException e) {
+        } catch (MongoException e) {
+            System.out.println("\nMongoDB exception: ");
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("\nNon-DB exception: ");
+            e.printStackTrace();
+        }
+    }
+
+
+        /// Funksjon for å legge til destinasjoner til favoritter
     public void addDestinationToFavorites(String userID, String destinationName, String address, double latitude, double longitude) {
 
         try {
