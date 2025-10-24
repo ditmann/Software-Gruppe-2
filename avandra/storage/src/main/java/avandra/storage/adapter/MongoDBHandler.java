@@ -265,15 +265,15 @@ public class MongoDBHandler implements DBHandler {
             if (userDoc == null) return null;
 
             Document destinationTypeDoc = (Document)
-            userDoc.get("favoritter");
+                    userDoc.get("favoritter");
             if (destinationTypeDoc == null) return null;
 
             Document destinationDoc = (Document)
-            destinationTypeDoc.get(destinationID);
+                    destinationTypeDoc.get(destinationID);
             if (destinationDoc == null) return null;
 
             Document coordinates = (Document)
-            destinationDoc.get(coordinateFieldName);
+                    destinationDoc.get(coordinateFieldName);
             if (coordinates == null) return null;
 
             double lat = coordinates.getDouble("latitude");
@@ -368,7 +368,7 @@ public class MongoDBHandler implements DBHandler {
         return getList();
     }
 
-    
+
     /// Identifies a doc with the value of the id-key, adds a new key:value at end
     /// OR overwrites existing value if key already exists
     //TODO:
@@ -477,7 +477,7 @@ public class MongoDBHandler implements DBHandler {
             Double lng,
             String adminId
     ) {
-        
+
         try {
             MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
             MongoDatabase db = mongoClient.getDatabase(getDbName());
@@ -554,12 +554,12 @@ public class MongoDBHandler implements DBHandler {
     }
 
 
-/*
- * ----------------------------------------------------------------------------------------------------------------------
- * ting som ikke er i iterface
- * --------------------------------------------------------------------------------------------------------------------------
- */
-/// Deletes all documents with a specified ID (if duplicates exist)
+    /*
+     * ----------------------------------------------------------------------------------------------------------------------
+     * ting som ikke er i iterface
+     * --------------------------------------------------------------------------------------------------------------------------
+     */
+    /// Deletes all documents with a specified ID (if duplicates exist)
     public void deleteManyDocuments(String idValue) {
 
         /// INITIALIZE CONNECTION
@@ -576,7 +576,7 @@ public class MongoDBHandler implements DBHandler {
         mongoClient.close();
     }
 
-  
+
     /// Searches the entire collection for a term and adds the containing doc to the return array
     // if alot of data this will take alot of processing time
     // not tested, will likely have issues with nested dictionaries but work with direct values

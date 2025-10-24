@@ -34,12 +34,11 @@ public interface DBHandler {
 
     //admin gir lite destinasjoner retunerer bra eller dårlig
     public boolean insertDestinationForLiteUser(String liteUserId,
-            String destId,
-            String name,
-            String address,
-            Double lat,
-            Double lng,
-            String adminId
-            );
+                                                String destId,
+                                                String name,
+                                                String address,
+                                                Double lat,
+                                                Double lng,
+                                                String adminId
+    );
 }
-

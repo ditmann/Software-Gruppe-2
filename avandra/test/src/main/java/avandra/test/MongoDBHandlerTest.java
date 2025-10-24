@@ -1,28 +1,45 @@
 package avandra.test;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
-import avandra.storage.adapter.MongoDBHandler;
-import com.mongodb.MongoException;
-import com.mongodb.client.*;
-import com.mongodb.client.result.DeleteResult;
-import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.codecs.DocumentCodecProvider;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.conversions.Bson;
 import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatchers;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.argThat;
 import org.mockito.MockedStatic;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import com.mongodb.MongoException;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
+
+import avandra.storage.adapter.MongoDBHandler;
 
 /**
  * Unit tests for MongoDBHandler adapter.
@@ -81,11 +98,10 @@ class MongoDBHandlerTest {
     void createUser_insertsOneDocument() {
         Wiring w = new Wiring();
         try {
-            List<String> lite = new ArrayList<>();
             handler.createUser( "bar",true);
 
             verify(w.coll, times(1)).insertOne(argThat(d ->
-                    "bar".equals(d.getString("foo"))));
+                    "bar".equals(d.getString("id"))));
             verify(w.client).close();
         } finally {
             w.close();
@@ -465,7 +481,7 @@ class MongoDBHandlerTest {
         try {
             when(w.client.getDatabase(anyString())).thenThrow(new MongoException("error"));
 
-          //  assertDoesNotThrow(() -> handler.createUser("x", "y"));
+            assertDoesNotThrow(() -> handler.createUser("x", true));
             assertDoesNotThrow(() -> handler.retrieveAllData());
             assertDoesNotThrow(() -> handler.retrieveByKeyValue("k", "v"));
             assertDoesNotThrow(() -> handler.appendData("id", "k", "v"));

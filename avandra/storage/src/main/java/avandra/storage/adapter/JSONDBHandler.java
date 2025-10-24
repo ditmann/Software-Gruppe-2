@@ -40,13 +40,13 @@ public class JSONDBHandler implements DBHandler {
     public void appendData(String filepath, String addKey, Object addValue) {
         ObjectMapper mapper = new ObjectMapper();
         Bruker bruker = new AdminBruker("Moiraine");
-       try {
-           File file = new File(filepath);
-           bruker = mapper.readValue(file, AdminBruker.class);
+        try {
+            File file = new File(filepath);
+            bruker = mapper.readValue(file, AdminBruker.class);
 
-       } catch (Exception e) {
-           throw new RuntimeException(e);
-       }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /// Returns the JSON doc contents
@@ -104,7 +104,7 @@ public class JSONDBHandler implements DBHandler {
 
     @Override
     public boolean insertDestinationForLiteUser(String liteUserId, String destId, String name, String address, Double lat, Double lng, String adminId) {
-      return false;
+        return false;
     }
 /*
     {"latitudeN":true,
@@ -113,5 +113,5 @@ public class JSONDBHandler implements DBHandler {
     "longitudeNUM":10.7522,
     "validert_bool":true}*/
 
-    
+
 }
