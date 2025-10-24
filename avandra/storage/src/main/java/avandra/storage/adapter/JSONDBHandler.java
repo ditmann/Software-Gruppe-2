@@ -29,19 +29,10 @@ public class JSONDBHandler implements DBHandler {
     }
 
     @Override
-    public void createUser(String key, String userID, boolean adminUser, List<String> liteUsers) {
+    public void createUser(String userID, boolean adminUser) {
 
     }
 
-    @Override
-    public void createUser(String key, String userID, boolean adminUser, String age, List<String> liteUsers, String favoriteDestination, String address) {
-
-    }
-
-    @Override
-    public void createUser(String key, String userID, boolean adminUser, String age, List<String> liteUsers, String favoriteDestination, String address, double latitude, double longitude) {
-
-    }
 
     /// Denne gjør ingenting.
     /// prøvde å legge til noe i objektet "bruker" men det er jo dumt. skal dokumentet VÆRE en versjon av bruker?
@@ -49,13 +40,13 @@ public class JSONDBHandler implements DBHandler {
     public void appendData(String filepath, String addKey, Object addValue) {
         ObjectMapper mapper = new ObjectMapper();
         Bruker bruker = new AdminBruker("Moiraine");
-       try {
-           File file = new File(filepath);
-           bruker = mapper.readValue(file, AdminBruker.class);
+        try {
+            File file = new File(filepath);
+            bruker = mapper.readValue(file, AdminBruker.class);
 
-       } catch (Exception e) {
-           throw new RuntimeException(e);
-       }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /// Returns the JSON doc contents
@@ -72,6 +63,10 @@ public class JSONDBHandler implements DBHandler {
         return destinasjon;
     }
 
+    @Override
+    public void addDestinationToFavorites(String userID, String destinationName, String address, double latitude, double longitude) {
+    }
+
     public Coordinate destinationCoordinate(String name) {
         return null;
     }
@@ -81,12 +76,11 @@ public class JSONDBHandler implements DBHandler {
 
     }
 
-
-
     @Override
-    public Coordinate searchDestination(String userID, String destinationType, String destinationID) {
+    public Coordinate searchDestination(String userID, String destinationID) {
         return null;
     }
+
 
     @Override
     public void removeData(String userID) {
@@ -110,7 +104,7 @@ public class JSONDBHandler implements DBHandler {
 
     @Override
     public boolean insertDestinationForLiteUser(String liteUserId, String destId, String name, String address, Double lat, Double lng, String adminId) {
-      return false;
+        return false;
     }
 /*
     {"latitudeN":true,
@@ -119,5 +113,5 @@ public class JSONDBHandler implements DBHandler {
     "longitudeNUM":10.7522,
     "validert_bool":true}*/
 
-    
+
 }

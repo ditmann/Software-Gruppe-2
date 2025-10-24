@@ -81,11 +81,10 @@ class MongoDBHandlerTest {
     void createUser_insertsOneDocument() {
         Wiring w = new Wiring();
         try {
-            List<String> lite = new ArrayList<>();
-            handler.createUser( "bar",true,lite);
+            handler.createUser( "bar",true);
 
             verify(w.coll, times(1)).insertOne(argThat(d ->
-                    "bar".equals(d.getString("foo"))));
+                    "bar".equals(d.getString("id"))));
             verify(w.client).close();
         } finally {
             w.close();
@@ -465,7 +464,7 @@ class MongoDBHandlerTest {
         try {
             when(w.client.getDatabase(anyString())).thenThrow(new MongoException("error"));
 
-          //  assertDoesNotThrow(() -> handler.createUser("x", "y"));
+            assertDoesNotThrow(() -> handler.createUser("x", true));
             assertDoesNotThrow(() -> handler.retrieveAllData());
             assertDoesNotThrow(() -> handler.retrieveByKeyValue("k", "v"));
             assertDoesNotThrow(() -> handler.appendData("id", "k", "v"));

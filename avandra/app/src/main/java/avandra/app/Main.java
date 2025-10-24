@@ -21,7 +21,6 @@ public class Main {
 
         //dbHandler.createUser("id", "Silje", true, "20", liteUsers, "Remmen", "skola en plass", 59.34, 11.23);
 
-        System.out.println(dbHandler.searchDestination("Kåre", "favoritter", "siste reis"));
 
 
      //dbHandler.appendData("Kåre", "Favoritter", favoritter);
