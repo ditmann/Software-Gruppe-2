@@ -5,25 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1929c9ed-51df-4c9e-810d-8a44f44805a4" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/core/src/main/java/avandra/core/domain/TripParser.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/src/main/java/avandra/test/TripPartTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Trip.json" beforeDir="false" afterPath="$PROJECT_DIR$/Trip.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/avandra/app/APIMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/avandra/app/APIMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/avandra/app/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/avandra/app/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/target/classes/avandra/app/APIMain.class" beforeDir="false" afterPath="$PROJECT_DIR$/app/target/classes/avandra/app/APIMain.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/target/classes/avandra/app/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/app/target/classes/avandra/app/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/avandra/core/domain/TripParser.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/core/src/main/java/avandra/core/domain/TripPart.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/avandra/core/domain/TripPart.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/avandra/core/port/DBHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/avandra/core/port/DBHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/avandra/core/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/avandra/core/domain/LiteBruker$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/avandra/core/domain/RandomLocationAdapter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/target/classes/avandra/core/domain/TripParser.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/core/target/classes/avandra/core/domain/TripPart.class" beforeDir="false" afterPath="$PROJECT_DIR$/core/target/classes/avandra/core/domain/TripPart.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/avandra/core/port/DBHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/core/target/classes/avandra/core/port/DBHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/JSONDBHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/JSONDBHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/MongoDBHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/MongoDBHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/target/classes/avandra/storage/adapter/JSONDBHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/storage/target/classes/avandra/storage/adapter/JSONDBHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/target/classes/avandra/storage/adapter/MongoDBHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/storage/target/classes/avandra/storage/adapter/MongoDBHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/src/main/java/avandra/test/MongoDBHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/main/java/avandra/test/MongoDBHandlerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/target/classes/avandra/test/MongoDBHandlerTest$Wiring.class" beforeDir="false" afterPath="$PROJECT_DIR$/test/target/classes/avandra/test/MongoDBHandlerTest$Wiring.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/target/classes/avandra/test/MongoDBHandlerTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/test/target/classes/avandra/test/MongoDBHandlerTest.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -55,28 +47,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.APIMain.executor&quot;: &quot;Run&quot;,
-    &quot;Application.EnturDemo.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.MongoDBHandlerTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TripFileHandlerTest.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Testing&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Gooner/Documents/GitHub/Software-Gruppe-2/avandra&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.APIMain.executor": "Run",
+    "Application.EnturDemo.executor": "Run",
+    "Application.Main.executor": "Run",
+    "JUnit.MongoDBHandlerTest.executor": "Run",
+    "JUnit.TripFileHandlerTest.executor": "Run",
+    "JUnit.TripParserTest.executor": "Run",
+    "JUnit.TripPartTest.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "Testing",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Gooner/Documents/GitHub/Software-Gruppe-2/avandra"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
-      &quot;GitIgnore&quot;
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "GitIgnore"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration default="true" type="JetRunConfigurationType">
       <module name="avandra" />

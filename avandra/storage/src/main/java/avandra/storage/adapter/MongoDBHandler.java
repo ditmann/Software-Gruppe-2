@@ -150,7 +150,7 @@ public class MongoDBHandler implements DBHandler {
 
     public void createUser( String userID, boolean adminUser, String favoriteDestination, String address, double latitude, double longitude) {
 
-        try {
+        try{
             /// INITIALIZE CONNECTION
             MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
 

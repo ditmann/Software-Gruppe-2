@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import avandra.api.EnturHttpClient;
 import avandra.core.adapter.RandomLocationAdapter;
 import avandra.core.domain.Coordinate;
-import avandra.core.domain.TripParser;
+
 import avandra.core.domain.TripPart;
 import avandra.core.port.DBHandler;
 import avandra.core.port.EnturClient;
@@ -34,9 +34,9 @@ public class APIMain {
                 1,        // amount of different trips
                 true                // include request metadata in file
         );
-        TripParser parser = new TripParser();
 
-        for(TripPart part : parser.tripParts(json)) {
+
+        for(TripPart part : TripPart.tripParts(json)) {
             System.out.println(part.toString());
         }
     }
