@@ -1,6 +1,5 @@
 package avandra.app;
 
-//denne kommentaren tester gitignore
 
 import avandra.storage.adapter.MongoDBHandler;
 

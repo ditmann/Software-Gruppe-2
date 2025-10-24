@@ -5,10 +5,10 @@
 /httpRequests/
 # User-specific project settings
 */*.iml
-*/avandra/target/
-*/avandra/.idea_modules/
-*/avandra/api/target/
-*/avandra/app/target/
-*/avandra/core/target/
-*/avandra/storage/target/
-*/avandra/test/target/
+*/target/
+*/.idea_modules/
+*/api/target/
+*/app/target/
+*/core/target/
+*/storage/target/
+*/test/target/
