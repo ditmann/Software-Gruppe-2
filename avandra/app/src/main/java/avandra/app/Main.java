@@ -21,29 +21,8 @@ public class Main {
 
         //dbHandler.createUser("id", "Silje", true, "20", liteUsers, "Remmen", "skola en plass", 59.34, 11.23);
 
-        System.out.println(dbHandler.searchDestination("Kåre", "favoritter", "siste reis"));
-
-
-     //dbHandler.appendData("Kåre", "Favoritter", favoritter);
-
-        /*
-        Coordinate c = dbHandler.destinationCoordinate("Timmy");
-
-        if (c != null) {
-            System.out.println("Kordinater: " );
-        }
-        else {
-            System.out.println("Fant ikke koordinater.");
-    }
-
-         */
-
-
-
-
-
-
-
+        System.out.println(dbHandler.searchDestination("Kåre", "siste reis"));
+        System.out.println(dbHandler.searchDestination("Victoria", "SÆRP"));
 
 
         //dbHandler.appendData(id, "navn", name);

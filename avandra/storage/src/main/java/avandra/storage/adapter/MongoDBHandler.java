@@ -18,6 +18,8 @@ import com.mongodb.client.model.Updates;
 import avandra.core.domain.Coordinate;
 import avandra.core.port.DBHandler;
 
+import javax.print.Doc;
+
 public class MongoDBHandler implements DBHandler {
 
     /// MAKE:
@@ -108,6 +110,7 @@ public class MongoDBHandler implements DBHandler {
     //TODO: prevent duplicates:
     //make it use appendData if id already exists? maybe just not work?
 
+    /// Oppretter en bruker med tomme dokumenter/lister
     public void createUser(String userID, boolean adminUser){
         /// for future use: take input?
         // find secure way to assign variables from front end (?) or store securely closer to core(?)
@@ -123,19 +126,17 @@ public class MongoDBHandler implements DBHandler {
             Document userDoc = new Document("id", userID)
                     .append("admin", adminUser);
 
-            Document favorites = new Document();
             List<String> litebrukere = new ArrayList<>();
+            Document planned_trips = new Document();
+            Document favorites = new Document();
 
-            userDoc.append("favoritter", favorites);
-            userDoc.append("litebrukere", litebrukere);
-
+            userDoc.append("litebrukere", litebrukere).append("planlagte reiser", planned_trips).append("favoritter", favorites);
 
             collection.insertOne(userDoc);
 
             /// DESTROY CONNECTION
             mongoClient.close();
         }
-
         /// Super basic error "handling" + if mongo-specific, notification
         catch (MongoException e) {
             System.out.println("\nMongoDB exception: ");
@@ -147,45 +148,10 @@ public class MongoDBHandler implements DBHandler {
         }
     }
 
-    public void createUser(String userID, boolean adminUser, String age, List<String> liteUsers, String favoriteDestination, String address){
+    /// Funksjon for å legge til destinasjoner til favoritter
+    public void addDestinationToFavorites(String userID, String destinationName, String address, double latitude, double longitude) {
 
         try {
-            /// INITIALIZE CONNECTION
-            MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
-
-            /// which db in the client, which collection in the db
-            MongoDatabase db = mongoClient.getDatabase(getDbName());
-            MongoCollection<Document> collection = db.getCollection(getCollectionName());
-
-            Document destination = new Document("adresse", address);
-
-            Document favorites = new Document(favoriteDestination, destination);
-
-            Document userDoc = new Document("id", userID)
-                    .append("admin", adminUser)
-                    .append("alder", age)
-                    .append("litebrukere", liteUsers)
-                    .append("favoritter", favorites);
-
-            collection.insertOne(userDoc);
-
-        }
-        /// Super basic error "handling" + if mongo-specific, notification
-        catch (MongoException e) {
-            System.out.println("\nMongoDB exception: ");
-            e.printStackTrace();
-        }
-        catch (Exception e) {
-            System.out.println("\nNon-DB exception: ");
-            e.printStackTrace();
-        }
-
-    }
-
-    public void createUser( String userID, boolean adminUser, String age, List<String> liteUsers, String favoriteDestination, String address, double latitude, double longitude){
-
-        try {
-            /// INITIALIZE CONNECTION
             MongoClient mongoClient = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
 
             /// which db in the client, which collection in the db
@@ -193,21 +159,15 @@ public class MongoDBHandler implements DBHandler {
             MongoCollection<Document> collection = db.getCollection(getCollectionName());
 
             Document coordinates = new Document("latitude", latitude).append("longitude", longitude);
+            Document destinationDetails = new Document("adresse", address).append("koordinater", coordinates);
 
-            Document destination = new Document("adresse", address).append("koordinater", coordinates);
+            Document update = new Document("$set", new Document("favoritter." + destinationName, destinationDetails));
 
-            Document favorites = new Document(favoriteDestination, destination);
+            collection.updateOne(Filters.eq("id", userID), update);
 
-            Document userDoc = new Document("id", userID)
-                    .append("admin", adminUser)
-                    .append("alder", age)
-                    .append("litebrukere", liteUsers)
-                    .append("favoritter", favorites);
-
-            collection.insertOne(userDoc);
+            mongoClient.close();
 
         }
-        /// Super basic error "handling" + if mongo-specific, notification
         catch (MongoException e) {
             System.out.println("\nMongoDB exception: ");
             e.printStackTrace();
@@ -216,7 +176,10 @@ public class MongoDBHandler implements DBHandler {
             System.out.println("\nNon-DB exception: ");
             e.printStackTrace();
         }
+
     }
+
+
 
     public void addCoordinatesToDestination(String userID, String destinationName, double latitude, double longitude) {
 

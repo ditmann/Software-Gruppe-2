@@ -20,7 +20,7 @@ public class APIMain {
         Coordinate me = location.currentCoordinate();
         EnturClient entur = new EnturHttpClient(clientName);
         DBHandler handler1 = new MongoDBHandler();
-        Coordinate to = handler1.searchDestination("Kåre", "favoritter","hjem");
+        Coordinate to = handler1.searchDestination("Kåre","hjem");
         TripFileHandler files = new TripFileHandler(entur, new ObjectMapper());
 
         files.planTripCoordsToFile(

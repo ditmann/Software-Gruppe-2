@@ -82,7 +82,7 @@ class MongoDBHandlerTest {
         Wiring w = new Wiring();
         try {
             List<String> lite = new ArrayList<>();
-            handler.createUser( "bar",true,lite);
+            handler.createUser( "bar",true);
 
             verify(w.coll, times(1)).insertOne(argThat(d ->
                     "bar".equals(d.getString("foo"))));
