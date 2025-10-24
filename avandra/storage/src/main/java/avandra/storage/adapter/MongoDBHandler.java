@@ -18,8 +18,6 @@ import com.mongodb.client.model.Updates;
 import avandra.core.domain.Coordinate;
 import avandra.core.port.DBHandler;
 
-import javax.print.Doc;
-
 public class MongoDBHandler implements DBHandler {
 
     /// MAKE:
@@ -51,6 +49,13 @@ public class MongoDBHandler implements DBHandler {
     private String collection_name = "testdata";
     private ArrayList<Document> list = new ArrayList<>();
     private String idField = "id";
+    private static final String ID_FIELD_NAME = "id";
+    private static final String FAVORITES_FIELD_NAME = "favoritter";
+    private static final String COORDINATES_FIELD_NAME = "koordinater";
+    private static final String LATITUDE_FIELD_NAME = "latitude";
+    private static final String LONGITUDE_FIELD_NAME = "longitude";
+    private static final String ADDRESS_FIELD_NAME = "adresse";
+    private static final String NAME_FIELD_ADMIN = "admin";
 
     ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
     /// GET'ERS & SET'ERS
@@ -111,6 +116,7 @@ public class MongoDBHandler implements DBHandler {
     //make it use appendData if id already exists? maybe just not work?
 
     /// Oppretter en bruker med tomme dokumenter/lister
+    
     public void createUser(String userID, boolean adminUser){
         /// for future use: take input?
         // find secure way to assign variables from front end (?) or store securely closer to core(?)
@@ -148,6 +154,7 @@ public class MongoDBHandler implements DBHandler {
         }
     }
 
+    @Override
     public void createUser( String userID, boolean adminUser, String favoriteDestination, String address, double latitude, double longitude) {
 
         try {
@@ -187,6 +194,7 @@ public class MongoDBHandler implements DBHandler {
 
 
         /// Funksjon for å legge til destinasjoner til favoritter
+    @Override
     public void addDestinationToFavorites(String userID, String destinationName, String address, double latitude, double longitude) {
 
         try {
@@ -218,7 +226,7 @@ public class MongoDBHandler implements DBHandler {
     }
 
 
-
+    @Override
     public void addCoordinatesToDestination(String userID, String destinationName, double latitude, double longitude) {
 
         try {
@@ -250,6 +258,7 @@ public class MongoDBHandler implements DBHandler {
 
 
     /// Returns all documents in the collection as an array
+    @Override
     public ArrayList<Document> retrieveAllData() {
 
         try {
@@ -284,7 +293,7 @@ public class MongoDBHandler implements DBHandler {
     }
 
 
-
+    @Override
     public Coordinate searchDestination(String userID, String destinationID){
 
         /// Same vars
@@ -336,11 +345,6 @@ public class MongoDBHandler implements DBHandler {
 
     @Override
     public Coordinate destinationCoordinate(String name) {
-
-        String user = "siljemst_db_user";
-        String pass = "Avandra1234567890";
-        String db_name = "dummy";
-        String collection_name = "testdata";
 
         try {
             /// INITIALIZE CONNECTION
@@ -409,7 +413,8 @@ public class MongoDBHandler implements DBHandler {
 
     /// Identifies a doc with the value of the id-key, adds a new key:value at end
     /// OR overwrites existing value if key already exists
-    //TODO:
+   
+    @Override
     public void appendData(String idValue, String addKey, Object addValue) {
 
         try {
@@ -439,6 +444,7 @@ public class MongoDBHandler implements DBHandler {
 
     /// Removes key and value in specified doc at specified key
     //TODO: What if specified key does not exist? (It does nothing), make error message?
+    @Override
     public void removeData(String userID, String removeKey) {
 
         try {
@@ -467,16 +473,8 @@ public class MongoDBHandler implements DBHandler {
     }
 
     //TODO: make:
-    public void removeData(String userID, String removeKey, String destinationType) {}
-    public void removeData(String userID, String keyToRemove, String destinationType, String destinationKey) {}
-
-
-
-
-
-
-
     /// Deletes the first document with a specified ID //start here
+    @Override
     public void removeData(String userID) {
 
         /// INITIALIZE CONNECTION
@@ -492,6 +490,18 @@ public class MongoDBHandler implements DBHandler {
         /// DESTROY CONNECTION
         mongoClient.close();
     }
+    @Override
+    public void removeData(String userID, String removeKey, String destinationType) {}
+    @Override
+    public void removeData(String userID, String keyToRemove, String destinationType, String destinationKey) {}
+
+
+
+
+
+
+
+    
 
     
     
@@ -594,9 +604,10 @@ public class MongoDBHandler implements DBHandler {
 
     /*
      * ----------------------------------------------------------------------------------------------------------------------
-     * ting som ikke er i iterface
+     ******************* ting som ikke er i iterface*******************
      * --------------------------------------------------------------------------------------------------------------------------
      */
+
     /// Deletes all documents with a specified ID (if duplicates exist)
     public void deleteManyDocuments(String idValue) {
 
