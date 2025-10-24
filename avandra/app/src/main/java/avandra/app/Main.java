@@ -1,7 +1,7 @@
 package avandra.app;
 
+//denne kommentaren tester gitignore
 
-import avandra.core.port.DBHandler;
 import avandra.storage.adapter.MongoDBHandler;
 
 public class Main {

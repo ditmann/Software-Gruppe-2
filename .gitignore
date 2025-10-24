@@ -4,11 +4,11 @@
 # Editor-based HTTP Client requests
 /httpRequests/
 # User-specific project settings
-/*.iml
-/avandra/target/
-/avandra/.idea_modules/
-/avandra/api/target/
-/avandra/app/target/
-/avandra/core/target/
-/avandra/storage/target/
-/avandra/test/target/
+*/*.iml
+*/avandra/target/
+*/avandra/.idea_modules/
+*/avandra/api/target/
+*/avandra/app/target/
+*/avandra/core/target/
+*/avandra/storage/target/
+*/avandra/test/target/
