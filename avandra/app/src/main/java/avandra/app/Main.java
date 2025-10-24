@@ -1,13 +1,20 @@
 package avandra.app;
 
 
+import avandra.storage.adapter.MongoDBConnection;
 import avandra.storage.adapter.MongoDBHandler;
 
 public class Main {
     public static void main(String[] args) throws Exception {
 
 
-        MongoDBHandler dbHandler = new MongoDBHandler();
+        MongoDBConnection connection = new MongoDBConnection();
+
+
+        MongoDBHandler dbHandler = new MongoDBHandler(connection);
+
+        dbHandler.createUser("test",false);
+
         //dbHandler.createUser("id", "Tina", true, "27", "hjem", "theodor vei :p");
         //dbHandler.addCoordinatesToDestination("Tina", "hjem", 59.3333, 10.3394);
 
