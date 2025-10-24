@@ -1,5 +1,6 @@
 package avandra.app;
 
+//denne kommertaren tester gitingore
 
 import avandra.storage.adapter.MongoDBHandler;
 

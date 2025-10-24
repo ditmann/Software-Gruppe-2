@@ -5,10 +5,4 @@
 /httpRequests/
 # User-specific project settings
 */*.iml
-*/target/
-*/.idea_modules/
-*/api/target/
-*/app/target/
-*/core/target/
-*/storage/target/
-*/test/target/
+.class
