@@ -1,12 +1,12 @@
 package avandra.storage.adapter;
 
+import avandra.core.port.DBConnection;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
-public class MongoDBConnection implements AutoCloseable {
+public class MongoDBConnection implements AutoCloseable, DBConnection {
 
     private final String user; //final because one must log out to log back in, restart is okay
     private final String pass; //^
