@@ -13,7 +13,7 @@ public class Main {
 
         MongoDBHandler dbHandler = new MongoDBHandler(connection);
 
-        dbHandler.createUser("test",false);
+        dbHandler.createUser("lmao",true);
 
         //dbHandler.createUser("id", "Tina", true, "27", "hjem", "theodor vei :p");
         //dbHandler.addCoordinatesToDestination("Tina", "hjem", 59.3333, 10.3394);

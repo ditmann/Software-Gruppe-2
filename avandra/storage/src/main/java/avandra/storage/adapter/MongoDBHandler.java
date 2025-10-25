@@ -29,6 +29,7 @@ public class MongoDBHandler implements DBHandler {
     private ArrayList<Document> list = new ArrayList<>();
     private String idField = "id";
     private MongoDBConnection mongoDBConnection;
+    private MongoCollection<Document> collection;
 
     public MongoDBHandler(MongoDBConnection connection) {
         this.mongoDBConnection = connection;
@@ -65,9 +66,9 @@ public class MongoDBHandler implements DBHandler {
     public void createUser(String userID, boolean adminUser){
         /// for future use: take input?
         // find secure way to assign variables from front end (?) or store securely closer to core(?)
-        try  {
+        try (MongoDBConnection connection = mongoDBConnection.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
-            MongoCollection<Document> collection = mongoDBConnection.getCollection();
+            collection = connection.getCollection();
 
             /// insertion of param - actual use of funct
             Document userDoc = new Document("id", userID)
@@ -76,7 +77,6 @@ public class MongoDBHandler implements DBHandler {
             List<String> litebrukere = new ArrayList<>();
             Document planned_trips = new Document();
             Document favorites = new Document();
-
             userDoc.append("litebrukere", litebrukere).append("planlagte reiser", planned_trips).append("favoritter", favorites);
 
             collection.insertOne(userDoc);

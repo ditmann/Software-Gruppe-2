@@ -65,10 +65,13 @@ public class MongoDBConnection implements AutoCloseable {
         this.db_name = db_name;
     }
 
-
+    public MongoDBConnection open() throws Exception {
+        return this;
+    }
 
     @Override
     public void close() throws Exception {
         client.close();
     }
 }
+
