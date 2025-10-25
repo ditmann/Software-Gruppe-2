@@ -28,8 +28,11 @@ public class MongoDBHandler implements DBHandler {
 
     private ArrayList<Document> list = new ArrayList<>();
     private String idField = "id";
-    private MongoDBConnection mongoDBConnection;
+
+    /// NOT given get'ers & set'ers as this app only accesses this specific db and area
+    private final MongoDBConnection mongoDBConnection; //final fordi denne ikke skal endres, bare hentes info fra
     private MongoCollection<Document> collection;
+
 
     public MongoDBHandler(MongoDBConnection connection) {
         this.mongoDBConnection = connection;
@@ -80,7 +83,6 @@ public class MongoDBHandler implements DBHandler {
             userDoc.append("litebrukere", litebrukere).append("planlagte reiser", planned_trips).append("favoritter", favorites);
 
             collection.insertOne(userDoc);
-
         }
         /// Super basic error "handling" + if mongo-specific, notification
         catch (MongoException e) {
@@ -96,9 +98,9 @@ public class MongoDBHandler implements DBHandler {
     /// Funksjon for å legge til destinasjoner til favoritter
     public void addDestinationToFavorites(String userID, String destinationName, String address, double latitude, double longitude) {
 
-        try {
+        try (MongoDBConnection connection = mongoDBConnection.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
-            MongoCollection<Document> collection = mongoDBConnection.getCollection();
+            collection = connection.getCollection();
 
             Document coordinates = new Document("latitude", latitude).append("longitude", longitude);
             Document destinationDetails = new Document("adresse", address).append("koordinater", coordinates);
@@ -121,9 +123,9 @@ public class MongoDBHandler implements DBHandler {
 
     public void addCoordinatesToDestination(String userID, String destinationName, double latitude, double longitude) {
 
-        try {
+        try (MongoDBConnection connection = mongoDBConnection.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
-            MongoCollection<Document> collection = mongoDBConnection.getCollection();
+            collection = connection.getCollection();
 
             Document coordinates = new Document("latitude", latitude).append("longitude", longitude);
 
@@ -145,9 +147,9 @@ public class MongoDBHandler implements DBHandler {
     /// Returns all documents in the collection as an array
     public ArrayList<Document> retrieveAllData() {
 
-        try {
+        try (MongoDBConnection connection = mongoDBConnection.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
-            MongoCollection<Document> collection = mongoDBConnection.getCollection();
+            collection = connection.getCollection();
 
             /// Retrieval of data - actual use of funct
             FindIterable<Document> content = collection.find();
@@ -240,9 +242,9 @@ public class MongoDBHandler implements DBHandler {
     /// Returns all docs which contain the specified key:value in an array
     public ArrayList<Document> retrieveByKeyValue(String key, String value){
 
-        try {
+        try (MongoDBConnection connection = mongoDBConnection.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
-            MongoCollection<Document> collection = mongoDBConnection.getCollection();
+            collection = connection.getCollection();
 
             /// Retrieval of data - actual use of funct
             FindIterable<Document> content = collection.find(Filters.eq(key, value));
@@ -269,9 +271,9 @@ public class MongoDBHandler implements DBHandler {
     //TODO:
     public void appendData(String idValue, String addKey, Object addValue) {
 
-        try {
+        try (MongoDBConnection connection = mongoDBConnection.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
-            MongoCollection<Document> collection = mongoDBConnection.getCollection();
+            collection = connection.getCollection();
 
             /// search by and insertion of param - actual use of funct
             collection.updateOne(Filters.eq(getIdField(), idValue), Updates.set(addKey, addValue));
@@ -291,9 +293,9 @@ public class MongoDBHandler implements DBHandler {
     //TODO: What if specified key does not exist? (It does nothing), make error message?
     public void removeData(String userID, String removeKey) {
 
-        try {
+        try (MongoDBConnection connection = mongoDBConnection.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
-            MongoCollection<Document> collection = mongoDBConnection.getCollection();
+            collection = connection.getCollection();
 
             /// remove key and value at specified key - actual use of funct
             collection.updateOne(Filters.eq(getIdField(), userID), Updates.unset(removeKey));
@@ -316,11 +318,21 @@ public class MongoDBHandler implements DBHandler {
 
     /// Deletes the first document with a specified ID //start here
     public void removeData(String userID) {
-        /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
-        MongoCollection<Document> collection = mongoDBConnection.getCollection();
+        try (MongoDBConnection connection = mongoDBConnection.open()) {
+            /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
+            collection = connection.getCollection();
 
-        /// remove key and value at specified key - actual use of funct
-        collection.deleteOne(Filters.eq(getIdField(), userID));
+            /// remove key and value at specified key - actual use of funct
+            collection.deleteOne(Filters.eq(getIdField(), userID));
+        }
+        catch (MongoException e) {
+            System.out.println("\nMongoDB exception: ");
+            e.printStackTrace();
+        }
+        catch (Exception e) {
+            System.out.println("\nNon-DB exception: ");
+            e.printStackTrace();
+        }
     }
 
     
