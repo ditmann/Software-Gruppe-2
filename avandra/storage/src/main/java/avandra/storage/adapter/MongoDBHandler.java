@@ -2,44 +2,39 @@ package avandra.storage.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.bson.Document;
-
 import com.mongodb.MongoException;
 import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
-import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
-
 import avandra.core.domain.Coordinate;
 import avandra.core.port.DBHandler;
-
-import javax.print.Doc;
 
 public class MongoDBHandler implements DBHandler {
 
     ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
-    /// VARIABLES
+    /// VARIABLE(S)
     ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
 
     private ArrayList<Document> list = new ArrayList<>();
     private String idField = "id";
 
-    /// NOT given get'ers & set'ers as this app only accesses this specific db and area
-    private final MongoDBConnection mongoDBConnection; //final fordi denne ikke skal endres, bare hentes info fra
+    // NOT given get'ers & set'ers as this application only accesses this specific db and collection
+    private final MongoDBConnection mongoDBConnection;
     private MongoCollection<Document> collection;
 
+    ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
+    /// CONSTRUCTOR(S)
+    ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
 
     public MongoDBHandler(MongoDBConnection connection) {
         this.mongoDBConnection = connection;
     }
 
     ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
-    /// GET'ERS & SET'ERS
+    /// GET'ER(s) & SET'ER(s)
     ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
 
     public ArrayList<Document> getList() {
@@ -57,23 +52,21 @@ public class MongoDBHandler implements DBHandler {
     public void setIdField(String idField) {this.idField = idField;}
 
     ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
-    /// METHODS
+    /// METHOD(S)
     ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
-
 
     /// Creates a doc with the given content at the specified db and collection
     //TODO: prevent duplicates:
     //make it use appendData if id already exists? maybe just not work?
 
-    /// Oppretter en bruker med tomme dokumenter/lister
+    /// Creates a document in the collection which represents a user, with all required fields
     public void createUser(String userID, boolean adminUser){
-        /// for future use: take input?
-        // find secure way to assign variables from front end (?) or store securely closer to core(?)
+
         try (MongoDBConnection connection = mongoDBConnection.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
-            /// insertion of param - actual use of funct
+            /// Method Logic: creating and inserting the keys (and values where required)
             Document userDoc = new Document("id", userID)
                     .append("admin", adminUser);
 
@@ -84,7 +77,7 @@ public class MongoDBHandler implements DBHandler {
 
             collection.insertOne(userDoc);
         }
-        /// Super basic error "handling" + if mongo-specific, notification
+        /// Super basic error "handling" + specified if Mongo-error
         catch (MongoException e) {
             System.out.println("\nMongoDB exception: ");
             e.printStackTrace();
@@ -110,6 +103,7 @@ public class MongoDBHandler implements DBHandler {
             collection.updateOne(Filters.eq("id", userID), update);
 
         }
+        /// Super basic error "handling" + specified if Mongo-error
         catch (MongoException e) {
             System.out.println("\nMongoDB exception: ");
             e.printStackTrace();
@@ -133,6 +127,7 @@ public class MongoDBHandler implements DBHandler {
 
             collection.updateOne(Filters.eq("id", userID), update);
         }
+        /// Super basic error "handling" + specified if Mongo-error
         catch (MongoException e) {
             System.out.println("\nMongoDB exception: ");
             e.printStackTrace();
@@ -157,8 +152,7 @@ public class MongoDBHandler implements DBHandler {
                 getList().add(doc);
             }
         }
-
-        /// Super basic error "handling" + if mongo-specific, notification
+        /// Super basic error "handling" + specified if Mongo-error
         catch (MongoException e) {
             System.out.println("\nMongoDB exception: ");
             e.printStackTrace();
@@ -173,13 +167,11 @@ public class MongoDBHandler implements DBHandler {
 
 
     public Coordinate searchDestination(String userID, String destinationID){
-
-        /// Same vars
         String coordinateFieldName = "koordinater";
 
-        try {
+        try (MongoDBConnection connection = mongoDBConnection.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
-            MongoCollection<Document> collection = mongoDBConnection.getCollection();
+            collection = connection.getCollection();
 
             /// Retrieval of data - actual use of funct
             Document userDoc = collection.find(Filters.eq("id", userID)).first();
@@ -202,6 +194,7 @@ public class MongoDBHandler implements DBHandler {
 
             return new Coordinate(lat, lon);
         }
+        /// Super basic error "handling" + specified if Mongo-error
         catch (MongoException e) {
             System.out.println("\nMongoDB exception: ");
             e.printStackTrace();
@@ -217,16 +210,15 @@ public class MongoDBHandler implements DBHandler {
     @Override
     public Coordinate destinationCoordinate(String name) {
 
-        try {
+        try (MongoDBConnection connection = mongoDBConnection.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
-            MongoCollection<Document> collection = mongoDBConnection.getCollection();
+            collection = connection.getCollection();
 
             ///  Må finne bruker
             Document userDoc = collection.find(Filters.eq("id", name)).first();
             if (userDoc == null) return null;
         }
-
-        /// Super basic error "handling" + if mongo-specific, notification
+        /// Super basic error "handling" + specified if Mongo-error
         catch (MongoException e) {
             System.out.println("\nMongoDB exception: ");
             e.printStackTrace();
@@ -235,6 +227,7 @@ public class MongoDBHandler implements DBHandler {
             System.out.println("\nNon-DB exception: ");
             e.printStackTrace();
         }
+
         return null;
     }
 
@@ -252,7 +245,7 @@ public class MongoDBHandler implements DBHandler {
                 getList().add(doc);
             }
         }
-
+        /// Super basic error "handling" + specified if Mongo-error
         catch (MongoException e) {
             System.out.println("\nMongoDB exception: ");
             e.printStackTrace();
@@ -278,7 +271,7 @@ public class MongoDBHandler implements DBHandler {
             /// search by and insertion of param - actual use of funct
             collection.updateOne(Filters.eq(getIdField(), idValue), Updates.set(addKey, addValue));
         }
-
+        /// Super basic error "handling" + specified if Mongo-error
         catch (MongoException e) {
             System.out.println("\nMongoDB exception: ");
             e.printStackTrace();
@@ -300,7 +293,7 @@ public class MongoDBHandler implements DBHandler {
             /// remove key and value at specified key - actual use of funct
             collection.updateOne(Filters.eq(getIdField(), userID), Updates.unset(removeKey));
         }
-
+        /// Super basic error "handling" + specified if Mongo-error
         catch (MongoException e) {
             System.out.println("\nMongoDB exception: ");
             e.printStackTrace();
@@ -318,6 +311,7 @@ public class MongoDBHandler implements DBHandler {
 
     /// Deletes the first document with a specified ID //start here
     public void removeData(String userID) {
+
         try (MongoDBConnection connection = mongoDBConnection.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
@@ -325,6 +319,7 @@ public class MongoDBHandler implements DBHandler {
             /// remove key and value at specified key - actual use of funct
             collection.deleteOne(Filters.eq(getIdField(), userID));
         }
+        /// Super basic error "handling" + specified if Mongo-error
         catch (MongoException e) {
             System.out.println("\nMongoDB exception: ");
             e.printStackTrace();
@@ -395,6 +390,7 @@ public class MongoDBHandler implements DBHandler {
             );
             return insertRes.getModifiedCount() == 1;
         }
+        /// Super basic error "handling" + specified if Mongo-error
         catch (MongoException e) {
             System.out.println("\nMongoDB exception: ");
             e.printStackTrace();
@@ -422,6 +418,7 @@ public class MongoDBHandler implements DBHandler {
             /// remove key and value at specified key - actual use of funct
             collection.deleteMany(Filters.eq(getIdField(), idValue));
         }
+        /// Super basic error "handling" + specified if Mongo-error
         catch (MongoException e) {
             System.out.println("\nMongoDB exception: ");
             e.printStackTrace();
@@ -450,9 +447,9 @@ public class MongoDBHandler implements DBHandler {
                         getList().add(doc); //save for later
                 }
             }
-            //if list.isEmpty() then create error message ..
         }
     }
+        /// Super basic error "handling" + specified if Mongo-error
         catch (MongoException e) {
         System.out.println("\nMongoDB exception: ");
         e.printStackTrace();
@@ -461,6 +458,11 @@ public class MongoDBHandler implements DBHandler {
         System.out.println("\nNon-DB exception: ");
         e.printStackTrace();
     }
+
+        if (getList().isEmpty()) {
+            System.out.println("Fant ingen dokumenter som matcher søkeordet");
+        }
+        //returns an empty list if search term had no matches
         return getList();
     }
 }
