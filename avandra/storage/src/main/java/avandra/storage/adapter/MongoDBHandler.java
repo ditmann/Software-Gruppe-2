@@ -55,27 +55,31 @@ public class MongoDBHandler implements DBHandler {
     /// METHOD(S)
     ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
 
-    /// Creates a doc with the given content at the specified db and collection
-    //TODO: prevent duplicates:
-    //make it use appendData if id already exists? maybe just not work?
 
-    /// Creates a document in the collection which represents a user, with all required fields
+    /// Creates a new document in the collection which represents a user, with all required fields
     public void createUser(String userID, boolean adminUser){
 
         try (MongoDBConnection connection = mongoDBConnection.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
-            /// Method Logic: creating and inserting the keys (and values where required)
-            Document userDoc = new Document("id", userID)
-                    .append("admin", adminUser);
 
-            List<String> litebrukere = new ArrayList<>();
-            Document planned_trips = new Document();
-            Document favorites = new Document();
-            userDoc.append("litebrukere", litebrukere).append("planlagte reiser", planned_trips).append("favoritter", favorites);
+            /// Method Logic: creating and inserting the keys (and values where required), if the ID doesn't exist
+            Boolean existingID = collection.find(Filters.eq(getIdField(), userID)).iterator().hasNext();
+            if (existingID) {
+                System.out.println("Denne ID'en eksisterer allerede");
+            }
+            else {
+                Document userDoc = new Document("id", userID)
+                        .append("admin", adminUser);
 
-            collection.insertOne(userDoc);
+                List<String> litebrukere = new ArrayList<>();
+                Document planned_trips = new Document();
+                Document favorites = new Document();
+                userDoc.append("litebrukere", litebrukere).append("planlagte reiser", planned_trips).append("favoritter", favorites);
+
+                collection.insertOne(userDoc);
+            }
         }
         /// Super basic error "handling" + specified if Mongo-error
         catch (MongoException e) {
@@ -88,20 +92,19 @@ public class MongoDBHandler implements DBHandler {
         }
     }
 
-    /// Funksjon for å legge til destinasjoner til favoritter
+    /// Adds a destination to the Document called "favoritter"
     public void addDestinationToFavorites(String userID, String destinationName, String address, double latitude, double longitude) {
 
         try (MongoDBConnection connection = mongoDBConnection.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
+            /// Method Logic: creates all necessary data from input, assembles hierarchy and adds to favoritter
             Document coordinates = new Document("latitude", latitude).append("longitude", longitude);
             Document destinationDetails = new Document("adresse", address).append("koordinater", coordinates);
-
             Document update = new Document("$set", new Document("favoritter." + destinationName, destinationDetails));
 
             collection.updateOne(Filters.eq("id", userID), update);
-
         }
         /// Super basic error "handling" + specified if Mongo-error
         catch (MongoException e) {
@@ -115,14 +118,17 @@ public class MongoDBHandler implements DBHandler {
     }
 
 
+    //TODO: should be generalized to add coordinates to any list? Now just to favorites
+    // OR: change name of method
     public void addCoordinatesToDestination(String userID, String destinationName, double latitude, double longitude) {
 
         try (MongoDBConnection connection = mongoDBConnection.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
+            /// Method Logic: Adds coordinates to the "koordinater"-key under an input-key for destination
+            /// in the list "favoritter"
             Document coordinates = new Document("latitude", latitude).append("longitude", longitude);
-
             Document update = new Document("$set", new Document("favoritter." + destinationName + ".koordinater", coordinates));
 
             collection.updateOne(Filters.eq("id", userID), update);
@@ -146,7 +152,7 @@ public class MongoDBHandler implements DBHandler {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
-            /// Retrieval of data - actual use of funct
+            /// Method Logic: Find and retrieve data
             FindIterable<Document> content = collection.find();
             for (Document doc : content) {
                 getList().add(doc);
@@ -166,6 +172,7 @@ public class MongoDBHandler implements DBHandler {
     }
 
 
+    /// TODO: add description of what it does
     public Coordinate searchDestination(String userID, String destinationID){
         String coordinateFieldName = "koordinater";
 
@@ -173,7 +180,7 @@ public class MongoDBHandler implements DBHandler {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
-            /// Retrieval of data - actual use of funct
+            /// Method Logic: find and retrieve data where there is
             Document userDoc = collection.find(Filters.eq("id", userID)).first();
             if (userDoc == null) return null;
 
@@ -207,6 +214,8 @@ public class MongoDBHandler implements DBHandler {
         return null;
     }
 
+
+    /// TODO: WHAT DOES THIS DO? returns null no matter what ?
     @Override
     public Coordinate destinationCoordinate(String name) {
 
@@ -214,7 +223,7 @@ public class MongoDBHandler implements DBHandler {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
-            ///  Må finne bruker
+            /// Method Logic:
             Document userDoc = collection.find(Filters.eq("id", name)).first();
             if (userDoc == null) return null;
         }
@@ -231,7 +240,6 @@ public class MongoDBHandler implements DBHandler {
         return null;
     }
 
-
     /// Returns all docs which contain the specified key:value in an array
     public ArrayList<Document> retrieveByKeyValue(String key, String value){
 
@@ -239,7 +247,7 @@ public class MongoDBHandler implements DBHandler {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
-            /// Retrieval of data - actual use of funct
+            /// Method Logic: Retrieve data
             FindIterable<Document> content = collection.find(Filters.eq(key, value));
             for (Document doc : content) {
                 getList().add(doc);
@@ -258,18 +266,16 @@ public class MongoDBHandler implements DBHandler {
         return getList();
     }
 
-
     /// Identifies a doc with the value of the id-key, adds a new key:value at end
     /// OR overwrites existing value if key already exists
-    //TODO:
-    public void appendData(String idValue, String addKey, Object addValue) {
+    public void appendData(String userID, String addKey, Object addValue) {
 
         try (MongoDBConnection connection = mongoDBConnection.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
-            /// search by and insertion of param - actual use of funct
-            collection.updateOne(Filters.eq(getIdField(), idValue), Updates.set(addKey, addValue));
+            /// Method Logic: search by and insertion of parameters
+            collection.updateOne(Filters.eq(getIdField(), userID), Updates.set(addKey, addValue));
         }
         /// Super basic error "handling" + specified if Mongo-error
         catch (MongoException e) {
@@ -282,16 +288,21 @@ public class MongoDBHandler implements DBHandler {
         }
     }
 
-    /// Removes key and value in specified doc at specified key
-    //TODO: What if specified key does not exist? (It does nothing), make error message?
+    /// Removes key and value in specified doc at specified key, if it exists
     public void removeData(String userID, String removeKey) {
 
         try (MongoDBConnection connection = mongoDBConnection.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
-            /// remove key and value at specified key - actual use of funct
-            collection.updateOne(Filters.eq(getIdField(), userID), Updates.unset(removeKey));
+            /// Method Logic: remove key and value at specified key
+            Boolean existingID = collection.find(Filters.eq(getIdField(), userID)).iterator().hasNext();
+            if (existingID) {
+                collection.updateOne(Filters.eq(getIdField(), userID), Updates.unset(removeKey));
+            }
+            else {
+                System.out.println("\nThe ID \"userID\" does not exist.");
+            }
         }
         /// Super basic error "handling" + specified if Mongo-error
         catch (MongoException e) {
@@ -310,13 +321,14 @@ public class MongoDBHandler implements DBHandler {
 
 
     /// Deletes the first document with a specified ID //start here
+    /// TODO: if-test..?? if ID doesnt exist? maybe all need an if-test?
     public void removeData(String userID) {
 
         try (MongoDBConnection connection = mongoDBConnection.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
-            /// remove key and value at specified key - actual use of funct
+            /// Method Logic: remove key and value at specified key
             collection.deleteOne(Filters.eq(getIdField(), userID));
         }
         /// Super basic error "handling" + specified if Mongo-error
@@ -345,7 +357,8 @@ public class MongoDBHandler implements DBHandler {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
-            //  Sjekk at admin har tilgang til denne lite-brukeren
+            /// Method Logic:
+            //Check that admin has access to this lite-user
             Document admin = collection.find(
                     Filters.and(
                             Filters.eq("id", adminId),
@@ -353,7 +366,7 @@ public class MongoDBHandler implements DBHandler {
                     )
             ).first();
 
-            // Forsøk å OPPDATERE eksisterende destinasjon
+            //attempt to UPDATE existing destination
             var updateRes = collection.updateOne(
                     Filters.and(
                             Filters.eq("id", liteUserId),
@@ -369,7 +382,7 @@ public class MongoDBHandler implements DBHandler {
                             Updates.set("favorites.$.updatedAt", java.time.Instant.now()),
                             Updates.set("favorites.$.adminId", adminId)));
 
-            // Hvis ikke fantes: PUSH ny destinasjon
+            //If did not exist: PUSH new destination
             Document coords = new Document();
             if (lat != null) coords.put("lat", lat);
             if (lng != null) coords.put("lng", lng);
@@ -404,18 +417,18 @@ public class MongoDBHandler implements DBHandler {
     }
 
 
-    /*
-     * ----------------------------------------------------------------------------------------------------------------------
-     * ting som ikke er i interface
-     * --------------------------------------------------------------------------------------------------------------------------
-     */
-    /// Deletes all documents with a specified ID (if duplicates exist)
+    ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
+    ///  METHODS NOT FROM INTERFACE
+    ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
+
+    /// Deletes all documents with a specified ID
+    // necessary for developers in case of duplicate ID entries
     public void deleteManyDocuments(String idValue) {
         try (MongoDBConnection connection = mongoDBConnection.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
-            /// remove key and value at specified key - actual use of funct
+            /// Method Logic: remove key and value at specified key
             collection.deleteMany(Filters.eq(getIdField(), idValue));
         }
         /// Super basic error "handling" + specified if Mongo-error
@@ -431,17 +444,17 @@ public class MongoDBHandler implements DBHandler {
 
     /// Searches the entire collection for a term and adds the containing doc to the return array
     // if alot of data this will take alot of processing time
-    // not tested, will likely have issues with nested dictionaries but work with direct values
+    // useful for developers in testing
     public ArrayList<Document> retrieveByValue(String searchTerm) {
         try (MongoDBConnection connection = mongoDBConnection.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
-            /// Retrieval of data - actual use of funct
-            MongoCursor<Document> cursor = collection.find().iterator(); //find() henter alt uten param
-            //iterator() sørger for en returtype som kan behandles av MongoCursor (som behandler data mer effektivt enn å lese inn absolutt alt selv)
-            while (cursor.hasNext()) { //for each item the mongocursor holds
-                Document doc = cursor.next(); //associating the cursor item with a datatype and var
+            /// Method Logic: retrieval of data
+            MongoCursor<Document> cursor = collection.find().iterator(); //find() fetches everything
+            //iterator() ensures a return type MongoCursor can use, for efficient data handling
+             while (cursor.hasNext()) { //for each item the mongocursor holds
+                Document doc = cursor.next(); //associating the cursor item with a datatype and variable
                 for (String key : doc.keySet()) {
                     if (doc.get(key).equals(searchTerm) || key.equals(searchTerm)) { //if value or key of doc matches input-value
                         getList().add(doc); //save for later
