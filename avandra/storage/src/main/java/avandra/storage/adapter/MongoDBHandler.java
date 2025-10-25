@@ -335,18 +335,6 @@ public class MongoDBHandler implements DBHandler {
         }
     }
 
-    
-    
-
-
-
-
-/*
-    public Coordinate destinationCoordinate(){
-
-        return new Coordinate(destinationCoordinate().getLatitudeNum(), destinationCoordinate().getLongitudeNUM());
-    } */
-
     /// Oppdater/legg til destinasjon hos lite-bruker, KUN hvis adminId har tilgang i admins.allowedLiteUsers
     public boolean insertDestinationForLiteUser(
             String liteUserId,
@@ -358,9 +346,9 @@ public class MongoDBHandler implements DBHandler {
             String adminId
     ) {
 
-        try {
+        try (MongoDBConnection connection = mongoDBConnection.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
-            MongoCollection<Document> collection = mongoDBConnection.getCollection();
+            collection = connection.getCollection();
 
             //  Sjekk at admin har tilgang til denne lite-brukeren
             Document admin = collection.find(
@@ -406,12 +394,13 @@ public class MongoDBHandler implements DBHandler {
                     Updates.push("favorites", destDoc)
             );
             return insertRes.getModifiedCount() == 1;
-
-        } catch (MongoException e) {
+        }
+        catch (MongoException e) {
             System.out.println("\nMongoDB exception: ");
             e.printStackTrace();
             return false;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             System.out.println("\nNon-DB exception: ");
             e.printStackTrace();
             return false;
@@ -426,33 +415,52 @@ public class MongoDBHandler implements DBHandler {
      */
     /// Deletes all documents with a specified ID (if duplicates exist)
     public void deleteManyDocuments(String idValue) {
-        /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
-        MongoCollection<Document> collection = mongoDBConnection.getCollection();
+        try (MongoDBConnection connection = mongoDBConnection.open()) {
+            /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
+            collection = connection.getCollection();
 
-        /// remove key and value at specified key - actual use of funct
-        collection.deleteMany(Filters.eq(getIdField(), idValue));
+            /// remove key and value at specified key - actual use of funct
+            collection.deleteMany(Filters.eq(getIdField(), idValue));
+        }
+        catch (MongoException e) {
+            System.out.println("\nMongoDB exception: ");
+            e.printStackTrace();
+        }
+        catch (Exception e) {
+            System.out.println("\nNon-DB exception: ");
+            e.printStackTrace();
+        }
     }
-
 
     /// Searches the entire collection for a term and adds the containing doc to the return array
     // if alot of data this will take alot of processing time
     // not tested, will likely have issues with nested dictionaries but work with direct values
     public ArrayList<Document> retrieveByValue(String searchTerm) {
-        /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
-        MongoCollection<Document> collection = mongoDBConnection.getCollection();
+        try (MongoDBConnection connection = mongoDBConnection.open()) {
+            /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
+            collection = connection.getCollection();
 
-        /// Retrieval of data - actual use of funct
-        MongoCursor<Document> cursor = collection.find().iterator(); //find() henter alt uten param
-        //iterator() sørger for en returtype som kan behandles av MongoCursor (som behandler data mer effektivt enn å lese inn absolutt alt selv)
-        while (cursor.hasNext()) { //for each item the mongocursor holds
-            Document doc = cursor.next(); //associating the cursor item with a datatype and var
-            for (String key : doc.keySet()) {
-                if (doc.get(key).equals(searchTerm) || key.equals(searchTerm)) { //if value or key of doc matches input-value
-                    getList().add(doc); //save for later
+            /// Retrieval of data - actual use of funct
+            MongoCursor<Document> cursor = collection.find().iterator(); //find() henter alt uten param
+            //iterator() sørger for en returtype som kan behandles av MongoCursor (som behandler data mer effektivt enn å lese inn absolutt alt selv)
+            while (cursor.hasNext()) { //for each item the mongocursor holds
+                Document doc = cursor.next(); //associating the cursor item with a datatype and var
+                for (String key : doc.keySet()) {
+                    if (doc.get(key).equals(searchTerm) || key.equals(searchTerm)) { //if value or key of doc matches input-value
+                        getList().add(doc); //save for later
                 }
             }
             //if list.isEmpty() then create error message ..
         }
+    }
+        catch (MongoException e) {
+        System.out.println("\nMongoDB exception: ");
+        e.printStackTrace();
+    }
+        catch (Exception e) {
+        System.out.println("\nNon-DB exception: ");
+        e.printStackTrace();
+    }
         return getList();
     }
 }
