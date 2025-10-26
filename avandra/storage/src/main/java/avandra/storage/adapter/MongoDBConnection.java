@@ -7,6 +7,8 @@ import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 
 public class MongoDBConnection implements AutoCloseable, DBConnection {
+    /// Connects to the specific database and collection Avandra uses
+    /// to store user information
 
     private final String user; //final because one must log out to log back in, restart is okay
     private final String pass; //^
@@ -50,6 +52,7 @@ public class MongoDBConnection implements AutoCloseable, DBConnection {
     }
 
     /// makes it possible to open a different Database or different collection in MongoDB
+    /// if a developer would like to ..
     public void setCollectionName(String collection_name) {
         this.collection_name = collection_name;
     }
@@ -57,25 +60,20 @@ public class MongoDBConnection implements AutoCloseable, DBConnection {
         this.db_name = db_name;
     }
 
-
-   /*public MongoDatabase getDb() {
-        return client.getDatabase(getDbName());
-   }
-   we need?
-   */
-
-/// Gives access to the specified collection
-//could have an override for use with other collections but this application
-//has only one collection for all its data
+    /// Gives access to the specified collection
+    //could have an override for use with other collections but this application
+    //has only one collection for all its data
    public MongoCollection<Document> getCollection () {
         return client.getDatabase(getDbName()).getCollection(getCollectionName());
    }
 
+   /// Returns self as an opened connection to the database
     public MongoDBConnection open() throws Exception {
         return this;
     }
 
-    @Override //good to have
+    @Override
+    /// For the madmen not using try-with-resources
     public void close() throws Exception {
         client.close();
     }

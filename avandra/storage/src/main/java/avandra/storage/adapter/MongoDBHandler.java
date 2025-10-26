@@ -11,6 +11,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import avandra.core.domain.Coordinate;
 import avandra.core.port.DBHandler;
+import org.bson.conversions.Bson;
 
 public class MongoDBHandler implements DBHandler {
 
@@ -55,14 +56,12 @@ public class MongoDBHandler implements DBHandler {
     /// METHOD(S)
     ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
 
-
     /// Creates a new document in the collection which represents a user, with all required fields
     public void createUser(String userID, boolean adminUser){
 
         try (MongoDBConnection connection = mongoDBConnection.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
-
 
             /// Method Logic: creating and inserting the keys (and values where required), if the ID doesn't exist
             Boolean existingID = collection.find(Filters.eq(getIdField(), userID)).iterator().hasNext();
@@ -236,7 +235,6 @@ public class MongoDBHandler implements DBHandler {
             System.out.println("\nNon-DB exception: ");
             e.printStackTrace();
         }
-
         return null;
     }
 
@@ -249,8 +247,14 @@ public class MongoDBHandler implements DBHandler {
 
             /// Method Logic: Retrieve data
             FindIterable<Document> content = collection.find(Filters.eq(key, value));
-            for (Document doc : content) {
-                getList().add(doc);
+            if (content.iterator().hasNext()) {
+                for (Document doc : content) {
+                    getList().add(doc);
+                }
+            }
+            else {
+                System.out.println("No match for key and value.");
+                //tom liste vil returneres
             }
         }
         /// Super basic error "handling" + specified if Mongo-error
@@ -275,7 +279,12 @@ public class MongoDBHandler implements DBHandler {
             collection = connection.getCollection();
 
             /// Method Logic: search by and insertion of parameters
-            collection.updateOne(Filters.eq(getIdField(), userID), Updates.set(addKey, addValue));
+            if (collection.countDocuments(Filters.eq(getIdField(), userID)) > 0) {
+                collection.updateOne(Filters.eq(getIdField(), userID), Updates.set(addKey, addValue));
+            }
+            else {
+                System.out.println("Found no match for " + userID + "\n");
+            }
         }
         /// Super basic error "handling" + specified if Mongo-error
         catch (MongoException e) {
@@ -321,7 +330,6 @@ public class MongoDBHandler implements DBHandler {
 
 
     /// Deletes the first document with a specified ID //start here
-    /// TODO: if-test..?? if ID doesnt exist? maybe all need an if-test?
     public void removeData(String userID) {
 
         try (MongoDBConnection connection = mongoDBConnection.open()) {
@@ -329,7 +337,12 @@ public class MongoDBHandler implements DBHandler {
             collection = connection.getCollection();
 
             /// Method Logic: remove key and value at specified key
-            collection.deleteOne(Filters.eq(getIdField(), userID));
+            if (collection.countDocuments(Filters.eq(getIdField(), userID)) > 0) {
+                collection.deleteOne(Filters.eq(getIdField(), userID));
+            }
+            else {
+                System.out.println("Found no match for " + userID + "\n");
+            }
         }
         /// Super basic error "handling" + specified if Mongo-error
         catch (MongoException e) {
@@ -343,6 +356,7 @@ public class MongoDBHandler implements DBHandler {
     }
 
     /// Oppdater/legg til destinasjon hos lite-bruker, KUN hvis adminId har tilgang i admins.allowedLiteUsers
+    /// TODO: what if something doesnt exist, error message?
     public boolean insertDestinationForLiteUser(
             String liteUserId,
             String destId,
@@ -423,13 +437,19 @@ public class MongoDBHandler implements DBHandler {
 
     /// Deletes all documents with a specified ID
     // necessary for developers in case of duplicate ID entries
-    public void deleteManyDocuments(String idValue) {
+    public void deleteManyDocuments(String userID) {
         try (MongoDBConnection connection = mongoDBConnection.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
             /// Method Logic: remove key and value at specified key
-            collection.deleteMany(Filters.eq(getIdField(), idValue));
+            if (collection.countDocuments(Filters.eq(getIdField(), userID)) > 0) {
+                collection.deleteMany(Filters.eq(getIdField(), userID));
+            }
+            else {
+                System.out.println("Found no match for " + userID + "\n");
+            }
+
         }
         /// Super basic error "handling" + specified if Mongo-error
         catch (MongoException e) {
@@ -473,7 +493,7 @@ public class MongoDBHandler implements DBHandler {
     }
 
         if (getList().isEmpty()) {
-            System.out.println("Fant ingen dokumenter som matcher søkeordet");
+            System.out.println("Found no match for " + searchTerm + "\n");
         }
         //returns an empty list if search term had no matches
         return getList();

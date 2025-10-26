@@ -9,11 +9,12 @@ public class Main {
 
 
         MongoDBConnection connection = new MongoDBConnection();
+        MongoDBHandler handler = new MongoDBHandler(connection);
+        handler.createUser("roflmao", true);
 
-
-        MongoDBHandler dbHandler = new MongoDBHandler(connection);
-
-        dbHandler.createUser("helo", true);
+        MongoDBConnection connection1 = new MongoDBConnection();
+        MongoDBHandler handler1 = new MongoDBHandler(connection1);
+        handler1.appendData("roflmao", "age", 12);
 
 
     }
