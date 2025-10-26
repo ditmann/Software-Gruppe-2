@@ -23,13 +23,20 @@ public class MongoDBConnectionTest {
 
     @Test
     /// Testing that open() returns an instance of the connection-class that is equal to the original
-    void open_returnsThis() throws Exception{
+    void open_returnsThis() throws Exception {
+        MongoDBConnection connection = new MongoDBConnection();
+
+        MongoDBConnection newConnection = connection.open();
+        Assertions.assertSame(connection, newConnection);
+    }
+    @Test
+    /// Tests the logic in the open()-method - that it returns itself. Here: that mockito returns itself.
+    void open_returnsMockedThis() throws Exception {
         MongoDBConnection fakeConnection = mock(MongoDBConnection.class);
 
         when(fakeConnection.open()).thenReturn(fakeConnection);
         MongoDBConnection newConnection = fakeConnection.open();
-        Assertions.assertSame(fakeConnection, newConnection);
-
-    }
+        Assertions.assertEquals(fakeConnection, newConnection);
+}
 }
 
