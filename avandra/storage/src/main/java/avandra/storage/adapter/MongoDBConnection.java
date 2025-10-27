@@ -10,11 +10,11 @@ public class MongoDBConnection implements AutoCloseable, DBConnection {
     /// Connects to the specific database and collection Avandra uses
     /// to store user information
 
-    private final String user; //final because one must log out to log back in, restart is okay
-    private final String pass; //^
+    private String user; //final because one must log out to log back in, restart is okay
+    private String pass; //^
     private String db_name = "dummy";
     private String collection_name = "testdata";
-    private final MongoClient client;
+    private MongoClient client;
 
 
 /// Exists only for developers, will not go to launch
@@ -23,7 +23,6 @@ public class MongoDBConnection implements AutoCloseable, DBConnection {
         this.pass = "Avandra1234567890";
         this.db_name = getDbName();
         this.collection_name = getCollectionName();
-        this.client = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
     }
 
 /// For users and system administrators
@@ -32,7 +31,6 @@ public class MongoDBConnection implements AutoCloseable, DBConnection {
         this.pass = password;
         this.db_name = getDbName();
         this.collection_name = getCollectionName();
-        this.client = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
     }
 
     public String getUser() {
@@ -69,6 +67,7 @@ public class MongoDBConnection implements AutoCloseable, DBConnection {
 
    /// Returns self as an opened connection to the database
     public MongoDBConnection open() throws Exception {
+        this.client = MongoClients.create("mongodb+srv://" + getUser() + ":" + getPass() + "@avandra.pix7etx.mongodb.net/" + "db");
         return this;
     }
 

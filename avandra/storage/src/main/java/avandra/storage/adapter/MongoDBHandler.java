@@ -23,7 +23,7 @@ public class MongoDBHandler implements DBHandler {
     private String idField = "id";
 
     // NOT given get'ers & set'ers as this application only accesses this specific db and collection
-    private final MongoDBConnection mongoDBConnection;
+    private MongoDBConnection mongoDBConnection;
     private MongoCollection<Document> collection;
 
     ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
@@ -60,6 +60,7 @@ public class MongoDBHandler implements DBHandler {
     public void createUser(String userID, boolean adminUser){
 
         try (MongoDBConnection connection = mongoDBConnection.open()) {
+
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 

@@ -18,9 +18,11 @@ public class Main {
         MongoDBHandler handler1 = new MongoDBHandler(connection1);
         handler1.appendData("roflmao", "age", 12);*/
 
-        MongoDBConnection conn = new MongoDBConnection();
-        MongoCollection<Document> colldoc = conn.getCollection();
-        System.out.println(colldoc);
+
+        MongoDBConnection connection1 = new MongoDBConnection();
+        MongoDBHandler handler = new MongoDBHandler(connection1);
+        handler.createUser("helo", true);
+        handler.appendData("helo", "age", 29);
 
 
     }

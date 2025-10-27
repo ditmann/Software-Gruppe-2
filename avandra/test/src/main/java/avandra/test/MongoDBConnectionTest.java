@@ -30,7 +30,7 @@ public class MongoDBConnectionTest {
         Assertions.assertSame(connection, newConnection);
     }
     @Test
-    /// Tests the logic in the open()-method - that it returns itself. Here: that mockito returns itself.
+    /// Tests the logic in the open()-method - that it returns itself. Here: that mockito returns correct.
     void open_returnsMockedThis() throws Exception {
         MongoDBConnection fakeConnection = mock(MongoDBConnection.class);
 
