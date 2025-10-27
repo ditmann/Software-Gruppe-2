@@ -1,29 +1,29 @@
 {
   "request" : {
-    "fromLat" : 59.94466257007701,
-    "fromLon" : 10.72868408529031,
+    "fromLat" : 59.95746329976858,
+    "fromLon" : 10.67625030164642,
     "toLat" : 59.2313,
     "toLon" : 10.9968,
     "numPatterns" : 1
   },
   "trip" : {
     "tripPatterns" : [ {
-      "startTime" : "2025-10-24T12:46:13+02:00",
-      "duration" : 6419,
-      "walkDistance" : 1595.95,
+      "startTime" : "2025-10-27T09:29:09+01:00",
+      "duration" : 7443,
+      "walkDistance" : 1707.8799999999999,
       "legs" : [ {
         "mode" : "foot",
-        "distance" : 507.26,
+        "distance" : 608.42,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null
       }, {
         "mode" : "metro",
-        "distance" : 5668.21,
+        "distance" : 9346.05,
         "line" : {
-          "id" : "RUT:Line:5",
-          "name" : "Sognsvann - Vestli",
-          "publicCode" : "5",
+          "id" : "RUT:Line:1",
+          "name" : "Frognerseteren - Bergkrystallen",
+          "publicCode" : "1",
           "transportMode" : "metro",
           "authority" : {
             "name" : "Ruter"
@@ -31,29 +31,29 @@
         },
         "fromEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:11287",
-            "name" : "Ullevål stadion"
+            "id" : "NSR:Quay:11594",
+            "name" : "Besserud"
           },
-          "aimedDepartureTime" : "2025-10-24T12:51:00+02:00",
-          "expectedDepartureTime" : "2025-10-24T12:53:23+02:00"
+          "aimedDepartureTime" : "2025-10-27T09:39:00+01:00",
+          "expectedDepartureTime" : "2025-10-27T09:39:00+01:00"
         },
         "toEstimatedCall" : {
           "quay" : {
             "id" : "NSR:Quay:7183",
             "name" : "Jernbanetorget"
           },
-          "aimedDepartureTime" : "2025-10-24T13:02:00+02:00",
-          "expectedDepartureTime" : "2025-10-24T13:04:23+02:00"
+          "aimedDepartureTime" : "2025-10-27T10:04:00+01:00",
+          "expectedDepartureTime" : "2025-10-27T10:04:00+01:00"
         }
       }, {
         "mode" : "foot",
-        "distance" : 430.61,
+        "distance" : 441.38,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null
       }, {
         "mode" : "rail",
-        "distance" : 91430.44,
+        "distance" : 91416.94,
         "line" : {
           "id" : "VYG:Line:RE20",
           "name" : "Oslo S-Halden-Göteborg (X-Border)",
@@ -65,19 +65,19 @@
         },
         "fromEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:562",
+            "id" : "NSR:Quay:567",
             "name" : "Oslo S"
           },
-          "aimedDepartureTime" : "2025-10-24T13:14:00+02:00",
-          "expectedDepartureTime" : "2025-10-24T13:14:00+02:00"
+          "aimedDepartureTime" : "2025-10-27T10:14:00+01:00",
+          "expectedDepartureTime" : "2025-10-27T10:14:00+01:00"
         },
         "toEstimatedCall" : {
           "quay" : {
             "id" : "NSR:Quay:392",
             "name" : "Fredrikstad stasjon"
           },
-          "aimedDepartureTime" : "2025-10-24T14:14:00+02:00",
-          "expectedDepartureTime" : "2025-10-24T14:14:00+02:00"
+          "aimedDepartureTime" : "2025-10-27T11:14:00+01:00",
+          "expectedDepartureTime" : "2025-10-27T11:14:00+01:00"
         }
       }, {
         "mode" : "foot",
@@ -102,16 +102,16 @@
             "id" : "NSR:Quay:4032",
             "name" : "St. Croixundergangen"
           },
-          "aimedDepartureTime" : "2025-10-24T14:18:00+02:00",
-          "expectedDepartureTime" : "2025-10-24T14:18:00+02:00"
+          "aimedDepartureTime" : "2025-10-27T11:18:00+01:00",
+          "expectedDepartureTime" : "2025-10-27T11:18:00+01:00"
         },
         "toEstimatedCall" : {
           "quay" : {
             "id" : "NSR:Quay:4197",
             "name" : "Borgehallen"
           },
-          "aimedDepartureTime" : "2025-10-24T14:28:00+02:00",
-          "expectedDepartureTime" : "2025-10-24T14:28:00+02:00"
+          "aimedDepartureTime" : "2025-10-27T11:28:00+01:00",
+          "expectedDepartureTime" : "2025-10-27T11:28:00+01:00"
         }
       }, {
         "mode" : "foot",

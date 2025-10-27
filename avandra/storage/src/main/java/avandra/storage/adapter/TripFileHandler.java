@@ -1,8 +1,6 @@
 package avandra.storage.adapter;
 import java.io.File;
 import java.io.IOException;
-import avandra.api.EnturHttpClient;
-import avandra.api.EnturHttpClient;
 import avandra.core.port.EnturClient;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
