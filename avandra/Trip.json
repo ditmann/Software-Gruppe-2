@@ -1,53 +1,53 @@
 {
   "request" : {
-    "fromLat" : 59.893406621251785,
-    "fromLon" : 10.777223579036033,
+    "fromLat" : 59.95746329976858,
+    "fromLon" : 10.67625030164642,
     "toLat" : 59.2313,
     "toLon" : 10.9968,
     "numPatterns" : 1
   },
   "trip" : {
     "tripPatterns" : [ {
-      "startTime" : "2025-10-24T11:32:15+02:00",
-      "duration" : 7257,
-      "walkDistance" : 1429.01,
+      "startTime" : "2025-10-27T09:29:09+01:00",
+      "duration" : 7443,
+      "walkDistance" : 1707.8799999999999,
       "legs" : [ {
         "mode" : "foot",
-        "distance" : 414.46,
+        "distance" : 608.42,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null
       }, {
-        "mode" : "bus",
-        "distance" : 5390.1,
+        "mode" : "metro",
+        "distance" : 9346.05,
         "line" : {
-          "id" : "RUT:Line:74",
-          "name" : "Jernbanetorget - Mortensrud T",
-          "publicCode" : "74",
-          "transportMode" : "bus",
+          "id" : "RUT:Line:1",
+          "name" : "Frognerseteren - Bergkrystallen",
+          "publicCode" : "1",
+          "transportMode" : "metro",
           "authority" : {
             "name" : "Ruter"
           }
         },
         "fromEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:12159",
-            "name" : "Ekeberghallen"
+            "id" : "NSR:Quay:11594",
+            "name" : "Besserud"
           },
-          "aimedDepartureTime" : "2025-10-24T11:37:00+02:00",
-          "expectedDepartureTime" : "2025-10-24T11:37:52+02:00"
+          "aimedDepartureTime" : "2025-10-27T09:39:00+01:00",
+          "expectedDepartureTime" : "2025-10-27T09:39:00+01:00"
         },
         "toEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:7203",
+            "id" : "NSR:Quay:7183",
             "name" : "Jernbanetorget"
           },
-          "aimedDepartureTime" : "2025-10-24T11:52:00+02:00",
-          "expectedDepartureTime" : "2025-10-24T11:52:52+02:00"
+          "aimedDepartureTime" : "2025-10-27T10:04:00+01:00",
+          "expectedDepartureTime" : "2025-10-27T10:04:00+01:00"
         }
       }, {
         "mode" : "foot",
-        "distance" : 356.47,
+        "distance" : 441.38,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null
@@ -68,16 +68,16 @@
             "id" : "NSR:Quay:567",
             "name" : "Oslo S"
           },
-          "aimedDepartureTime" : "2025-10-24T12:14:00+02:00",
-          "expectedDepartureTime" : "2025-10-24T12:14:00+02:00"
+          "aimedDepartureTime" : "2025-10-27T10:14:00+01:00",
+          "expectedDepartureTime" : "2025-10-27T10:14:00+01:00"
         },
         "toEstimatedCall" : {
           "quay" : {
             "id" : "NSR:Quay:392",
             "name" : "Fredrikstad stasjon"
           },
-          "aimedDepartureTime" : "2025-10-24T13:13:00+02:00",
-          "expectedDepartureTime" : "2025-10-24T13:13:00+02:00"
+          "aimedDepartureTime" : "2025-10-27T11:14:00+01:00",
+          "expectedDepartureTime" : "2025-10-27T11:14:00+01:00"
         }
       }, {
         "mode" : "foot",
@@ -102,16 +102,16 @@
             "id" : "NSR:Quay:4032",
             "name" : "St. Croixundergangen"
           },
-          "aimedDepartureTime" : "2025-10-24T13:18:00+02:00",
-          "expectedDepartureTime" : "2025-10-24T13:18:00+02:00"
+          "aimedDepartureTime" : "2025-10-27T11:18:00+01:00",
+          "expectedDepartureTime" : "2025-10-27T11:18:00+01:00"
         },
         "toEstimatedCall" : {
           "quay" : {
             "id" : "NSR:Quay:4197",
             "name" : "Borgehallen"
           },
-          "aimedDepartureTime" : "2025-10-24T13:28:00+02:00",
-          "expectedDepartureTime" : "2025-10-24T13:28:00+02:00"
+          "aimedDepartureTime" : "2025-10-27T11:28:00+01:00",
+          "expectedDepartureTime" : "2025-10-27T11:28:00+01:00"
         }
       }, {
         "mode" : "foot",
