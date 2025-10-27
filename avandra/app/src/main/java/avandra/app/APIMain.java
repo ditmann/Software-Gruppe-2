@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import avandra.core.port.DBConnection;
 import org.bson.Document;
 
 import avandra.storage.adapter.MongoDBConnection;
@@ -30,7 +31,8 @@ public class APIMain {
         String clientName = "HIOFsTUD-AVANDRA";
         LocationPort location = new RandomLocationAdapter(); // gir random posisjon
         EnturClient entur = new EnturHttpClient(clientName); // snakker med entur
-        DBHandler db = new MongoDBHandler();                 // snakker med mongodb
+        DBConnection connection = new MongoDBConnection();
+        DBHandler db = new MongoDBHandler(connection);                 // snakker med mongodb
         TripFileHandler files = new TripFileHandler(entur, new ObjectMapper()); // lager reiseplaner
 
         // ytre while: gjør at vi kan logge ut og logge inn som en annen bruker
@@ -465,4 +467,3 @@ public class APIMain {
     }
 }
 
- */

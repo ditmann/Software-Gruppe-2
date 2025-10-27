@@ -1,59 +1,59 @@
 {
   "request" : {
-    "fromLat" : 59.95746329976858,
-    "fromLon" : 10.67625030164642,
-    "toLat" : 59.2313,
-    "toLon" : 10.9968,
+    "fromLat" : 59.92138306586945,
+    "fromLon" : 10.690944084535355,
+    "toLat" : 59.213484,
+    "toLon" : 10.934413,
     "numPatterns" : 1
   },
   "trip" : {
     "tripPatterns" : [ {
-      "startTime" : "2025-10-27T09:29:09+01:00",
-      "duration" : 7443,
-      "walkDistance" : 1707.8799999999999,
+      "startTime" : "2025-10-27T09:48:02+01:00",
+      "duration" : 6026,
+      "walkDistance" : 1832.78,
       "legs" : [ {
         "mode" : "foot",
-        "distance" : 608.42,
+        "distance" : 241.56,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null
       }, {
-        "mode" : "metro",
-        "distance" : 9346.05,
+        "mode" : "tram",
+        "distance" : 4605.51,
         "line" : {
-          "id" : "RUT:Line:1",
-          "name" : "Frognerseteren - Bergkrystallen",
-          "publicCode" : "1",
-          "transportMode" : "metro",
+          "id" : "RUT:Line:13",
+          "name" : "Bekkestua - Ljabru",
+          "publicCode" : "13",
+          "transportMode" : "tram",
           "authority" : {
             "name" : "Ruter"
           }
         },
         "fromEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:11594",
-            "name" : "Besserud"
+            "id" : "NSR:Quay:11840",
+            "name" : "Thune"
           },
-          "aimedDepartureTime" : "2025-10-27T09:39:00+01:00",
-          "expectedDepartureTime" : "2025-10-27T09:39:00+01:00"
+          "aimedDepartureTime" : "2025-10-27T09:51:00+01:00",
+          "expectedDepartureTime" : "2025-10-27T09:51:10+01:00"
         },
         "toEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:7183",
-            "name" : "Jernbanetorget"
+            "id" : "NSR:Quay:7167",
+            "name" : "Bjørvika"
           },
-          "aimedDepartureTime" : "2025-10-27T10:04:00+01:00",
-          "expectedDepartureTime" : "2025-10-27T10:04:00+01:00"
+          "aimedDepartureTime" : "2025-10-27T10:05:00+01:00",
+          "expectedDepartureTime" : "2025-10-27T10:05:10+01:00"
         }
       }, {
         "mode" : "foot",
-        "distance" : 441.38,
+        "distance" : 371.52,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null
       }, {
         "mode" : "rail",
-        "distance" : 91416.94,
+        "distance" : 91433.35,
         "line" : {
           "id" : "VYG:Line:RE20",
           "name" : "Oslo S-Halden-Göteborg (X-Border)",
@@ -81,41 +81,7 @@
         }
       }, {
         "mode" : "foot",
-        "distance" : 275.84,
-        "line" : null,
-        "fromEstimatedCall" : null,
-        "toEstimatedCall" : null
-      }, {
-        "mode" : "bus",
-        "distance" : 5141.7,
-        "line" : {
-          "id" : "OST:Line:1_7",
-          "name" : "Moum-Ambjørnrød",
-          "publicCode" : "7",
-          "transportMode" : "bus",
-          "authority" : {
-            "name" : "Østfold kollektivtrafikk"
-          }
-        },
-        "fromEstimatedCall" : {
-          "quay" : {
-            "id" : "NSR:Quay:4032",
-            "name" : "St. Croixundergangen"
-          },
-          "aimedDepartureTime" : "2025-10-27T11:18:00+01:00",
-          "expectedDepartureTime" : "2025-10-27T11:18:00+01:00"
-        },
-        "toEstimatedCall" : {
-          "quay" : {
-            "id" : "NSR:Quay:4197",
-            "name" : "Borgehallen"
-          },
-          "aimedDepartureTime" : "2025-10-27T11:28:00+01:00",
-          "expectedDepartureTime" : "2025-10-27T11:28:00+01:00"
-        }
-      }, {
-        "mode" : "foot",
-        "distance" : 382.24,
+        "distance" : 1219.7,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null
