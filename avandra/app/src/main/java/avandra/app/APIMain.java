@@ -4,6 +4,7 @@ package avandra.app;
 
 import java.io.File;
 
+import avandra.storage.adapter.MongoDBConnection;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import avandra.api.EnturHttpClient;
@@ -17,14 +18,15 @@ import avandra.core.port.LocationPort;
 import avandra.storage.adapter.MongoDBHandler;
 import avandra.storage.adapter.TripFileHandler;
 
-
+/*
 public class APIMain {
     public static void main(String[] args) throws Exception {
         String clientName = "HIOFsTUD-AVANDRA";
         LocationPort location = new RandomLocationAdapter();
         Coordinate me = location.currentCoordinate();
         EnturClient entur = new EnturHttpClient(clientName);
-        DBHandler handler = new MongoDBHandler();
+        MongoDBConnection connection = new MongoDBConnection();
+        DBHandler handler = new MongoDBHandler(connection);
         Coordinate to = handler.searchDestination("Kåre","hjem");
         TripFileHandler files = new TripFileHandler(entur, new ObjectMapper());
 
@@ -41,3 +43,5 @@ public class APIMain {
         }
     }
 }
+
+ */

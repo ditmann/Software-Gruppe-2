@@ -3,6 +3,7 @@ package avandra.test;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import avandra.storage.adapter.MongoDBConnection;
 import org.bson.Document;
 import org.bson.codecs.DocumentCodecProvider;
 import org.bson.codecs.configuration.CodecRegistries;
@@ -52,7 +53,8 @@ import avandra.storage.adapter.MongoDBHandler;
  */
 class MongoDBHandlerTest {
 
-    private final MongoDBHandler handler = new MongoDBHandler();
+    private final MongoDBConnection connection = new MongoDBConnection();
+    private final MongoDBHandler handler = new MongoDBHandler(connection);
 
     /**
      * The handler accumulates results in an internal list.
@@ -208,7 +210,7 @@ class MongoDBHandlerTest {
                     .thenReturn(mock(UpdateResult.class));
 
             handler.setIdField("id");
-            handler.appendData("Hjordis", "age", "79");
+            handler.appendData("Hjørdis", "age", "79");
 
             ArgumentCaptor<Bson> filterCap = ArgumentCaptor.forClass(Bson.class);
             ArgumentCaptor<Bson> updateCap = ArgumentCaptor.forClass(Bson.class);
@@ -221,13 +223,13 @@ class MongoDBHandlerTest {
             var filterDoc = filterCap.getValue().toBsonDocument(Document.class, registry);
             var updateDoc = updateCap.getValue().toBsonDocument(Document.class, registry);
 
-            assertEquals("Hjordis", filterDoc.getString("id").getValue());
+            assertEquals("Hjørdis", filterDoc.getString("id").getValue());
             var setDoc = updateDoc.getDocument("$set");
             assertNotNull(setDoc);
             assertEquals("79", setDoc.getString("age").getValue());
 
-            verify(w.client).getDatabase(handler.getDbName());
-            verify(w.db).getCollection(handler.getCollectionName());
+            verify(w.client).getDatabase(connection.getDbName());
+            verify(w.db).getCollection(connection.getCollectionName());
             verify(w.client).close();
         } finally {
             w.close();
