@@ -3,17 +3,18 @@ package avandra.storage.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import avandra.core.port.DBConnection;
 import org.bson.Document;
+
 import com.mongodb.MongoException;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
+
 import avandra.core.domain.Coordinate;
+import avandra.core.port.DBConnection;
 import avandra.core.port.DBHandler;
-import org.bson.conversions.Bson;
 
 public class MongoDBHandler implements DBHandler {
 
@@ -306,7 +307,7 @@ public class MongoDBHandler implements DBHandler {
     }
 
     /// Removes key and value in specified doc at specified key, if it exists
-    public void removeData(String userID, String removeKey) {
+    public void removeData(String userID, String keyToRemove) {
 
         try (MongoDBConnection connection = (MongoDBConnection) mongoDBConnection.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
@@ -315,7 +316,7 @@ public class MongoDBHandler implements DBHandler {
             /// Method Logic: remove key and value at specified key
             Boolean existingID = collection.find(Filters.eq(getIdField(), userID)).iterator().hasNext();
             if (existingID) {
-                collection.updateOne(Filters.eq(getIdField(), userID), Updates.unset(removeKey));
+                collection.updateOne(Filters.eq(getIdField(), userID), Updates.unset(keyToRemove));
             }
             else {
                 System.out.println("\nThe ID \"userID\" does not exist.");
@@ -333,7 +334,7 @@ public class MongoDBHandler implements DBHandler {
     }
 
     //TODO: make:
-    public void removeData(String userID, String removeKey, String destinationType) {}
+    public void removeData(String userID, String keyToRemove, String destinationType) {}
     public void removeData(String userID, String keyToRemove, String destinationType, String destinationKey) {}
 
 
