@@ -77,7 +77,7 @@ class MongoDBHandlerTest {
             INSTANCES_TO_RESET.clear();
         }
 
-        private void track(Wiring w) {
+        private void track_TrackingMongoDBHandlerObjects(Wiring w) {
             INSTANCES_TO_RESET.add(w.handler);
 
         }
@@ -95,16 +95,24 @@ class MongoDBHandlerTest {
     @Test
     void createUser_insertsOneDocument() throws Exception {
         Wiring w = new Wiring();
-        
-            handler.createUser( "bar",true);
+        w.track_TrackingMongoDBHandlerObjects(w);
 
-            verify(w.coll, times(1)).insertOne(argThat(d ->
-                    "bar".equals(d.getString("id"))));
-            verify(w.client).close();
-        } finally {
-            w.close();
+        FindIterable<Document> findIterable = mock(FindIterable.class);
+        MongoCursor<Document> mongoCursor = mock(MongoCursor.class);
+
+        when(w.collection.find(any(Bson.class))).thenReturn(findIterable);
+        when(findIterable.iterator()).thenReturn(mongoCursor);
+        when(mongoCursor.hasNext()).thenReturn(false);
+
+        w.handler.createUser("Kjell",true);
+
+        verify(w.collection, times(1)).insertOne(ArgumentMatchers.argThat(d ->
+                "Kjell".equals(d.getString("id")) && d.containsKey("admin") && d.containsKey("litebrukere")
+                && d.containsKey("favoritter") && d.containsKey("planlagte reiser")));
+
+        verify(w.rootConnection).open();
+        verify(w.openedConnection).close();
         }
-    }
 
     // -----------------------------
     // retrieveAllData
@@ -115,7 +123,7 @@ class MongoDBHandlerTest {
      * that both documents are returned and the client is closed.
      */
     @Test
-    void retrieveAllData_returnsAllDocs() {
+    void retrieveAllData_returnsAllDocs() throws Exception {
         Wiring w = new Wiring();
         try {
             @SuppressWarnings("unchecked")
