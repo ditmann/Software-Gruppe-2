@@ -3,6 +3,7 @@ package avandra.test;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import avandra.core.domain.Coordinate;
 import avandra.core.port.DBConnection;
 import avandra.storage.adapter.MongoDBConnection;
 import avandra.storage.adapter.MongoDBHandler;
@@ -344,8 +345,8 @@ class MongoDBHandlerTest {
         MongoCursor<Document> cursor = mock(MongoCursor.class);
 
         Document valueMatch = new Document("field1", "needle");
-        Document keyMatch   = new Document("needle", "anything");
-        Document noMatch    = new Document("other", "stuff");
+        Document keyMatch = new Document("needle", "anything");
+        Document noMatch = new Document("other", "stuff");
 
         when(w.collection.find()).thenReturn(iterable);
         when(iterable.iterator()).thenReturn(cursor);
@@ -427,6 +428,35 @@ class MongoDBHandlerTest {
         verify(w.rootConnection).open();
         verify(w.oppnedConnection).close();
     }
+    // -----------------------------
+    // searchDestination
+    // -----------------------------
+    @Test
+    void searchDestination_insertDestinationInFavorites() throws Exception {
+
+        Wiring w = new Wiring();
+        track(w);
+        Document coordsDoc = new Document("latitude", 59.3231).append("longitude", 11.2526);
+        Document destinationDoc = new Document("koordinater", coordsDoc);
+        Document favoritesDoc = new Document("FFK", destinationDoc);
+        Document userDoc = new Document("id", "Kåre").append("favoritter", favoritesDoc);
+
+        FindIterable<Document> findIterable = mock(FindIterable.class);
+        when(w.collection.find(any(Bson.class))).thenReturn(findIterable);
+        when(findIterable.first()).thenReturn(userDoc);
+        Coordinate coordinateResults = w.handler.searchDestination("Kåre", "FFK");
+
+
+        when(w.collection.find(any(Bson.class))).thenReturn(findIterable);
+
+        assertNotNull(coordinateResults, "expected coordinates");
+        assertEquals(59.3231, coordinateResults.getLatitudeNum());
+        assertEquals(11.2526, coordinateResults.getLongitudeNUM());
+
+        verify(w.rootConnection).open();
+        verify(w.oppnedConnection).close();
+
+    }
 
     // -----------------------------
     // Exception handling
@@ -444,6 +474,7 @@ class MongoDBHandlerTest {
 
         MongoDBHandler handler = new MongoDBHandler(rootConn);
 
+        assertDoesNotThrow(() -> handler.searchDestination("Per", "Hjem"));
         assertDoesNotThrow(() -> handler.createUser("Per", true));
         assertDoesNotThrow(() -> handler.retrieveAllData());
         assertDoesNotThrow(() -> handler.retrieveByKeyValue("Tore", "Hjem"));
