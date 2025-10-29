@@ -14,7 +14,8 @@
         <module>app</module>
         <module>core</module>
         <module>storage</module>
-        <module>test</module>  
+        <module>test</module> 
+        <module>location</module>
     </modules>
 
     <properties>

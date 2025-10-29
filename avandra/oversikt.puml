@@ -1,0 +1,38 @@
+@startuml
+
+skinparam class {
+    BackgroundColor<<Hexagon>> YellowGreen
+    BorderColor<<Hexagon>> YellowGreen
+    FontColor<<Hexagon>> White
+}
+
+package "Application Core" {
+    class "Domain Service" as DomainService <<Hexagon>>
+    class "Input Port" as InputPort
+    class "Output Port" as OutputPort
+
+    InputPort -- DomainService
+    DomainService -- OutputPort
+}
+
+package "Adapters" {
+    class "UI Adapter" as UIAdapter
+    class "Persistence Adapter" as PersistenceAdapter
+    class "External Service Adapter" as ExternalServiceAdapter
+    
+    InputPort <.. UIAdapter
+    OutputPort <.. PersistenceAdapter
+    OutputPort <.. ExternalServiceAdapter
+}
+
+package "External Systems" {
+    class "UI"
+    class "Database"
+    class "External Service"
+    
+    UI ..> UIAdapter
+    Database ..> PersistenceAdapter
+    ExternalService ..> ExternalServiceAdapter
+}
+
+@enduml
