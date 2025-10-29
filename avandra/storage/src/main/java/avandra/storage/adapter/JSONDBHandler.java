@@ -1,17 +1,18 @@
 package avandra.storage.adapter;
 
 import java.io.File;
+import java.util.List;
 
+import avandra.core.port.DBHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import avandra.core.domain.AdminBruker;
 import avandra.core.domain.Coordinate;
 import avandra.core.domain.Destinasjon;
 import avandra.core.domainParents.Bruker;
-import avandra.core.port.DBHandler;
 
 
-public class JSONDBHandler implements DBHandler{
+public class JSONDBHandler implements DBHandler {
 
     ///creates new file /overwrites each time
     //fine for testing
@@ -27,19 +28,25 @@ public class JSONDBHandler implements DBHandler{
         }
     }
 
+
+    @Override
+    public void createUser(String userID, boolean adminUser, String favoriteDestination, String address, double latitude, double longitude) {
+
+    }
+
     /// Denne gjør ingenting.
     /// prøvde å legge til noe i objektet "bruker" men det er jo dumt. skal dokumentet VÆRE en versjon av bruker?
     /// ignore
     public void appendData(String filepath, String addKey, Object addValue) {
         ObjectMapper mapper = new ObjectMapper();
         Bruker bruker = new AdminBruker("Moiraine");
-       try {
-           File file = new File(filepath);
-           bruker = mapper.readValue(file, AdminBruker.class);
+        try {
+            File file = new File(filepath);
+            bruker = mapper.readValue(file, AdminBruker.class);
 
-       } catch (Exception e) {
-           throw new RuntimeException(e);
-       }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /// Returns the JSON doc contents
@@ -56,22 +63,55 @@ public class JSONDBHandler implements DBHandler{
         return destinasjon;
     }
 
+    @Override
+    public void addDestinationToFavorites(String userID, String destinationName, String address, double latitude, double longitude) {
+    }
+
     public Coordinate destinationCoordinate(String name) {
         return null;
     }
 
+    @Override
+    public void addCoordinatesToDestination(String userID, String destinationName, double latitude, double longitude) {
 
-    public static void main(String[] args) {
-        JSONDBHandler handler = new JSONDBHandler();
-        System.out.println(handler.retrieveAllData());
+    }
+
+    @Override
+    public Coordinate searchDestination(String userID, String destinationID) {
+        return null;
     }
 
 
-    /*
+    @Override
+    public void removeData(String userID) {
+
+    }
+
+    @Override
+    public void removeData(String userID, String keyToRemove) {
+
+    }
+
+    @Override
+    public void removeData(String userID, String keyToRemove, String destinationType) {
+
+    }
+
+    @Override
+    public void removeData(String userID, String keyToRemove, String destinationType, String destinationKey) {
+
+    }
+
+    @Override
+    public boolean insertDestinationForLiteUser(String liteUserId, String destId, String name, String address, Double lat, Double lng, String adminId) {
+        return false;
+    }
+/*
     {"latitudeN":true,
     "latitudeNum":59.9139,
     "longitudeE":true,
     "longitudeNUM":10.7522,
     "validert_bool":true}*/
+
 
 }

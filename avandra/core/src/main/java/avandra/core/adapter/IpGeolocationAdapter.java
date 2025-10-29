@@ -1,8 +1,9 @@
-package avandra.core.domain;
+package avandra.core.adapter;
 
 import java.io.IOException;
 import java.time.Duration;
 
+import avandra.core.domain.Coordinate;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
