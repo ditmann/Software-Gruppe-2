@@ -241,6 +241,11 @@ public class MongoDBHandler implements DBHandler {
         }
         return null;
     }
+    //TODO: make
+    @Override
+    public void createUser(String userID, boolean adminUser, String favoriteDestination, String address, double latitude, double longitude) {
+
+    }
 
     /// Returns all docs which contain the specified key:value in an array
     public ArrayList<Document> retrieveByKeyValue(String key, String value){
@@ -274,10 +279,6 @@ public class MongoDBHandler implements DBHandler {
         return getList();
     }
 
-    @Override
-    public void createUser(String userID, boolean adminUser, String favoriteDestination, String address, double latitude, double longitude) {
-
-    }
 
     /// Identifies a doc with the value of the id-key, adds a new key:value at end
     /// OR overwrites existing value if key already exists
