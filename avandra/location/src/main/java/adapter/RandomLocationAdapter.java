@@ -1,5 +1,5 @@
+package adapter;
 
-package avandra.core.adapter;
 
 import java.util.concurrent.ThreadLocalRandom;
 

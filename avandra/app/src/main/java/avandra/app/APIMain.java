@@ -11,8 +11,8 @@ import org.bson.Document;
 import avandra.storage.adapter.MongoDBConnection;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import adapter.RandomLocationAdapter;
 import avandra.api.EnturHttpClient;
-import avandra.core.adapter.RandomLocationAdapter;
 import avandra.core.domain.Coordinate;
 import avandra.core.domain.TripPart;
 import avandra.core.port.DBHandler;

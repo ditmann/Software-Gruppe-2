@@ -1,4 +1,4 @@
-package avandra.core.adapter;
+package adapter;
 
 import java.io.IOException;
 import java.time.Duration;
