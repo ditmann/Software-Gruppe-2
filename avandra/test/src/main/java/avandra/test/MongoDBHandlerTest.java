@@ -3,6 +3,7 @@ package avandra.test;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import avandra.core.port.DBConnection;
 import avandra.storage.adapter.MongoDBConnection;
 import org.bson.Document;
 import org.bson.codecs.DocumentCodecProvider;
@@ -21,14 +22,9 @@ import org.mockito.ArgumentMatchers;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.*;
+
 import org.mockito.MockedStatic;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import com.mongodb.MongoException;
 import com.mongodb.client.FindIterable;
@@ -53,38 +49,37 @@ import avandra.storage.adapter.MongoDBHandler;
  */
 class MongoDBHandlerTest {
 
-    private final MongoDBConnection connection = new MongoDBConnection();
-    private final MongoDBHandler handler = new MongoDBHandler(connection);
-
-    /**
-     * The handler accumulates results in an internal list.
-     * Clear it after each test to prevent cross-test contamination.
-     */
-    @AfterEach
-    void resetAccumulatingList() {
-        handler.setList(new ArrayList<>());
-    }
-
     /**
      * Utility: mocks the full chain
      * MongoClients.create() → MongoClient → MongoDatabase → MongoCollection.
      * Used by all tests to simplify setup.
      */
     private static class Wiring {
-        final MockedStatic<MongoClients> staticCreate;
-        final MongoClient client = mock(MongoClient.class);
-        final MongoDatabase db = mock(MongoDatabase.class);
-        final MongoCollection<Document> coll = mock(MongoCollection.class);
+        final DBConnection rootConnection = mock(DBConnection.class);
+        final MongoDBConnection openedConnection = mock(MongoDBConnection.class);
+        final MongoCollection<Document> collection = mock(MongoCollection.class);
+        final MongoDBHandler handler;
 
-        Wiring() {
-            staticCreate = mockStatic(MongoClients.class);
-            staticCreate.when(() -> MongoClients.create(anyString())).thenReturn(client);
-            when(client.getDatabase(anyString())).thenReturn(db);
-            when(db.getCollection(anyString())).thenReturn(coll);
+        Wiring() throws Exception {
+            when(rootConnection.open()).thenReturn(openedConnection);
+            when(openedConnection.getCollection()).thenReturn(collection);
+            doNothing().when(openedConnection).close();
+            handler = new MongoDBHandler(rootConnection);
+        }
+        private static final
+        ArrayList<MongoDBHandler> INSTANCES_TO_RESET = new ArrayList<>();
+
+        @AfterEach
+        void cleanUpLists() {
+            for (MongoDBHandler instance : INSTANCES_TO_RESET) {
+                instance.setList(new ArrayList<>());
+            }
+            INSTANCES_TO_RESET.clear();
         }
 
-        void close() {
-            staticCreate.close();
+        private void track(Wiring w) {
+            INSTANCES_TO_RESET.add(w.handler);
+
         }
     }
 
@@ -98,9 +93,9 @@ class MongoDBHandlerTest {
      */
 
     @Test
-    void createUser_insertsOneDocument() {
+    void createUser_insertsOneDocument() throws Exception {
         Wiring w = new Wiring();
-        try {
+        
             handler.createUser( "bar",true);
 
             verify(w.coll, times(1)).insertOne(argThat(d ->
