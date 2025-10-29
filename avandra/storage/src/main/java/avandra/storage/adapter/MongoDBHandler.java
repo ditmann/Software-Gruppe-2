@@ -333,9 +333,62 @@ public class MongoDBHandler implements DBHandler {
         }
     }
 
-    //TODO: make:
-    public void removeData(String userID, String keyToRemove, String destinationType) {}
-    public void removeData(String userID, String keyToRemove, String destinationType, String destinationKey) {}
+    //deletes a key for a user, (userid, the key to remove, the type of destination[path])
+    public void removeData(String userID, String keyToRemove, String destinationType) {
+
+        try (MongoDBConnection connection = (MongoDBConnection) mongoDBConnection.open()) {
+            /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
+            collection = connection.getCollection();
+
+            /// Method Logic: remove key and value at specified key
+            Boolean existingID = collection.find(Filters.eq(getIdField(), userID)).iterator().hasNext();
+            if (existingID) {
+                collection.updateOne(Filters.eq(getIdField(), userID),
+                Updates.unset(destinationType + "." + keyToRemove));
+            }
+            else {
+                System.out.println("\nThe ID \"userID\" does not exist.");
+            }
+        }
+        /// Super basic error "handling" + specified if Mongo-error
+        catch (MongoException e) {
+            System.out.println("\nMongoDB exception: ");
+            e.printStackTrace();
+        }
+        catch (Exception e) {
+            System.out.println("\nNon-DB exception: ");
+            e.printStackTrace();
+        }
+
+    }
+
+    //deletes a key for a user, (userid, the key to remove, the type of destination[path], the specific destination[path])
+    public void removeData(String userID, String keyToRemove, String destinationType, String destinationKey) {
+
+        try (MongoDBConnection connection = (MongoDBConnection) mongoDBConnection.open()) {
+            /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
+            collection = connection.getCollection();
+
+            /// Method Logic: remove key and value at specified key
+            Boolean existingID = collection.find(Filters.eq(getIdField(), userID)).iterator().hasNext();
+            if (existingID) {
+                collection.updateOne(Filters.eq(getIdField(), userID),
+                Updates.unset(destinationType + "." + destinationKey + "." + keyToRemove));
+            }
+            else {
+                System.out.println("\nThe ID \"userID\" does not exist.");
+            }
+        }
+        /// Super basic error "handling" + specified if Mongo-error
+        catch (MongoException e) {
+            System.out.println("\nMongoDB exception: ");
+            e.printStackTrace();
+        }
+        catch (Exception e) {
+            System.out.println("\nNon-DB exception: ");
+            e.printStackTrace();
+        }
+    }
 
 
     /// Deletes the first document with a specified ID //start here
