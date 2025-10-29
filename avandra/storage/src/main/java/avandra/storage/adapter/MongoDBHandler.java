@@ -76,10 +76,10 @@ public class MongoDBHandler implements DBHandler {
                 Document userDoc = new Document("id", userID)
                         .append("admin", adminUser);
 
-                List<String> litebrukere = new ArrayList<>();
-                Document planned_trips = new Document();
+                List<String> liteUserList = new ArrayList<>();
+                Document plannedTrips = new Document();
                 Document favorites = new Document();
-                userDoc.append("litebrukere", litebrukere).append("planlagte reiser", planned_trips).append("favoritter", favorites);
+                userDoc.append("litebrukere", liteUserList).append("planlagte reiser", plannedTrips).append("favoritter", favorites);
 
                 collection.insertOne(userDoc);
             }
