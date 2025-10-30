@@ -26,7 +26,7 @@ public class MongoDBHandler implements DBHandler {
     private String idField = "id";
 
     // NOT given get'ers & set'ers as this application only accesses this specific db and collection
-    private DBConnection mongoDBConnection;
+    private final DBConnection mongoDBConnection;
     private MongoCollection<Document> collection;
 
     ///  ----^^*****^^----|----^^*****^^----
