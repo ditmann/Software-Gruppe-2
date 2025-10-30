@@ -10,8 +10,8 @@ public class MongoDBConnection implements AutoCloseable, DBConnection {
     /// Connects to the specific database and collection Avandra uses
     /// to store user information
 
-    private String user; //final because one must log out to log back in, restart is okay
-    private String pass; //^
+    private final String user; //final because one must log out to log back in, restart is okay
+    private final String pass; //^
     private String db_name = "dummy";
     private String collection_name = "testdata";
     private MongoClient client;

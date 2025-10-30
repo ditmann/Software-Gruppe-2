@@ -8,9 +8,10 @@
         <outputRelativeToContentRoot value="true" />
         <module name="app" />
         <module name="core" />
+        <module name="test" />
+        <module name="location" />
         <module name="api" />
         <module name="storage" />
-        <module name="test" />
         <module name="avandra (1) (no.avandra)" />
       </profile>
     </annotationProcessing>
