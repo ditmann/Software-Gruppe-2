@@ -95,6 +95,48 @@ public class MongoDBHandler implements DBHandler {
         }
     }
 
+    @Override
+    public void createUser( String userID, boolean adminUser, String favoriteDestination,
+                            String address, double latitude, double longitude) {
+
+        try {
+            try (MongoDBConnection connection = (MongoDBConnection) mongoDBConnection.open()) {
+
+                /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
+                collection = connection.getCollection();
+            Document userDoc = new Document("id", userID)
+                    .append("admin", adminUser);
+
+            List<String> liteUsers = new ArrayList<>();
+            Document planned_trips = new Document();
+            Document favorites = new Document(favoriteDestination, address);
+            Document coordinates = new Document("latitude", latitude).append("longitude", longitude);
+            Document destination = new Document("adresse", address).append("koordinater", coordinates);
+            favorites.append(favoriteDestination, destination);
+
+
+            userDoc.append("litebrukere", liteUsers)
+                    .append("planlagte reiser", planned_trips)
+                    .append("favoritter", favorites);
+
+            collection.insertOne(userDoc);
+
+        }
+    }
+        /// Super basic error "handling" + if mongo-specific, notification catch (MongoException e) {
+        catch (MongoException e) {
+            System.out.println("\nMongoDB exception: ");
+            e.printStackTrace();
+        }
+        catch (Exception e) {
+            System.out.println("\nNon-DB exception: ");
+            e.printStackTrace();
+        }
+    }
+
+
+
+
 
     public void addDestinationToFavorites(String userID, String destinationName, String address, double latitude, double longitude) {
 
@@ -240,11 +282,6 @@ public class MongoDBHandler implements DBHandler {
             e.printStackTrace();
         }
         return null;
-    }
-    //TODO: make
-    @Override
-    public void createUser(String userID, boolean adminUser, String favoriteDestination, String address, double latitude, double longitude) {
-
     }
 
     /// Returns all docs which contain the specified key:value in an array
