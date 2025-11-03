@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import avandra.core.adapter.IpGeolocationAdapter;
 import avandra.core.port.DBConnection;
 import org.bson.Document;
 
@@ -29,15 +30,15 @@ public class APIMain {
 
         // lager "services" vi bruker videre
         String clientName = "HIOFsTUD-AVANDRA";
-        LocationPort location = new RandomLocationAdapter(); // gir random posisjon
         EnturClient entur = new EnturHttpClient(clientName); // snakker med entur
         DBConnection connection = new MongoDBConnection();
+        LocationPort location = null;
         DBHandler db = new MongoDBHandler(connection);                 // snakker med mongodb
         TripFileHandler files = new TripFileHandler(entur, new ObjectMapper()); // lager reiseplaner
 
         // ytre while: gjør at vi kan logge ut og logge inn som en annen bruker
         while (true) {
-            System.out.println("=== Velkommen til ReiseSimulator 3000 ===");
+            System.out.println("=== Velkommen til Avandra ===");
             System.out.println("");
 
             // henter ALLE brukerne fra databasen (kan inneholde duplikater)
@@ -139,6 +140,9 @@ public class APIMain {
 
                 // 1 = reis til en av favorittene dine
                 if (valg == 1) {
+                    System.out.println("(1) Random location");
+                    System.out.println("(2) IP based loaction");
+                    location = ipPortPicker(in, clientName);
                     reis(in, aktivBruker, db, files, location);
                 }
 
@@ -463,6 +467,15 @@ public class APIMain {
             if (s.equals("j") || s.equals("ja")) return true;
             if (s.equals("n") || s.equals("nei")) return false;
             System.out.println("Skriv j eller n:");
+        }
+    }
+    private static LocationPort ipPortPicker(Scanner in, String clientName) {
+        while (true) {
+            String s = in.nextLine().trim().toLowerCase();
+            if (s.equals("1")) {  return new RandomLocationAdapter();} // gir random posisjon
+            if (s.equals("2")) { return new IpGeolocationAdapter(clientName); // gir posisjon basert på ip
+            }
+
         }
     }
 }
