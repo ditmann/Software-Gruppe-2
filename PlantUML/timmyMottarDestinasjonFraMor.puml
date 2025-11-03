@@ -12,6 +12,7 @@ entity Entur
 entity TripFileHandler
 control TripPartDTO as tpdto
 entity FindBestTripService as bts
+database DBImplementation as dbi
 
 
 '------------'
@@ -27,6 +28,8 @@ LocationPort -> cdto: Coordinates for position
 cdto -> jps: Timmys current position coords
 
 jps -> dbh: Coordinates for Turn pls
+dbh -> dbi: Coordinates for Turn pls
+dbi -> dbh: Coordinates
 dbh -> cdto: Coordinates for destination
 cdto -> jps: Destination coords
 

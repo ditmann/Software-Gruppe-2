@@ -3,14 +3,35 @@
 
 
 actor "Timmys mor" as mor
-boundary Klient
+boundary Client
+entity API
+entity DBService
 entity DBHandler
-control MongoDBHandler
-database MongoDB
-
+database DatabaseImplementation
 '------------'
 
-mor -> Klient: Logge inn
+note left of mor: is logged in, has liteUser menu \nopen and Timmy selected
+note left of mor: goal: legg til Turn i Timmys \nfavorittdestinasjoner
+mor -> Client: legg til Turn i Timmys \nfavorittdestinasjoner
+Client -> API: Name("Turn"), Adresse, Coordinates, liteUserID
+API -> DBService:
+DBService -> DBHandler: add Turn for Lite
+DBHandler -> DatabaseImplementation: Update liteUser
+DatabaseImplementation -> DBHandler: is update?
+DBHandler -> DBService: True/False
+DBService -> API: False
+API -> Client: False
+DBService -> DBHandler: True, getAllLiteUsers
+DBHandler -> DatabaseImplementation: getAllLite
+DatabaseImplementation -> DBHandler: all Lite Destinations
+DBHandler -> DBService: all Lite Destinations
+DBService -> API: all Lite Destinations
+API -> Client: all Lite Destinations
+
+
+
+/'
+
 mor -> Klient: Legge inn destinasjon hos Timmy
 
 Klient -> DBHandler: Destinasjon, liteID
@@ -20,7 +41,7 @@ MongoDB -> MongoDBHandler: boolean
 MongoDBHandler -> DBHandler: boolean
 DBHandler -> Klient: boolean
 Klient -> mor: boolean
-
+'/
 
 
 @enduml
