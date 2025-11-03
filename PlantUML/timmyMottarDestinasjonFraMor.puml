@@ -2,29 +2,40 @@
 'https://plantuml.com/sequence-diagram
 
 actor Timmy
-boundary Klient
-entity DBHandler
-control MongoDBHandler
-database MongoDB
+boundary Client
+entity API
+entity JourneyPlannerService as jps
+entity LocationPort
+control CoordinateDTO as cdto
+entity DBHandlerPort as dbh
+entity Entur
+entity TripFileHandler
+control TripPartDTO as tpdto
+entity FindBestTripService as bts
+
 
 '------------'
 
-Timmy -> Klient: Logge inn
-Timmy -> Klient: Reise nå
-Timmy -> Klient: Favorittdestinasjon: Oscars bursdag
+note left of Timmy: is logged in, has opened favorites
+Timmy -> Client: Turn
 
-Klient -> LocationPort: Hvor er jeg?
-LocationPort -> IPGeoLocationAdapter: Hvor er jeg?
-IPGeoLocationAdapter -> Main: ? MAIN?
-Main -> Entur: Koordinater
-Klient -> DBHandler: "Oscars bursdag"
-DBHandler -> MongoDBHandler: "Oscars bursdag"
-MongoDBHandler -> Main: Koordinater
-Main -> Entur: Koordinater
-Entur -> Main: Reiseinformasjon
-Main -> Klient: Reiseinformasjon
-Klient -> Timmy: Reiseinformasjon
+Client -> API: Going to Turn
+API -> jps: Going to Turn
 
+jps -> LocationPort: Where am I?
+LocationPort -> cdto: Coordinates for position
+cdto -> jps: Timmys current position coords
+
+jps -> dbh: Coordinates for Turn pls
+dbh -> cdto: Coordinates for destination
+cdto -> jps: Destination coords
+
+jps -> Entur: Find journey
+Entur -> TripFileHandler: Entur-data
+TripFileHandler -> tpdto: Converts data to DTO
+tpdto -> bts: Sends DTO for handline
+bts -> API
+API -> Client: Journey information
 
 
 @enduml
