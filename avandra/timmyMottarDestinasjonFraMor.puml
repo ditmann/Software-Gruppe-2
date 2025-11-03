@@ -1,0 +1,30 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+actor Timmy
+boundary Klient
+entity DBHandler
+control MongoDBHandler
+database MongoDB
+
+'------------'
+
+Timmy -> Klient: Logge inn
+Timmy -> Klient: Reise nå
+Timmy -> Klient: Favorittdestinasjon: Oscars bursdag
+
+Klient -> LocationPort: Hvor er jeg?
+LocationPort -> IPGeoLocationAdapter: Hvor er jeg?
+IPGeoLocationAdapter -> Main: ? MAIN?
+Main -> Entur: Koordinater
+Klient -> DBHandler: "Oscars bursdag"
+DBHandler -> MongoDBHandler: "Oscars bursdag"
+MongoDBHandler -> Main: Koordinater
+Main -> Entur: Koordinater
+Entur -> Main: Reiseinformasjon
+Main -> Klient: Reiseinformasjon
+Klient -> Timmy: Reiseinformasjon
+
+
+
+@enduml
