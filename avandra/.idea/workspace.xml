@@ -5,12 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1929c9ed-51df-4c9e-810d-8a44f44805a4" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/test/src/test/java/avandra/test/MongoDBHandlerIT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Trip.json" beforeDir="false" afterPath="$PROJECT_DIR$/Trip.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/target/classes/avandra/app/APIMain.class" beforeDir="false" afterPath="$PROJECT_DIR$/app/target/classes/avandra/app/APIMain.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/src/main/java/avandra/test/MongoDBHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/main/java/avandra/test/MongoDBHandlerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/target/classes/avandra/test/MongoDBHandlerTest$Wiring.class" beforeDir="false" afterPath="$PROJECT_DIR$/test/target/classes/avandra/test/MongoDBHandlerTest$Wiring.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/target/classes/avandra/test/MongoDBHandlerTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/test/target/classes/avandra/test/MongoDBHandlerTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/MongoDBConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/MongoDBConnection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/target/classes/avandra/storage/adapter/MongoDBConnection.class" beforeDir="false" afterPath="$PROJECT_DIR$/storage/target/classes/avandra/storage/adapter/MongoDBConnection.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/src/main/java/avandra/test/MongoDBConnectionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/test/java/avandra/test/MongoDBConnectionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/src/main/java/avandra/test/MongoDBHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/test/java/avandra/test/MongoDBHandlerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/src/main/java/avandra/test/TripFileHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/test/java/avandra/test/TripFileHandlerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/src/main/java/avandra/test/TripPartTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/test/java/avandra/test/TripPartTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/target/classes/avandra/test/MongoDBConnectionTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/target/classes/avandra/test/MongoDBHandlerTest$Wiring.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/target/classes/avandra/test/MongoDBHandlerTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/target/classes/avandra/test/TripFileHandlerTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/target/classes/avandra/test/TripPartTest.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,6 +42,9 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
@@ -47,6 +59,9 @@
     "Application.ConsoleMain.executor": "Run",
     "Application.EnturDemo.executor": "Run",
     "Application.Main.executor": "Run",
+    "JUnit.All in test.executor": "Run",
+    "JUnit.MongoDBConnectionTest.executor": "Run",
+    "JUnit.MongoDBHandlerIT.executor": "Run",
     "JUnit.MongoDBHandlerTest.createUser_insertsOneDocument.executor": "Run",
     "JUnit.MongoDBHandlerTest.executor": "Run",
     "JUnit.TripFileHandlerTest.executor": "Run",
@@ -67,7 +82,60 @@
     ]
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JUnit.All in test">
+    <configuration name="All in test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="test" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MongoDBConnectionTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="avandra.test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="avandra.test" />
+      <option name="MAIN_CLASS_NAME" value="avandra.test.MongoDBConnectionTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MongoDBHandlerIT" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="avandra.test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="avandra.test" />
+      <option name="MAIN_CLASS_NAME" value="avandra.test.MongoDBHandlerIT" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MongoDBHandlerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="avandra.test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="avandra.test" />
+      <option name="MAIN_CLASS_NAME" value="avandra.test.MongoDBHandlerTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="MongoDBHandlerTest.createUser_insertsOneDocument" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="test" />
       <extension name="coverage">
@@ -97,6 +165,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.All in test" />
+        <item itemvalue="JUnit.MongoDBHandlerTest" />
+        <item itemvalue="JUnit.MongoDBHandlerIT" />
+        <item itemvalue="JUnit.MongoDBConnectionTest" />
         <item itemvalue="JUnit.MongoDBHandlerTest.createUser_insertsOneDocument" />
       </list>
     </recent_temporary>

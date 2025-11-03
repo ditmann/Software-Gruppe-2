@@ -33,6 +33,9 @@ public class MongoDBConnection implements AutoCloseable, DBConnection {
         this.collection_name = getCollectionName();
     }
 
+    public MongoDBConnection(String connectionString, String testdb, String users) {
+    }
+
     public String getUser() {
         return user;
     }
