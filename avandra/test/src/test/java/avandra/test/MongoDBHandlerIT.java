@@ -21,7 +21,6 @@ class MongoDBHandlerIT {
     static void setup() throws Exception {
         // Spin up a real MongoDB instance in Docker using Testcontainers.
         // This gives us an actual running database for the integration test
-        // without depending on a developer's local Mongo.
         mongo = new MongoDBContainer("mongo:7.0");
         mongo.start();
 
@@ -57,7 +56,7 @@ class MongoDBHandlerIT {
         // This is how production code would read all user documents back out.
         ArrayList<Document> all = handler.retrieveAllData();
 
-        // Sanity check: we expect at least one user to exist in the DB now.
+        // We expect at least one user to exist in the DB now.
         assertFalse(all.isEmpty(), "expected at least one user in DB");
 
         // Find the document we just created for Per.
@@ -77,25 +76,24 @@ class MongoDBHandlerIT {
         // not just in memory.
         assertEquals("78", per.get("age"));
 
-        // Extra check: retrieveByKeyValue("id", "Per") should also be able to find this user.
+        // retrieveByKeyValue("id", "Per") should also be able to find this user.
         var byKeyVal = handler.retrieveByKeyValue("id", "Per");
         assertFalse(byKeyVal.isEmpty(), "retrieveByKeyValue should find Per");
     }
 
     @Test
     void deleteUser_removesDocument() throws Exception {
-        // Create a new user "Petter" so we have something to delete.
         handler.createUser("Petter", false);
 
-        // Make sure the user is actually there before we delete.
+        handler.setList(new ArrayList<>()); // clear cache before reading
         var before = handler.retrieveByKeyValue("id", "Petter");
         assertFalse(before.isEmpty(), "user Petter should exist before delete");
 
-        // removeData(userId) is the overload that deletes the entire document for that user.
         handler.removeData("Petter");
 
-        // After deleting, we should not be able to find that user anymore.
+        handler.setList(new ArrayList<>()); // clear cache before reading again
         var after = handler.retrieveByKeyValue("id", "Petter");
         assertTrue(after.isEmpty(), "user Petter should be gone after delete");
     }
+
 }
