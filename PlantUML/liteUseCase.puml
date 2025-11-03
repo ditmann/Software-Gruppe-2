@@ -1,0 +1,16 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+actor Admin as admin
+
+boundary client
+control logic as core
+database DB
+
+
+DB -> core
+core -> DB
+client -> core
+core -> client
+lite -> client
+@enduml

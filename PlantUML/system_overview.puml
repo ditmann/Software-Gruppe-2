@@ -1,0 +1,92 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+package "app" {
+    class "Main"
+}
+
+package "Core" {
+
+    package "Port" {
+        interface "DBConnection"
+        interface "DBHandler"
+        interface "LocationPort"
+    }
+
+    package "Domain" {
+        class "Coordinate"
+    }
+
+    package "DTO" {
+            class "TripPart"
+    }
+
+    package "Service" {
+
+        class "TripFileHandler" {
+        }
+    }
+}
+
+package "Storage" {
+
+    class JSONDBHandler {
+    }
+
+    class MongoDBConnection {
+    }
+
+    class MongoDBHandler {
+    - list: ArrayList<Document>
+    - idField: String
+    - connectionToDatabase: DBConnection
+    - listOfDocuments: MongoCollection<Document>
+    }
+}
+
+package "API" {
+    class "EnturHttpClient"
+}
+
+package "Location" {
+    class "IpGeolocationAdapter"
+    class "RandomLocationAdapter"
+}
+
+package "Test" {
+
+    class "MongoDBConnectionTest"
+    class "MongoDBHandlerTest"
+    class "TripFileHandlerTest"
+    class "TripPartTest"
+    interface "EnturClient"
+}
+
+MongoDBConnection ..|> DBConnection
+MongoDBHandler .up.|> DBHandler
+JSONDBHandler .up.|> DBHandler
+IpGeolocationAdapter .up.|> LocationPort
+RandomLocationAdapter ..|> LocationPort
+MongoDBConnectionTest <-- MongoDBConnection
+MongoDBHandlerTest <-- MongoDBHandler
+TripFileHandlerTest <-- TripFileHandler
+TripPartTest <-- TripPart
+EnturHttpClient --> EnturClient
+MongoDBHandler <-- MongoDBConnection
+Coordinate --> DBHandler
+Coordinate --> IpGeolocationAdapter
+Coordinate --> RandomLocationAdapter
+
+
+Main <-- EnturHttpClient
+Main <.. DBConnection
+Main <.. DBHandler
+Main <-- TripFileHandler
+Main <.. LocationPort
+Main <-- TripFileHandler
+Main <-- TripPart
+Main <-- Coordinate
+
+
+
+@enduml

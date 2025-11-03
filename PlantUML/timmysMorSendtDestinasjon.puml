@@ -1,0 +1,26 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+
+actor "Timmys mor" as mor
+boundary Klient
+entity DBHandler
+control MongoDBHandler
+database MongoDB
+
+'------------'
+
+mor -> Klient: Logge inn
+mor -> Klient: Legge inn destinasjon hos Timmy
+
+Klient -> DBHandler: Destinasjon, liteID
+DBHandler -> MongoDBHandler: insertDestinationForLiteUser(Destinasjon)
+MongoDBHandler -> MongoDB: Oppdaterer databasen til litebrukeren
+MongoDB -> MongoDBHandler: boolean
+MongoDBHandler -> DBHandler: boolean
+DBHandler -> Klient: boolean
+Klient -> mor: boolean
+
+
+
+@enduml

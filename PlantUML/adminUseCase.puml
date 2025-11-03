@@ -1,0 +1,20 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+actor Admin as admin
+actor Lite as lite
+boundary client
+control logic as logic
+database DB
+
+
+note left of admin : registers a destination\nto a lite user they manage
+note right of lite : this user's database\nis updated with the\ninput from the admin\nand displayed when\nthis user uses their\napp
+admin -> (data)
+(data) --> client
+client --> logic
+logic --> DB
+DB ..> logic
+logic ..> client
+client ..> lite
+@enduml
