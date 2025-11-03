@@ -3,8 +3,6 @@ package avandra.app;
 
 import avandra.storage.adapter.MongoDBConnection;
 import avandra.storage.adapter.MongoDBHandler;
-import com.mongodb.client.MongoCollection;
-import org.bson.Document;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -21,9 +19,11 @@ public class Main {
 
         MongoDBConnection connection1 = new MongoDBConnection();
         MongoDBHandler handler = new MongoDBHandler(connection1);
-        handler.createUser("helo", true);
-        handler.appendData("helo", "age", 29);
+        //handler.createUser("helo", true);
+        //handler.appendData("helo", "age", 29);
 
+        //handler.removeData("Timmys mor","addresse", "favoritter", "hjem");
+        //handler.removeData("Timmys mor", "hjem", "favoritter");
 
     }
 }

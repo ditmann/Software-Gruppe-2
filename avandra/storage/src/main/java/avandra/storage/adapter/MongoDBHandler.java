@@ -3,17 +3,18 @@ package avandra.storage.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import avandra.core.port.DBConnection;
 import org.bson.Document;
+
 import com.mongodb.MongoException;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
+
 import avandra.core.domain.Coordinate;
+import avandra.core.port.DBConnection;
 import avandra.core.port.DBHandler;
-import org.bson.conversions.Bson;
 
 public class MongoDBHandler implements DBHandler {
 
@@ -75,10 +76,10 @@ public class MongoDBHandler implements DBHandler {
                 Document userDoc = new Document("id", userID)
                         .append("admin", adminUser);
 
-                List<String> litebrukere = new ArrayList<>();
-                Document planned_trips = new Document();
+                List<String> liteUserList = new ArrayList<>();
+                Document plannedTrips = new Document();
                 Document favorites = new Document();
-                userDoc.append("litebrukere", litebrukere).append("planlagte reiser", planned_trips).append("favoritter", favorites);
+                userDoc.append("litebrukere", liteUserList).append("planlagte reiser", plannedTrips).append("favoritter", favorites);
 
                 collection.insertOne(userDoc);
             }
@@ -240,6 +241,11 @@ public class MongoDBHandler implements DBHandler {
         }
         return null;
     }
+    //TODO: make
+    @Override
+    public void createUser(String userID, boolean adminUser, String favoriteDestination, String address, double latitude, double longitude) {
+
+    }
 
     /// Returns all docs which contain the specified key:value in an array
     public ArrayList<Document> retrieveByKeyValue(String key, String value){
@@ -273,10 +279,6 @@ public class MongoDBHandler implements DBHandler {
         return getList();
     }
 
-    @Override
-    public void createUser(String userID, boolean adminUser, String favoriteDestination, String address, double latitude, double longitude) {
-
-    }
 
     /// Identifies a doc with the value of the id-key, adds a new key:value at end
     /// OR overwrites existing value if key already exists
@@ -306,7 +308,7 @@ public class MongoDBHandler implements DBHandler {
     }
 
     /// Removes key and value in specified doc at specified key, if it exists
-    public void removeData(String userID, String removeKey) {
+    public void removeData(String userID, String keyToRemove) {
 
         try (MongoDBConnection connection = (MongoDBConnection) mongoDBConnection.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
@@ -315,7 +317,7 @@ public class MongoDBHandler implements DBHandler {
             /// Method Logic: remove key and value at specified key
             Boolean existingID = collection.find(Filters.eq(getIdField(), userID)).iterator().hasNext();
             if (existingID) {
-                collection.updateOne(Filters.eq(getIdField(), userID), Updates.unset(removeKey));
+                collection.updateOne(Filters.eq(getIdField(), userID), Updates.unset(keyToRemove));
             }
             else {
                 System.out.println("\nThe ID \"userID\" does not exist.");
@@ -332,9 +334,62 @@ public class MongoDBHandler implements DBHandler {
         }
     }
 
-    //TODO: make:
-    public void removeData(String userID, String removeKey, String destinationType) {}
-    public void removeData(String userID, String keyToRemove, String destinationType, String destinationKey) {}
+    //deletes a key for a user, (userid, the key to remove, the type of destination[path])
+    public void removeData(String userID, String keyToRemove, String destinationType) {
+
+        try (MongoDBConnection connection = (MongoDBConnection) mongoDBConnection.open()) {
+            /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
+            collection = connection.getCollection();
+
+            /// Method Logic: remove key and value at specified key
+            Boolean existingID = collection.find(Filters.eq(getIdField(), userID)).iterator().hasNext();
+            if (existingID) {
+                collection.updateOne(Filters.eq(getIdField(), userID),
+                Updates.unset(destinationType + "." + keyToRemove));
+            }
+            else {
+                System.out.println("\nThe ID \"userID\" does not exist.");
+            }
+        }
+        /// Super basic error "handling" + specified if Mongo-error
+        catch (MongoException e) {
+            System.out.println("\nMongoDB exception: ");
+            e.printStackTrace();
+        }
+        catch (Exception e) {
+            System.out.println("\nNon-DB exception: ");
+            e.printStackTrace();
+        }
+
+    }
+
+    //deletes a key for a user, (userid, the key to remove, the type of destination[path], the specific destination[path])
+    public void removeData(String userID, String keyToRemove, String destinationType, String destinationKey) {
+
+        try (MongoDBConnection connection = (MongoDBConnection) mongoDBConnection.open()) {
+            /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
+            collection = connection.getCollection();
+
+            /// Method Logic: remove key and value at specified key
+            Boolean existingID = collection.find(Filters.eq(getIdField(), userID)).iterator().hasNext();
+            if (existingID) {
+                collection.updateOne(Filters.eq(getIdField(), userID),
+                Updates.unset(destinationType + "." + destinationKey + "." + keyToRemove));
+            }
+            else {
+                System.out.println("\nThe ID \"userID\" does not exist.");
+            }
+        }
+        /// Super basic error "handling" + specified if Mongo-error
+        catch (MongoException e) {
+            System.out.println("\nMongoDB exception: ");
+            e.printStackTrace();
+        }
+        catch (Exception e) {
+            System.out.println("\nNon-DB exception: ");
+            e.printStackTrace();
+        }
+    }
 
 
     /// Deletes the first document with a specified ID //start here
