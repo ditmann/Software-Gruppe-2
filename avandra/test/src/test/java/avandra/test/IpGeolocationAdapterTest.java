@@ -1,6 +1,6 @@
 package avandra.test;
 
-import avandra.core.adapter.IpGeolocationAdapter;
+import avandra.api.IpGeolocationAdapter;
 import avandra.core.DTO.CoordinateDTO;
 import okhttp3.OkHttpClient;
 import okhttp3.mockwebserver.MockResponse;
