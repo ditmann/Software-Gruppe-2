@@ -11,11 +11,13 @@ package "Core" {
         interface "DBHandlerPort"
         interface "DBConnectionPort"
         interface "LocationPort"
+        interface "EnturClientPort"
     }
 
     package "Service" {
         class "FindBestTripService"
         class "TripFileHandler"
+        class "DBService"
     }
 
     package "DTO" {
@@ -54,7 +56,6 @@ package "Test" {
 
     class "TripFileHandlerTest"
     class "MongoDBHandlerTest"
-    class "EnturClient"
     class "IpGeolocationAdapterTest"
     interface "RandomLocationTest"
 }
