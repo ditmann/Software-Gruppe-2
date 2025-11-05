@@ -217,30 +217,6 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
         return null;
     }
 
-
-    /// TODO: WHAT DOES THIS DO? returns null no matter what ?
-    @Override
-    public CoordinateDTO destinationCoordinate(String name) {
-
-        try (MongoDBConnectionAdapter connection = (MongoDBConnectionAdapter) mongoDBConnectionPort.open()) {
-            /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
-            collection = connection.getCollection();
-
-            /// Method Logic:
-            Document userDoc = collection.find(Filters.eq("id", name)).first();
-            if (userDoc == null) return null;
-        }
-        /// Super basic error "handling" + specified if Mongo-error
-        catch (MongoException e) {
-            System.out.println("\nMongoDB exception: ");
-            e.printStackTrace();
-        }
-        catch (Exception e) {
-            System.out.println("\nNon-DB exception: ");
-            e.printStackTrace();
-        }
-        return null;
-    }
     //TODO: make
     @Override
     public void createUser(String userID, boolean adminUser, String favoriteDestination, String address, double latitude, double longitude) {
