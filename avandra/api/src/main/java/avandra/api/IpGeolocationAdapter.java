@@ -1,12 +1,12 @@
-package avandra.core.adapter;
+package avandra.api;
 
 import java.io.IOException;
 import java.time.Duration;
 
-import avandra.core.domain.Coordinate;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import avandra.core.domain.Coordinate;
 import avandra.core.port.LocationPort;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

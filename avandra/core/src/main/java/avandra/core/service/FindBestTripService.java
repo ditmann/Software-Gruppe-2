@@ -1,8 +1,10 @@
-package avandra.core.domain;
+package avandra.core.service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import avandra.core.domain.TripPart;
 
 /**
  * Goes through all trip alternatives (each trip = list of TripParts)
