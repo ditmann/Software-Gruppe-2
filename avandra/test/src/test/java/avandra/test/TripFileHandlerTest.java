@@ -1,8 +1,8 @@
 package avandra.test;
 
-import avandra.core.domain.Coordinate;
-import avandra.core.domain.TripPart;
-import avandra.core.port.EnturClient;
+import avandra.core.DTO.CoordinateDTO;
+import avandra.core.DTO.TripPartDTO;
+import avandra.test.main.EnturClient;
 import avandra.storage.adapter.TripFileHandler;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.*;
 /**
  * tests for the grouped TripFileHandler
  *
- * - takes a List<Coordinate> [from, to]
+ * - takes a List<CoordinateDTO> [from, to]
  * - calls Entur with the right args
  * - writes Trip.json with {request, trip} when includeRequestMeta = true
  * - returns a matrix of legs where each inner list is one tripPattern
@@ -49,9 +49,9 @@ class TripFileHandlerTest {
         new File("Trip.json").delete();
     }
 
-    // small helper that behaves like our Coordinate class
+    // small helper that behaves like our CoordinateDTO class
     // note the NUM suffix on longitude to match the real interface
-    private static final class TestCoord extends Coordinate {
+    private static final class TestCoord extends CoordinateDTO {
         private final double lat, lon;
         TestCoord(double lat, double lon) { this.lat = lat; this.lon = lon; }
         @Override public double getLatitudeNum() { return lat; }
@@ -90,15 +90,15 @@ class TripFileHandlerTest {
                 .thenReturn(sampleTrip(mapper));
 
         // run the method
-        List<Coordinate> coords = List.of(from, to);
-        List<List<TripPart>> matrix = handler.planTrip(coords, n, true);
+        List<CoordinateDTO> coords = List.of(from, to);
+        List<List<TripPartDTO>> matrix = handler.planTrip(coords, n, true);
 
         // we should get a matrix back with one pattern and one leg inside
         assertNotNull(matrix, "handler should return a matrix");
         assertEquals(1, matrix.size(), "expected one pattern in the test data");
         assertEquals(1, matrix.get(0).size(), "expected one leg inside the pattern");
 
-        TripPart leg = matrix.get(0).get(0);
+        TripPartDTO leg = matrix.get(0).get(0);
         assertEquals("bus", leg.getLegTransportMode(), "mode should match JSON");
         assertEquals(740, leg.getTravelDistance(), "distance should match JSON");
         assertEquals("RUT:Line:25", leg.getLineId(), "line id should match JSON");

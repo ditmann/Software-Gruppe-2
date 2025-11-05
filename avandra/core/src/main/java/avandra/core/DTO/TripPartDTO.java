@@ -1,21 +1,8 @@
-package avandra.core.domain;
+package avandra.core.DTO;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
-public class TripPart {
+public class TripPartDTO {
 
     // Her starter LEG- objektet
     private String legTransportMode;
@@ -49,7 +36,7 @@ public class TripPart {
 
 
 
-    public TripPart() {}
+    public TripPartDTO() {}
 
     public String getLegTransportMode() {
         return legTransportMode;

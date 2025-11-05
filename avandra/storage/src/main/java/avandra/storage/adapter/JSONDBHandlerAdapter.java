@@ -5,13 +5,13 @@ import java.io.File;
 import avandra.core.port.DBHandlerPort;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import avandra.core.domain.AdminBruker;
-import avandra.core.domain.Coordinate;
-import avandra.core.domain.Destinasjon;
+import avandra.core.DTO.AdminBruker;
+import avandra.core.DTO.CoordinateDTO;
+import avandra.core.DTO.Destinasjon;
 import avandra.core.domainParents.Bruker;
 
 
-public class JSONDBHandlerPort implements DBHandlerPort {
+public class JSONDBHandlerAdapter implements DBHandlerPort {
 
     ///creates new file /overwrites each time
     //fine for testing
@@ -66,7 +66,7 @@ public class JSONDBHandlerPort implements DBHandlerPort {
     public void addDestinationToFavorites(String userID, String destinationName, String address, double latitude, double longitude) {
     }
 
-    public Coordinate destinationCoordinate(String name) {
+    public CoordinateDTO destinationCoordinate(String name) {
         return null;
     }
 
@@ -76,7 +76,7 @@ public class JSONDBHandlerPort implements DBHandlerPort {
     }
 
     @Override
-    public Coordinate searchDestination(String userID, String destinationID) {
+    public CoordinateDTO searchDestination(String userID, String destinationID) {
         return null;
     }
 

@@ -1,7 +1,7 @@
 package avandra.test;
 
 import avandra.core.adapter.RandomLocationAdapter;
-import avandra.core.domain.Coordinate;
+import avandra.core.DTO.CoordinateDTO;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,7 +11,7 @@ class RandomLocationTest {
     @Test
     void returnsFixedCoordinateWhenProvided() throws Exception {
         var adapter = new RandomLocationAdapter(59.91, 10.75);
-        Coordinate c = adapter.currentCoordinate();
+        CoordinateDTO c = adapter.currentCoordinate();
 
         assertEquals(59.91, c.getLatitudeNum(), 1e-9);
         assertEquals(10.75, c.getLongitudeNUM(), 1e-9);
@@ -23,7 +23,7 @@ class RandomLocationTest {
 
         // sample a few times just to be safe
         for (int i = 0; i < 20; i++) {
-            Coordinate c = adapter.currentCoordinate();
+            CoordinateDTO c = adapter.currentCoordinate();
             double lat = c.getLatitudeNum();
             double lon = c.getLongitudeNUM();
 

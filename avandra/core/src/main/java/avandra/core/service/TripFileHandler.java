@@ -7,8 +7,8 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
-import avandra.core.domain.Coordinate;
-import avandra.core.domain.TripPart;
+import avandra.core.DTO.CoordinateDTO;
+import avandra.core.DTO.TripPartDTO;
 import avandra.core.port.EnturClient;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,17 +39,17 @@ public final class TripFileHandler {
      * @throws IOException       if writing the file fails or the Entur call raises I/O errors
      * @throws IllegalArgumentException if coords is null or has fewer than two items
      */
-    public List<List<TripPart>> planTrip(List<Coordinate> coords,
-                                         int numPatterns,
-                                         boolean includeRequestMeta) throws IOException {
+    public List<List<TripPartDTO>> planTrip(List<CoordinateDTO> coords,
+                                            int numPatterns,
+                                            boolean includeRequestMeta) throws IOException {
         if (coords == null || coords.size() < 2) {
             throw new IllegalArgumentException("expected a list with exactly two coordinates [from, to]");
         }
 
-        Coordinate from = coords.get(0);
-        Coordinate to   = coords.get(1);
+        CoordinateDTO from = coords.get(0);
+        CoordinateDTO to   = coords.get(1);
 
-        // use the exact getters the Coordinate exposes
+        // use the exact getters the CoordinateDTO exposes
         double fromLat = from.getLatitudeNum();
         double fromLon = from.getLongitudeNUM();
         double toLat   = to.getLatitudeNum();
@@ -87,12 +87,12 @@ public final class TripFileHandler {
     /**
      * Parse the Entur trip node into a matrix where each inner list is one pattern's legs
      */
-    private static List<List<TripPart>> parseTripPartsGrouped(JsonNode tripNode) {
-        List<List<TripPart>> grouped = new ArrayList<>();
+    private static List<List<TripPartDTO>> parseTripPartsGrouped(JsonNode tripNode) {
+        List<List<TripPartDTO>> grouped = new ArrayList<>();
 
         JsonNode patterns = tripNode.path("tripPatterns");
         for (JsonNode pattern : patterns) {
-            List<TripPart> legsForPattern = new ArrayList<>();
+            List<TripPartDTO> legsForPattern = new ArrayList<>();
             JsonNode legs = pattern.path("legs");
             for (JsonNode leg : legs) {
                 legsForPattern.add(parseSingleLeg(leg));
@@ -104,42 +104,42 @@ public final class TripFileHandler {
     }
 
     /**
-     * Map a single leg node to TripPart
+     * Map a single leg node to TripPartDTO
      */
-    private static TripPart parseSingleLeg(JsonNode leg) {
-        TripPart tripPart = new TripPart();
+    private static TripPartDTO parseSingleLeg(JsonNode leg) {
+        TripPartDTO tripPartDTO = new TripPartDTO();
 
         // mode like bus or foot
-        tripPart.setLegTransportMode(leg.path("mode").asText());
+        tripPartDTO.setLegTransportMode(leg.path("mode").asText());
 
         // distance in meters
-        tripPart.setTravelDistance(leg.path("distance").asInt());
+        tripPartDTO.setTravelDistance(leg.path("distance").asInt());
 
         // line details are optional so guard them
         JsonNode line = leg.path("line");
         if (!line.isMissingNode() && !line.isNull()) {
-            tripPart.setLineId(line.path("id").asText());
-            tripPart.setLineName(line.path("name").asText());
-            tripPart.setLineNumber(line.path("publicCode").asText());
-            tripPart.setLineTransportMode(line.path("transportMode").asText());
+            tripPartDTO.setLineId(line.path("id").asText());
+            tripPartDTO.setLineName(line.path("name").asText());
+            tripPartDTO.setLineNumber(line.path("publicCode").asText());
+            tripPartDTO.setLineTransportMode(line.path("transportMode").asText());
 
             JsonNode authority = line.path("authority");
-            tripPart.setLineOwner(authority.path("name").asText());
+            tripPartDTO.setLineOwner(authority.path("name").asText());
         }
 
         // fromEstimatedCall platform and times
         JsonNode fromEstimatedCall = leg.path("fromEstimatedCall");
         if (!fromEstimatedCall.isMissingNode() && !fromEstimatedCall.isNull()) {
             JsonNode fromQuay = fromEstimatedCall.path("quay");
-            tripPart.setDepartPlatformId(fromQuay.path("id").asText());
-            tripPart.setDepartPlatformName(fromQuay.path("name").asText());
+            tripPartDTO.setDepartPlatformId(fromQuay.path("id").asText());
+            tripPartDTO.setDepartPlatformName(fromQuay.path("name").asText());
 
             JsonNode aimedDepartureTime = fromEstimatedCall.path("aimedDepartureTime");
             if (aimedDepartureTime.isTextual()) {
                 String s = aimedDepartureTime.asText().trim();
                 if (!s.isEmpty()) {
                     try {
-                        tripPart.setAimedDeparture(
+                        tripPartDTO.setAimedDeparture(
                                 OffsetDateTime.parse(s)
                                         .atZoneSameInstant(DEFAULT_ZONE)
                                         .toLocalDateTime()
@@ -153,7 +153,7 @@ public final class TripFileHandler {
                 String s = expectedDepartureTime.asText().trim();
                 if (!s.isEmpty()) {
                     try {
-                        tripPart.setExpectedDeparture(
+                        tripPartDTO.setExpectedDeparture(
                                 OffsetDateTime.parse(s)
                                         .atZoneSameInstant(DEFAULT_ZONE)
                                         .toLocalDateTime()
@@ -167,15 +167,15 @@ public final class TripFileHandler {
         JsonNode toEstimatedCall = leg.path("toEstimatedCall");
         if (!toEstimatedCall.isMissingNode() && !toEstimatedCall.isNull()) {
             JsonNode toQuay = toEstimatedCall.path("quay");
-            tripPart.setArrivePlatformId(toQuay.path("id").asText());
-            tripPart.setArrivePlatformName(toQuay.path("name").asText());
+            tripPartDTO.setArrivePlatformId(toQuay.path("id").asText());
+            tripPartDTO.setArrivePlatformName(toQuay.path("name").asText());
 
             JsonNode aimedArrivalFromTo = toEstimatedCall.path("aimedDepartureTime");
             if (aimedArrivalFromTo.isTextual()) {
                 String s = aimedArrivalFromTo.asText().trim();
                 if (!s.isEmpty()) {
                     try {
-                        tripPart.setAimedArrival(
+                        tripPartDTO.setAimedArrival(
                                 OffsetDateTime.parse(s)
                                         .atZoneSameInstant(DEFAULT_ZONE)
                                         .toLocalDateTime()
@@ -189,7 +189,7 @@ public final class TripFileHandler {
                 String s = expectedArrivalFromTo.asText().trim();
                 if (!s.isEmpty()) {
                     try {
-                        tripPart.setExpectedArrival(
+                        tripPartDTO.setExpectedArrival(
                                 OffsetDateTime.parse(s)
                                         .atZoneSameInstant(DEFAULT_ZONE)
                                         .toLocalDateTime()
@@ -199,6 +199,6 @@ public final class TripFileHandler {
             }
         }
 
-        return tripPart;
+        return tripPartDTO;
     }
 }

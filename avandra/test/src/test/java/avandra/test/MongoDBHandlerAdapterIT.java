@@ -1,8 +1,8 @@
 package avandra.test;
 
 import avandra.core.port.DBConnectionPort;
-import avandra.storage.adapter.MongoDBConnectionPort;
-import avandra.storage.adapter.MongoDBHandlerPort;
+import avandra.storage.adapter.MongoDBConnectionAdapter;
+import avandra.storage.adapter.MongoDBHandlerAdapter;
 import org.bson.Document;
 import org.junit.jupiter.api.*;
 
@@ -12,10 +12,10 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MongoDBHandlerPortIT {
+class MongoDBHandlerAdapterIT {
 
     static MongoDBContainer mongo;
-    static MongoDBHandlerPort handler;
+    static MongoDBHandlerAdapter handler;
 
     @BeforeAll
     static void setup() throws Exception {
@@ -25,17 +25,17 @@ class MongoDBHandlerPortIT {
         mongo.start();
 
         // Create a real DBConnectionPort that points at the Mongo container.
-        DBConnectionPort realConn = new MongoDBConnectionPort(
+        DBConnectionPort realConn = new MongoDBConnectionAdapter(
                 mongo.getConnectionString(), // connection URI from the container
                 "testdb",                    // test database name (can be anything)
                 "users"                      // collection name we want to use
         );
 
         // Create the real handler we're testing, but now backed by the container DB.
-        handler = new MongoDBHandlerPort(realConn);
+        handler = new MongoDBHandlerAdapter(realConn);
 
         // Make sure the handler is using the same "id" field we rely on in production.
-        // (If MongoDBHandlerPort defaults to some other key, set it here.)
+        // (If MongoDBHandlerAdapter defaults to some other key, set it here.)
         handler.setIdField("id");
     }
 

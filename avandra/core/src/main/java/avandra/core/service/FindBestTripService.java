@@ -4,7 +4,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import avandra.core.domain.TripPart;
+import avandra.core.DTO.TripPartDTO;
 
 /**
  * Goes through all trip alternatives (each trip = list of TripParts)
@@ -40,13 +40,13 @@ public final class FindBestTripService {
      * @param tripAlternatives list of trips, each trip being a list of TripParts
      * @return the trip with the lowest score or null if no trips
      */
-    public List<TripPart> pickBest(List<List<TripPart>> tripAlternatives) {
+    public List<TripPartDTO> pickBest(List<List<TripPartDTO>> tripAlternatives) {
         if (tripAlternatives == null || tripAlternatives.isEmpty()) return null;
 
-        List<TripPart> bestTrip = null;
+        List<TripPartDTO> bestTrip = null;
         double bestScore = Double.POSITIVE_INFINITY;
 
-        for (List<TripPart> trip : tripAlternatives) {
+        for (List<TripPartDTO> trip : tripAlternatives) {
             double score = calculateTripScore(trip);
             if (score < bestScore) {
                 bestScore = score;
@@ -60,11 +60,11 @@ public final class FindBestTripService {
      * calculates a score for a given trip
      * lower score = better trip
      */
-    private double calculateTripScore(List<TripPart> tripLegs) {
+    private double calculateTripScore(List<TripPartDTO> tripLegs) {
         int totalWalkingMeters = 0;
         int totalBoardings = 0;
 
-        for (TripPart leg : tripLegs) {
+        for (TripPartDTO leg : tripLegs) {
             String mode = leg.getLegTransportMode();
             if (mode != null && (mode.equalsIgnoreCase("foot") || mode.equalsIgnoreCase("walk"))) {
                 totalWalkingMeters += leg.getTravelDistance();
@@ -80,7 +80,7 @@ public final class FindBestTripService {
         // find the first departure and last arrival to estimate total trip duration
         LocalDateTime firstDeparture = null;
         LocalDateTime lastArrival = null;
-        for (TripPart leg : tripLegs) {
+        for (TripPartDTO leg : tripLegs) {
             if (firstDeparture == null && leg.getExpectedDeparture() != null) {
                 firstDeparture = leg.getExpectedDeparture();
             }

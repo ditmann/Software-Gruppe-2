@@ -3,10 +3,10 @@ package avandra.test;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import avandra.core.domain.Coordinate;
+import avandra.core.DTO.CoordinateDTO;
 import avandra.core.port.DBConnectionPort;
-import avandra.storage.adapter.MongoDBConnectionPort;
-import avandra.storage.adapter.MongoDBHandlerPort;
+import avandra.storage.adapter.MongoDBConnectionAdapter;
+import avandra.storage.adapter.MongoDBHandlerAdapter;
 import org.bson.Document;
 import org.bson.codecs.DocumentCodecProvider;
 import org.bson.codecs.configuration.CodecRegistries;
@@ -29,16 +29,16 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatchers;
 
 /**
- * Unit tests for MongoDBHandlerPort.
+ * Unit tests for MongoDBHandlerAdapter.
  *
  * We:
- *  - mock DBConnectionPort -> MongoDBConnectionPort -> MongoCollection so we never hit a real DB
+ *  - mock DBConnectionPort -> MongoDBConnectionAdapter -> MongoCollection so we never hit a real DB
  *  - mock FindIterable + MongoCursor for reads/loops
  *
  * IMPORTANT: all @Test methods declare `throws Exception`
  * because some handler methods are declared with checked throws.
  */
-class MongoDBHandlerPortTest {
+class MongoDBHandlerAdapterTest {
 
     /**
      * Wiring object bundles all mocks and a handler instance.
@@ -49,16 +49,16 @@ class MongoDBHandlerPortTest {
      */
     private static class Wiring {
         final DBConnectionPort rootConnection = mock(DBConnectionPort.class);
-        final MongoDBConnectionPort openedConnection = mock(MongoDBConnectionPort.class);
+        final MongoDBConnectionAdapter openedConnection = mock(MongoDBConnectionAdapter.class);
         final MongoCollection<Document> collection = mock(MongoCollection.class);
-        final MongoDBHandlerPort handler;
+        final MongoDBHandlerAdapter handler;
 
         Wiring() throws Exception {
             when(rootConnection.open()).thenReturn(openedConnection);
             when(openedConnection.getCollection()).thenReturn(collection);
             doNothing().when(openedConnection).close();
 
-            handler = new MongoDBHandlerPort(rootConnection);
+            handler = new MongoDBHandlerAdapter(rootConnection);
         }
     }
 
@@ -66,11 +66,11 @@ class MongoDBHandlerPortTest {
      * The handler accumulates results in an internal list.
      * Clear it after each test to prevent cross-test contamination.
      */
-    private static final ArrayList<MongoDBHandlerPort> INSTANCES_TO_RESET = new ArrayList<>();
+    private static final ArrayList<MongoDBHandlerAdapter> INSTANCES_TO_RESET = new ArrayList<>();
 
     @AfterEach
     void cleanupLists() {
-        for (MongoDBHandlerPort h : INSTANCES_TO_RESET) {
+        for (MongoDBHandlerAdapter h : INSTANCES_TO_RESET) {
             h.setList(new ArrayList<>());
         }
         INSTANCES_TO_RESET.clear();
@@ -419,7 +419,7 @@ class MongoDBHandlerPortTest {
         when(w.collection.find(any(Bson.class))).thenReturn(findIterable);
         when(findIterable.first()).thenReturn(userDoc);
 
-        Coordinate result = w.handler.searchDestination("Kåre", "FFK");
+        CoordinateDTO result = w.handler.searchDestination("Kåre", "FFK");
 
         assertNotNull(result, "Expected coordinates, got null");
         assertEquals(59.3231, result.getLatitudeNum(), 1e-6);
@@ -438,13 +438,13 @@ class MongoDBHandlerPortTest {
     void methods_handleMongoException_gracefully() throws Exception {
 
         DBConnectionPort rootConn = mock(DBConnectionPort.class);
-        MongoDBConnectionPort openedConn = mock(MongoDBConnectionPort.class);
+        MongoDBConnectionAdapter openedConn = mock(MongoDBConnectionAdapter.class);
 
         when(rootConn.open()).thenReturn(openedConn);
         when(openedConn.getCollection()).thenThrow(new MongoException("error"));
         doNothing().when(openedConn).close();
 
-        MongoDBHandlerPort handler = new MongoDBHandlerPort(rootConn);
+        MongoDBHandlerAdapter handler = new MongoDBHandlerAdapter(rootConn);
 
         assertDoesNotThrow(() -> handler.searchDestination("Per", "Hjem"));
         assertDoesNotThrow(() -> handler.createUser("Per", true));

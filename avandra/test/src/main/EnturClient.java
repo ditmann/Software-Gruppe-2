@@ -1,4 +1,4 @@
-package avandra.core.port;
+package avandra.test.main;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import java.io.IOException;

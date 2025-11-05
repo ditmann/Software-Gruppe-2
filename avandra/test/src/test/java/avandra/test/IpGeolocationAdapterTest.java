@@ -1,7 +1,7 @@
 package avandra.test;
 
 import avandra.core.adapter.IpGeolocationAdapter;
-import avandra.core.domain.Coordinate;
+import avandra.core.DTO.CoordinateDTO;
 import okhttp3.OkHttpClient;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -39,7 +39,7 @@ class IpGeolocationAdapterTest {
                 server.url("/json").toString()
         );
 
-        Coordinate c = adapter.currentCoordinate();
+        CoordinateDTO c = adapter.currentCoordinate();
 
         assertEquals(59.9139, c.getLatitudeNum(), 1e-4);
         assertEquals(10.7522, c.getLongitudeNUM(), 1e-4);

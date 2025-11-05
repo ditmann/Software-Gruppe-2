@@ -1,14 +1,14 @@
-package avandra.core.domain;
+package avandra.core.DTO;
 
-public class Coordinate {
+public class CoordinateDTO {
     private double latitudeNum;
     private double longitudeNUM;
 
-    public Coordinate(double latitudeNum, double longitudeNUM) {
+    public CoordinateDTO(double latitudeNum, double longitudeNUM) {
         this.latitudeNum = latitudeNum;
         this.longitudeNUM = longitudeNUM;
     }
-    public Coordinate() {
+    public CoordinateDTO() {
 
     }
 

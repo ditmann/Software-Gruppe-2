@@ -7,16 +7,16 @@ import java.util.Scanner;
 
 import avandra.core.adapter.IpGeolocationAdapter;
 import avandra.core.port.DBConnectionPort;
-import avandra.storage.adapter.MongoDBHandlerPort;
+import avandra.storage.adapter.MongoDBConnectionAdapter;
+import avandra.storage.adapter.MongoDBHandlerAdapter;
 import org.bson.Document;
 
-import avandra.storage.adapter.MongoDBConnectionPort;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import avandra.api.EnturHttpClient;
 import avandra.core.adapter.RandomLocationAdapter;
-import avandra.core.domain.Coordinate;
-import avandra.core.domain.TripPart;
+import avandra.core.DTO.CoordinateDTO;
+import avandra.core.DTO.TripPartDTO;
 import avandra.core.port.DBHandlerPort;
 import avandra.core.port.EnturClient;
 import avandra.core.port.LocationPort;
@@ -31,9 +31,9 @@ public class APIMain {
         // lager "services" vi bruker videre
         String clientName = "HIOFsTUD-AVANDRA";
         EnturClient entur = new EnturHttpClient(clientName); // snakker med entur
-        DBConnectionPort connection = new MongoDBConnectionPort();
+        DBConnectionPort connection = new MongoDBConnectionAdapter();
         LocationPort location = null;
-        DBHandlerPort db = new MongoDBHandlerPort(connection);                 // snakker med mongodb
+        DBHandlerPort db = new MongoDBHandlerAdapter(connection);                 // snakker med mongodb
         TripFileHandler files = new TripFileHandler(entur, new ObjectMapper()); // lager reiseplaner
 
         // ytre while: gjør at vi kan logge ut og logge inn som en annen bruker
@@ -208,14 +208,14 @@ public class APIMain {
         String valgtDest = favorittNavn.get(valg - 1);
 
         // hent koordinatene (latitude/longitude) for den valgte destinasjonen
-        Coordinate dest = db.searchDestination(navn, valgtDest);
+        CoordinateDTO dest = db.searchDestination(navn, valgtDest);
         if (dest == null) {
             System.out.println("Fant ikke koordinater.");
             return;
         }
 
         // generer en tilfeldig startposisjon
-        Coordinate start = location.currentCoordinate();
+        CoordinateDTO start = location.currentCoordinate();
 
         System.out.println("Reiser fra: " + start.getLatitudeNum() + ", " + start.getLongitudeNUM());
         System.out.println("Til: " + valgtDest + " (" + dest.getLatitudeNum() + ", " + dest.getLongitudeNUM() + ")");
@@ -229,15 +229,15 @@ public class APIMain {
                 true // ta med ekstra info
         );
 
-        // TripPart.tripParts() leser den fila og oversetter til "steg"
-        List<TripPart> deler = TripPart.tripParts(tripJson);
+        // TripPartDTO.tripParts() leser den fila og oversetter til "steg"
+        List<TripPartDTO> deler = TripPartDTO.tripParts(tripJson);
         if (deler == null || deler.isEmpty()) {
             System.out.println("Fant ingen rute.");
             return;
         }
 
         System.out.println("=== Reiseplan ===");
-        for (TripPart del : deler) {
+        for (TripPartDTO del : deler) {
             System.out.println(del.toString());
         }
 
@@ -268,7 +268,7 @@ public class APIMain {
 
         // addDestinationToFavorites(brukerId, destNavn, adresse, lat, lon)
         // vi bruker destNavn også som "adresse"
-        ((MongoDBHandlerPort) db).addDestinationToFavorites(navn, destNavn, destNavn, lat, lon);
+        ((MongoDBHandlerAdapter) db).addDestinationToFavorites(navn, destNavn, destNavn, lat, lon);
 
         System.out.println("Favoritt '" + destNavn + "' lagt til for " + navn);
         System.out.println("");
@@ -308,7 +308,7 @@ public class APIMain {
         String valgtDest = favorittNavn.get(valg - 1);
 
         // removeData(collection, fieldToRemove, userId)
-        ((MongoDBHandlerPort) db).removeData("brukere", "favoritter." + valgtDest, navn);
+        ((MongoDBHandlerAdapter) db).removeData("brukere", "favoritter." + valgtDest, navn);
 
         System.out.println("Favoritt '" + valgtDest + "' fjernet for " + navn);
         System.out.println("");
@@ -397,7 +397,7 @@ public class APIMain {
         double lat = Double.parseDouble(latStr);
         double lon = Double.parseDouble(lonStr);
 
-        ((MongoDBHandlerPort) db).addDestinationToFavorites(navn, destNavn, destNavn, lat, lon);
+        ((MongoDBHandlerAdapter) db).addDestinationToFavorites(navn, destNavn, destNavn, lat, lon);
 
         System.out.println("Favoritt '" + destNavn + "' lagt til for " + navn);
     }
@@ -428,7 +428,7 @@ public class APIMain {
         int valg = lesValg(in, 1, favorittNavn.size());
         String valgtDest = favorittNavn.get(valg - 1);
 
-        ((MongoDBHandlerPort) db).removeData("brukere", "favoritter." + valgtDest, navn);
+        ((MongoDBHandlerAdapter) db).removeData("brukere", "favoritter." + valgtDest, navn);
 
         System.out.println("Favoritt '" + valgtDest + "' fjernet for " + navn);
     }

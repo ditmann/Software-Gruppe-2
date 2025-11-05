@@ -1,7 +1,7 @@
 package avandra.core.port;
 
 
-import avandra.core.domain.Coordinate;
+import avandra.core.DTO.CoordinateDTO;
 
 public interface DBHandlerPort {
     // make user in DB %overloading skal brukes%
@@ -20,10 +20,10 @@ public interface DBHandlerPort {
     public void addCoordinatesToDestination(String userID, String destinationName, double latitude, double longitude);
 
     ///  Returnerer koordinater
-    public Coordinate destinationCoordinate(String name);
+    public CoordinateDTO destinationCoordinate(String name);
 
     /// search with ID to find specific document
-    public Coordinate searchDestination(String userID, String destinationID);
+    public CoordinateDTO searchDestination(String userID, String destinationID);
 
     //Removes data (dokument id, what to delete, path, path, path) %overloading skal brukes%
     public void removeData(String userID); //sletter topp nivå i dokument

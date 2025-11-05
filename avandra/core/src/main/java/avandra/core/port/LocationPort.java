@@ -1,7 +1,7 @@
 package avandra.core.port;
-import avandra.core.domain.Coordinate;
+import avandra.core.DTO.CoordinateDTO;
 
 public interface LocationPort {
     /** Return the current device/user coordinate. */
-    Coordinate currentCoordinate() throws Exception;
+    CoordinateDTO currentCoordinate() throws Exception;
 }

@@ -3,10 +3,10 @@ package avandra.api;
 import java.io.IOException;
 import java.time.Duration;
 
+import avandra.core.DTO.CoordinateDTO;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import avandra.core.domain.Coordinate;
 import avandra.core.port.LocationPort;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -41,7 +41,7 @@ public class IpGeolocationAdapter implements LocationPort {
     }
 
     @Override
-    public Coordinate currentCoordinate() throws Exception {
+    public CoordinateDTO currentCoordinate() throws Exception {
         Request req = new Request.Builder()
                 .url(endpoint)
                 .header("User-Agent", clientName)
@@ -59,7 +59,7 @@ public class IpGeolocationAdapter implements LocationPort {
             double lat = json.get("latitude").asDouble();
             double lon = json.get("longitude").asDouble();
 
-            return new Coordinate((float) lat, (float) lon);
+            return new CoordinateDTO((float) lat, (float) lon);
         }
     }
 }
