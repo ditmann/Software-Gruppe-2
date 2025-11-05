@@ -22,7 +22,7 @@ package "Core" {
 
     package "DTO" {
             class "TripPartDTO"
-            class "CooardinateDTO"
+            class "CoordinateDTO"
     }
 
     package "Adapter" {
@@ -57,11 +57,60 @@ package "API" {
 package "Test" {
 
     class "TripFileHandlerTest"
-    class "MongoDBHandlerTest"
+    class "MongoDBHandlerAdapterTest"
     class "IpGeolocationAdapterTest"
-    interface "RandomLocationTest"
+    class "RandomLocationTest"
+    class "MongoDBHandlerAdapterIT"
+    class "MongoDBConnectionAdapterTest"
+    class "FindBestTripServiceTest"
 }
 
+'API koblinger:
+"EnturHttpClient"-->"EnturClientPort"
+"IpGeolocationAdapter"-->"LocationPort"
+"IpGeolocationAdapter"-->"CoordinateDTO"
+
+'Storage koblinger:
+"JsonDBhandlerAdapter"-->"DBHandlerPort"
+"JsonDBhandlerAdapter"-->"CoordinateDTO"
+"MongoDBConnectionAdapter"-->"DBConnectionPort"
+"MongoDBHandlerAdapter"-->"DBHandlerPort"
+"MongoDBHandlerAdapter"-->"CoordinateDTO"
+"MongoDBHandlerAdapter"-->"DBConnectionPort"
+
+'Core koblinger:
+'   Adapter:
+"RandomLocationAdapter"-->"LocationPort"
+"RandomLocationAdapter"-->"CoordinateDTO"
+'   Port:
+"DBHandlerPort"-->"CoordinateDTO"
+"LocationPort"-->"CoordinateDTO"
+'   DTO: Bruker ingen koblinger
+'   Service:
+"FindBestTripService"-->"TripPartDTO"
+"TripFileHandler"-->"TripPartDTO"
+"TripFileHandler"-->"CoordinateDTO"
+"TripFileHandler"-->"EnturClientPort"
+
+'Test kobling:
+"TripFileHandlerTest"-->"CoordinateDTO"
+"TripFileHandlerTest"-->"TripPartDTO"
+"TripFileHandlerTest"-->"EnturClientPort"
+"TripFileHandlerTest"-->"TripFileHandler"
+"RandomLocationTest"-->"RandomLocationAdapter"
+"RandomLocationTest"-->"CoordinateDTO"
+"MongoDBHandlerAdapterTest"-->"CoordinateDTO"
+"MongoDBHandlerAdapterTest"-->"DBConnectionPort"
+"MongoDBHandlerAdapterTest"-->"MongoDBHandlerAdapter"
+"MongoDBHandlerAdapterTest"-->"MongoDBConnectionAdapter"
+"MongoDBHandlerAdapterIT"-->"DBConnectionPort"
+"MongoDBHandlerAdapterIT"-->"MongoDBConnectionAdapter"
+"MongoDBHandlerAdapterIT"-->"MongoDBHandlerAdapter"
+"MongoDBConnectionAdapterTest"-->"MongoDBConnectionAdapter"
+"IpGeolocationAdapterTest"-->"IpGeolocationAdapter"
+"IpGeolocationAdapterTest"-->"CoordinateDTO"
+"FindBestTripServiceTest"-->"FindBestTripService"
+"FindBestTripServiceTest"-->"TripPartDTO"
 
 
 
