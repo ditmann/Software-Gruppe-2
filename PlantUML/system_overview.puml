@@ -1,0 +1,69 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+package "app" {
+    class "Main"
+}
+
+package "Core" {
+
+    package "Port" {
+        interface "DBHandlerPort"
+        interface "DBConnectionPort"
+        interface "LocationPort"
+        interface "EnturClientPort"
+    }
+
+    package "Service" {
+        class "FindBestTripService"
+        class "TripFileHandler"
+        class "DBService"
+    }
+
+    package "DTO" {
+            class "TripPartDTO"
+            class "CooardinateDTO"
+    }
+
+    package "Adapter" {
+
+        class "RandomLocationAdapter" 
+    }
+}
+
+package "Storage" {
+
+    class JsonDBhandlerAdapter {
+    }
+
+    class MongoDBConnectionAdapter {
+    }
+
+    class MongoDBHandlerAdapter{
+    - list: ArrayList<Document>
+    - idField: String
+    - connectionToDatabase: DBConnection
+    - listOfDocuments: MongoCollection<Document>
+    }
+}
+
+package "API" {
+    class "EnturHttpClient"
+    class "IpGeolocationAdapter"
+    class "AvandraController"
+
+}
+
+package "Test" {
+
+    class "TripFileHandlerTest"
+    class "MongoDBHandlerTest"
+    class "IpGeolocationAdapterTest"
+    interface "RandomLocationTest"
+}
+
+
+
+
+
+@enduml
