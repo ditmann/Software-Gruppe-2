@@ -5,10 +5,9 @@ import java.io.File;
 import avandra.core.port.DBHandlerPort;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import avandra.core.DTO.AdminBruker;
+
 import avandra.core.DTO.CoordinateDTO;
-import avandra.core.DTO.Destinasjon;
-import avandra.core.domainParents.Bruker;
+
 
 
 public class JSONDBHandlerAdapter implements DBHandlerPort {
@@ -37,7 +36,7 @@ public class JSONDBHandlerAdapter implements DBHandlerPort {
     /// prøvde å legge til noe i objektet "bruker" men det er jo dumt. skal dokumentet VÆRE en versjon av bruker?
     /// ignore
     public void appendData(String filepath, String addKey, Object addValue) {
-        ObjectMapper mapper = new ObjectMapper();
+      /*  ObjectMapper mapper = new ObjectMapper();
         Bruker bruker = new AdminBruker("Moiraine");
         try {
             File file = new File(filepath);
@@ -45,12 +44,12 @@ public class JSONDBHandlerAdapter implements DBHandlerPort {
 
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }
+        } */
     }
 
     /// Returns the JSON doc contents
     public Object retrieveAllData() {
-        Destinasjon destinasjon = new Destinasjon();
+       /* Destinasjon destinasjon = new Destinasjon();
         try {
             ObjectMapper mapper = new ObjectMapper();
             File file = new File("dummydata.json");
@@ -59,7 +58,8 @@ public class JSONDBHandlerAdapter implements DBHandlerPort {
         catch (Exception e) {
             System.out.println(e);
         }
-        return destinasjon;
+        return destinasjon; */
+        return null;
     }
 
     @Override
