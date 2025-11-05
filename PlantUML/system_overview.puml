@@ -8,35 +8,36 @@ package "app" {
 package "Core" {
 
     package "Port" {
-        interface "DBConnection"
-        interface "DBHandler"
+        interface "DBHandlerPort"
+        interface "DBConnectionPort"
         interface "LocationPort"
     }
 
-    package "Domain" {
-        class "Coordinate"
+    package "Service" {
+        class "FindBestTripService"
+        class "TripFileHandler"
     }
 
     package "DTO" {
-            class "TripPart"
+            class "TripPartDTO"
+            class "CooardinateDTO"
     }
 
-    package "Service" {
+    package "Adapter" {
 
-        class "TripFileHandler" {
-        }
+        class "RandomLocationAdapter" 
     }
 }
 
 package "Storage" {
 
-    class JSONDBHandler {
+    class JsonDBhandlerAdapter {
     }
 
-    class MongoDBConnection {
+    class MongoDBConnectionAdapter {
     }
 
-    class MongoDBHandler {
+    class MongoDBHandlerAdapter{
     - list: ArrayList<Document>
     - idField: String
     - connectionToDatabase: DBConnection
@@ -46,46 +47,19 @@ package "Storage" {
 
 package "API" {
     class "EnturHttpClient"
-}
-
-package "Location" {
     class "IpGeolocationAdapter"
-    class "RandomLocationAdapter"
 }
 
 package "Test" {
 
-    class "MongoDBConnectionTest"
-    class "MongoDBHandlerTest"
     class "TripFileHandlerTest"
-    class "TripPartTest"
-    interface "EnturClient"
+    class "MongoDBHandlerTest"
+    class "EnturClient"
+    class "IpGeolocationAdapterTest"
+    interface "RandomLocationTest"
 }
 
-MongoDBConnection ..|> DBConnection
-MongoDBHandler .up.|> DBHandler
-JSONDBHandler .up.|> DBHandler
-IpGeolocationAdapter .up.|> LocationPort
-RandomLocationAdapter ..|> LocationPort
-MongoDBConnectionTest <-- MongoDBConnection
-MongoDBHandlerTest <-- MongoDBHandler
-TripFileHandlerTest <-- TripFileHandler
-TripPartTest <-- TripPart
-EnturHttpClient --> EnturClient
-MongoDBHandler <-- MongoDBConnection
-Coordinate --> DBHandler
-Coordinate --> IpGeolocationAdapter
-Coordinate --> RandomLocationAdapter
 
-
-Main <-- EnturHttpClient
-Main <.. DBConnection
-Main <.. DBHandler
-Main <-- TripFileHandler
-Main <.. LocationPort
-Main <-- TripFileHandler
-Main <-- TripPart
-Main <-- Coordinate
 
 
 
