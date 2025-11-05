@@ -5,10 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1929c9ed-51df-4c9e-810d-8a44f44805a4" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/MongoDBConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/MongoDBConnection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/target/classes/avandra/storage/adapter/MongoDBConnection.class" beforeDir="false" afterPath="$PROJECT_DIR$/storage/target/classes/avandra/storage/adapter/MongoDBConnection.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/src/test/java/avandra/test/MongoDBHandlerIT.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/test/java/avandra/test/MongoDBHandlerIT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/avandra/app/APIMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/avandra/app/APIMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/avandra/app/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/avandra/app/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/avandra/core/port/DBConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/avandra/core/port/DBConnectionPort.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/avandra/core/port/DBHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/avandra/core/port/DBHandlerPort.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/JSONDBHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/JSONDBHandlerPort.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/MongoDBConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/MongoDBConnectionPort.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/MongoDBHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/MongoDBHandlerPort.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/src/test/java/avandra/test/MongoDBConnectionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/test/java/avandra/test/MongoDBConnectionPortTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/src/test/java/avandra/test/MongoDBHandlerIT.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/test/java/avandra/test/MongoDBHandlerPortIT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/src/test/java/avandra/test/MongoDBHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/test/java/avandra/test/MongoDBHandlerPortTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,35 +48,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.APIMain.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ConsoleMain.executor&quot;: &quot;Run&quot;,
-    &quot;Application.EnturDemo.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.All in test.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.MongoDBConnectionTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.MongoDBHandlerIT.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.MongoDBHandlerTest.createUser_insertsOneDocument.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.MongoDBHandlerTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TripFileHandlerTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TripParserTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TripPartTest.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Testing&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Gooner/Documents/GitHub/Software-Gruppe-2/avandra&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.APIMain.executor": "Run",
+    "Application.ConsoleMain.executor": "Run",
+    "Application.EnturDemo.executor": "Run",
+    "Application.Main.executor": "Run",
+    "JUnit.All in test.executor": "Run",
+    "JUnit.MongoDBConnectionTest.executor": "Run",
+    "JUnit.MongoDBHandlerIT.executor": "Run",
+    "JUnit.MongoDBHandlerTest.createUser_insertsOneDocument.executor": "Run",
+    "JUnit.MongoDBHandlerTest.executor": "Run",
+    "JUnit.TripFileHandlerTest.executor": "Run",
+    "JUnit.TripParserTest.executor": "Run",
+    "JUnit.TripPartTest.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "Dev",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Gooner/Documents/GitHub/Software-Gruppe-2/avandra"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
-      &quot;GitIgnore&quot;
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "GitIgnore"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="JUnit.All in test">
     <configuration name="All in test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="test" />
@@ -80,7 +86,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MongoDBConnectionTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="MongoDBConnectionPortTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="test" />
       <extension name="coverage">
         <pattern>
@@ -89,13 +95,13 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="avandra.test" />
-      <option name="MAIN_CLASS_NAME" value="avandra.test.MongoDBConnectionTest" />
+      <option name="MAIN_CLASS_NAME" value="avandra.test.MongoDBConnectionPortTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MongoDBHandlerIT" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="MongoDBHandlerPortIT" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="test" />
       <extension name="coverage">
         <pattern>
@@ -104,13 +110,13 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="avandra.test" />
-      <option name="MAIN_CLASS_NAME" value="avandra.test.MongoDBHandlerIT" />
+      <option name="MAIN_CLASS_NAME" value="avandra.test.MongoDBHandlerPortIT" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MongoDBHandlerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="MongoDBHandlerPortTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="test" />
       <extension name="coverage">
         <pattern>
@@ -119,13 +125,13 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="avandra.test" />
-      <option name="MAIN_CLASS_NAME" value="avandra.test.MongoDBHandlerTest" />
+      <option name="MAIN_CLASS_NAME" value="avandra.test.MongoDBHandlerPortTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MongoDBHandlerTest.createUser_insertsOneDocument" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="MongoDBHandlerPortTest.createUser_insertsOneDocument" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="test" />
       <extension name="coverage">
         <pattern>
@@ -134,7 +140,7 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="avandra.test" />
-      <option name="MAIN_CLASS_NAME" value="avandra.test.MongoDBHandlerTest" />
+      <option name="MAIN_CLASS_NAME" value="avandra.test.MongoDBHandlerPortTest" />
       <option name="METHOD_NAME" value="createUser_insertsOneDocument" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
@@ -155,10 +161,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.All in test" />
-        <item itemvalue="JUnit.MongoDBHandlerTest" />
-        <item itemvalue="JUnit.MongoDBHandlerIT" />
-        <item itemvalue="JUnit.MongoDBConnectionTest" />
-        <item itemvalue="JUnit.MongoDBHandlerTest.createUser_insertsOneDocument" />
+        <item itemvalue="JUnit.MongoDBHandlerPortTest" />
+        <item itemvalue="JUnit.MongoDBHandlerPortIT" />
+        <item itemvalue="JUnit.MongoDBConnectionPortTest" />
+        <item itemvalue="JUnit.MongoDBHandlerPortTest.createUser_insertsOneDocument" />
       </list>
     </recent_temporary>
   </component>

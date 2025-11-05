@@ -3,6 +3,7 @@ package avandra.storage.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import avandra.core.port.DBHandlerPort;
 import org.bson.Document;
 
 import com.mongodb.MongoException;
@@ -13,10 +14,9 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 
 import avandra.core.domain.Coordinate;
-import avandra.core.port.DBConnection;
-import avandra.core.port.DBHandler;
+import avandra.core.port.DBConnectionPort;
 
-public class MongoDBHandler implements DBHandler {
+public class MongoDBHandlerPort implements DBHandlerPort {
 
     ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
     /// VARIABLE(S)
@@ -26,15 +26,15 @@ public class MongoDBHandler implements DBHandler {
     private String idField = "id";
 
     // NOT given get'ers & set'ers as this application only accesses this specific db and collection
-    private DBConnection mongoDBConnection;
+    private DBConnectionPort mongoDBConnectionPort;
     private MongoCollection<Document> collection;
 
     ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
     /// CONSTRUCTOR(S)
     ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
 
-    public MongoDBHandler(DBConnection connection) {
-        this.mongoDBConnection = connection;
+    public MongoDBHandlerPort(DBConnectionPort connection) {
+        this.mongoDBConnectionPort = connection;
     }
 
     ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
@@ -62,7 +62,7 @@ public class MongoDBHandler implements DBHandler {
     /// Creates a new document in the collection which represents a user, with all required fields
     public void createUser(String userID, boolean adminUser){
 
-        try (MongoDBConnection connection = (MongoDBConnection) mongoDBConnection.open()) {
+        try (MongoDBConnectionPort connection = (MongoDBConnectionPort) mongoDBConnectionPort.open()) {
 
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
@@ -98,7 +98,7 @@ public class MongoDBHandler implements DBHandler {
 
     public void addDestinationToFavorites(String userID, String destinationName, String address, double latitude, double longitude) {
 
-        try (MongoDBConnection connection = (MongoDBConnection) mongoDBConnection.open()) {
+        try (MongoDBConnectionPort connection = (MongoDBConnectionPort) mongoDBConnectionPort.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
@@ -125,7 +125,7 @@ public class MongoDBHandler implements DBHandler {
     // OR: change name of method
     public void addCoordinatesToDestination(String userID, String destinationName, double latitude, double longitude) {
 
-        try (MongoDBConnection connection = (MongoDBConnection) mongoDBConnection.open()) {
+        try (MongoDBConnectionPort connection = (MongoDBConnectionPort) mongoDBConnectionPort.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
@@ -151,7 +151,7 @@ public class MongoDBHandler implements DBHandler {
     /// Returns all documents in the collection as an array
     public ArrayList<Document> retrieveAllData() {
 
-        try (MongoDBConnection connection = (MongoDBConnection) mongoDBConnection.open()) {
+        try (MongoDBConnectionPort connection = (MongoDBConnectionPort) mongoDBConnectionPort.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
@@ -179,7 +179,7 @@ public class MongoDBHandler implements DBHandler {
     public Coordinate searchDestination(String userID, String destinationID){
         String coordinateFieldName = "koordinater";
 
-        try (MongoDBConnection connection = (MongoDBConnection) mongoDBConnection.open()) {
+        try (MongoDBConnectionPort connection = (MongoDBConnectionPort) mongoDBConnectionPort.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
@@ -222,7 +222,7 @@ public class MongoDBHandler implements DBHandler {
     @Override
     public Coordinate destinationCoordinate(String name) {
 
-        try (MongoDBConnection connection = (MongoDBConnection) mongoDBConnection.open()) {
+        try (MongoDBConnectionPort connection = (MongoDBConnectionPort) mongoDBConnectionPort.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
@@ -250,7 +250,7 @@ public class MongoDBHandler implements DBHandler {
     /// Returns all docs which contain the specified key:value in an array
     public ArrayList<Document> retrieveByKeyValue(String key, String value){
 
-        try (MongoDBConnection connection = (MongoDBConnection) mongoDBConnection.open()) {
+        try (MongoDBConnectionPort connection = (MongoDBConnectionPort) mongoDBConnectionPort.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
@@ -284,7 +284,7 @@ public class MongoDBHandler implements DBHandler {
     /// OR overwrites existing value if key already exists
     public void appendData(String userID, String addKey, Object addValue) {
 
-        try (MongoDBConnection connection = (MongoDBConnection) mongoDBConnection.open()) {
+        try (MongoDBConnectionPort connection = (MongoDBConnectionPort) mongoDBConnectionPort.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
@@ -310,7 +310,7 @@ public class MongoDBHandler implements DBHandler {
     /// Removes key and value in specified doc at specified key, if it exists
     public void removeData(String userID, String keyToRemove) {
 
-        try (MongoDBConnection connection = (MongoDBConnection) mongoDBConnection.open()) {
+        try (MongoDBConnectionPort connection = (MongoDBConnectionPort) mongoDBConnectionPort.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
@@ -337,7 +337,7 @@ public class MongoDBHandler implements DBHandler {
     //deletes a key for a user, (userid, the key to remove, the type of destination[path])
     public void removeData(String userID, String keyToRemove, String destinationType) {
 
-        try (MongoDBConnection connection = (MongoDBConnection) mongoDBConnection.open()) {
+        try (MongoDBConnectionPort connection = (MongoDBConnectionPort) mongoDBConnectionPort.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
@@ -366,7 +366,7 @@ public class MongoDBHandler implements DBHandler {
     //deletes a key for a user, (userid, the key to remove, the type of destination[path], the specific destination[path])
     public void removeData(String userID, String keyToRemove, String destinationType, String destinationKey) {
 
-        try (MongoDBConnection connection = (MongoDBConnection) mongoDBConnection.open()) {
+        try (MongoDBConnectionPort connection = (MongoDBConnectionPort) mongoDBConnectionPort.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
@@ -395,7 +395,7 @@ public class MongoDBHandler implements DBHandler {
     /// Deletes the first document with a specified ID //start here
     public void removeData(String userID) {
 
-        try (MongoDBConnection connection = (MongoDBConnection) mongoDBConnection.open()) {
+        try (MongoDBConnectionPort connection = (MongoDBConnectionPort) mongoDBConnectionPort.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
@@ -430,7 +430,7 @@ public class MongoDBHandler implements DBHandler {
             String adminId
     ) {
 
-        try (MongoDBConnection connection = (MongoDBConnection) mongoDBConnection.open()) {
+        try (MongoDBConnectionPort connection = (MongoDBConnectionPort) mongoDBConnectionPort.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
@@ -501,7 +501,7 @@ public class MongoDBHandler implements DBHandler {
     /// Deletes all documents with a specified ID
     // necessary for developers in case of duplicate ID entries
     public void deleteManyDocuments(String userID) {
-        try (MongoDBConnection connection = (MongoDBConnection) mongoDBConnection.open()) {
+        try (MongoDBConnectionPort connection = (MongoDBConnectionPort) mongoDBConnectionPort.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
@@ -529,7 +529,7 @@ public class MongoDBHandler implements DBHandler {
     // if alot of data this will take alot of processing time
     // useful for developers in testing
     public ArrayList<Document> retrieveByValue(String searchTerm) {
-        try (MongoDBConnection connection = (MongoDBConnection) mongoDBConnection.open()) {
+        try (MongoDBConnectionPort connection = (MongoDBConnectionPort) mongoDBConnectionPort.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 

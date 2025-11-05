@@ -6,20 +6,20 @@ import java.util.List;
 import java.util.Scanner;
 
 import avandra.core.adapter.IpGeolocationAdapter;
-import avandra.core.port.DBConnection;
+import avandra.core.port.DBConnectionPort;
+import avandra.storage.adapter.MongoDBHandlerPort;
 import org.bson.Document;
 
-import avandra.storage.adapter.MongoDBConnection;
+import avandra.storage.adapter.MongoDBConnectionPort;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import avandra.api.EnturHttpClient;
 import avandra.core.adapter.RandomLocationAdapter;
 import avandra.core.domain.Coordinate;
 import avandra.core.domain.TripPart;
-import avandra.core.port.DBHandler;
+import avandra.core.port.DBHandlerPort;
 import avandra.core.port.EnturClient;
 import avandra.core.port.LocationPort;
-import avandra.storage.adapter.MongoDBHandler;
 import avandra.storage.adapter.TripFileHandler;
 
 public class APIMain {
@@ -31,9 +31,9 @@ public class APIMain {
         // lager "services" vi bruker videre
         String clientName = "HIOFsTUD-AVANDRA";
         EnturClient entur = new EnturHttpClient(clientName); // snakker med entur
-        DBConnection connection = new MongoDBConnection();
+        DBConnectionPort connection = new MongoDBConnectionPort();
         LocationPort location = null;
-        DBHandler db = new MongoDBHandler(connection);                 // snakker med mongodb
+        DBHandlerPort db = new MongoDBHandlerPort(connection);                 // snakker med mongodb
         TripFileHandler files = new TripFileHandler(entur, new ObjectMapper()); // lager reiseplaner
 
         // ytre while: gjør at vi kan logge ut og logge inn som en annen bruker
@@ -177,7 +177,7 @@ public class APIMain {
     // ======================= FUNKSJONER =======================
 
     // planlegg reise til en av favorittene
-    private static void reis(Scanner in, Document bruker, DBHandler db,
+    private static void reis(Scanner in, Document bruker, DBHandlerPort db,
                              TripFileHandler files, LocationPort location) throws Exception {
 
         String navn = bruker.getString("id");
@@ -246,7 +246,7 @@ public class APIMain {
     }
 
     // legger til en favoritt for deg selv (kun admin)
-    private static void leggTilFavoritt(Scanner in, Document bruker, DBHandler db) {
+    private static void leggTilFavoritt(Scanner in, Document bruker, DBHandlerPort db) {
         if (!isAdmin(bruker)) {
             System.out.println("Du har ikke rettigheter til å legge til favoritter.");
             return;
@@ -268,14 +268,14 @@ public class APIMain {
 
         // addDestinationToFavorites(brukerId, destNavn, adresse, lat, lon)
         // vi bruker destNavn også som "adresse"
-        ((MongoDBHandler) db).addDestinationToFavorites(navn, destNavn, destNavn, lat, lon);
+        ((MongoDBHandlerPort) db).addDestinationToFavorites(navn, destNavn, destNavn, lat, lon);
 
         System.out.println("Favoritt '" + destNavn + "' lagt til for " + navn);
         System.out.println("");
     }
 
     // fjerner en favoritt for deg selv (kun admin)
-    private static void fjernFavoritt(Scanner in, Document bruker, DBHandler db) {
+    private static void fjernFavoritt(Scanner in, Document bruker, DBHandlerPort db) {
         if (!isAdmin(bruker)) {
             System.out.println("Du har ikke rettigheter til å fjerne favoritter.");
             return;
@@ -308,14 +308,14 @@ public class APIMain {
         String valgtDest = favorittNavn.get(valg - 1);
 
         // removeData(collection, fieldToRemove, userId)
-        ((MongoDBHandler) db).removeData("brukere", "favoritter." + valgtDest, navn);
+        ((MongoDBHandlerPort) db).removeData("brukere", "favoritter." + valgtDest, navn);
 
         System.out.println("Favoritt '" + valgtDest + "' fjernet for " + navn);
         System.out.println("");
     }
 
     // admin-meny: admin kan styre brukere i sin "litebrukere"-liste
-    private static void adminMeny(Scanner in, Document admin, ArrayList<Document> alleBrukere, DBHandler db) {
+    private static void adminMeny(Scanner in, Document admin, ArrayList<Document> alleBrukere, DBHandlerPort db) {
 
         // sikkerhet: sjekk at du faktisk er admin
         if (!isAdmin(admin)) {
@@ -382,7 +382,7 @@ public class APIMain {
     }
 
     // admin legger til favoritt på en litebruker
-    private static void leggTilFavorittForAndre(Scanner in, Document bruker, DBHandler db) {
+    private static void leggTilFavorittForAndre(Scanner in, Document bruker, DBHandlerPort db) {
         String navn = bruker.getString("id");
 
         System.out.println("Navn på ny favoritt:");
@@ -397,13 +397,13 @@ public class APIMain {
         double lat = Double.parseDouble(latStr);
         double lon = Double.parseDouble(lonStr);
 
-        ((MongoDBHandler) db).addDestinationToFavorites(navn, destNavn, destNavn, lat, lon);
+        ((MongoDBHandlerPort) db).addDestinationToFavorites(navn, destNavn, destNavn, lat, lon);
 
         System.out.println("Favoritt '" + destNavn + "' lagt til for " + navn);
     }
 
     // admin fjerner favoritt på en litebruker
-    private static void fjernFavorittForAndre(Scanner in, Document bruker, DBHandler db) {
+    private static void fjernFavorittForAndre(Scanner in, Document bruker, DBHandlerPort db) {
         String navn = bruker.getString("id");
         Object favObj = bruker.get("favoritter");
 
@@ -428,7 +428,7 @@ public class APIMain {
         int valg = lesValg(in, 1, favorittNavn.size());
         String valgtDest = favorittNavn.get(valg - 1);
 
-        ((MongoDBHandler) db).removeData("brukere", "favoritter." + valgtDest, navn);
+        ((MongoDBHandlerPort) db).removeData("brukere", "favoritter." + valgtDest, navn);
 
         System.out.println("Favoritt '" + valgtDest + "' fjernet for " + navn);
     }

@@ -3,7 +3,7 @@ package avandra.core.port;
 
 import avandra.core.domain.Coordinate;
 
-public interface DBHandler {
+public interface DBHandlerPort {
     // make user in DB %overloading skal brukes%
     public void createUser( String userID, boolean adminUser, String favoriteDestination, String address, double latitude, double longitude);
 

@@ -1,9 +1,8 @@
 package avandra.storage.adapter;
 
 import java.io.File;
-import java.util.List;
 
-import avandra.core.port.DBHandler;
+import avandra.core.port.DBHandlerPort;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import avandra.core.domain.AdminBruker;
@@ -12,7 +11,7 @@ import avandra.core.domain.Destinasjon;
 import avandra.core.domainParents.Bruker;
 
 
-public class JSONDBHandler implements DBHandler {
+public class JSONDBHandlerPort implements DBHandlerPort {
 
     ///creates new file /overwrites each time
     //fine for testing

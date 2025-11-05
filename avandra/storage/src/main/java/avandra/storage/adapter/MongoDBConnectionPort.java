@@ -1,12 +1,12 @@
 package avandra.storage.adapter;
 
-import avandra.core.port.DBConnection;
+import avandra.core.port.DBConnectionPort;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 
-public class MongoDBConnection implements AutoCloseable, DBConnection {
+public class MongoDBConnectionPort implements AutoCloseable, DBConnectionPort {
 
     private String user;
     private String pass;
@@ -16,7 +16,7 @@ public class MongoDBConnection implements AutoCloseable, DBConnection {
     private MongoClient client;
 
     /// Exists only for developers, will not go to launch
-    public MongoDBConnection() {
+    public MongoDBConnectionPort() {
         this.user = "siljemst_db_user";
         this.pass = "Avandra1234567890";
         this.db_name = getDbName();
@@ -24,7 +24,7 @@ public class MongoDBConnection implements AutoCloseable, DBConnection {
     }
 
     /// For users and system administrators
-    public MongoDBConnection(String username, String password) {
+    public MongoDBConnectionPort(String username, String password) {
         this.user = username;
         this.pass = password;
         this.db_name = getDbName();
@@ -32,7 +32,7 @@ public class MongoDBConnection implements AutoCloseable, DBConnection {
     }
 
     /// For Testcontainers or any full connection string
-    public MongoDBConnection(String connectionString, String dbName, String collectionName) {
+    public MongoDBConnectionPort(String connectionString, String dbName, String collectionName) {
         this.uri = connectionString;        // <-- store URI from container (or Atlas)
         this.db_name = dbName;
         this.collection_name = collectionName;
@@ -51,7 +51,7 @@ public class MongoDBConnection implements AutoCloseable, DBConnection {
     }
 
     /// Returns self as an opened connection to the database
-    public MongoDBConnection open() throws Exception {
+    public MongoDBConnectionPort open() throws Exception {
         if (uri != null && !uri.isBlank()) {
             // Use explicit connection string (e.g., from Testcontainers or Atlas URI env var)
             this.client = MongoClients.create(uri);

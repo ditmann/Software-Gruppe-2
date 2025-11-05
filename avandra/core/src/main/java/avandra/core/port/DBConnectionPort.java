@@ -1,6 +1,6 @@
 package avandra.core.port;
 
-public interface DBConnection {
+public interface DBConnectionPort {
 
     /// Open connection through object
     public Object open() throws Exception;
