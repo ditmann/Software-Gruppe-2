@@ -5,16 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1929c9ed-51df-4c9e-810d-8a44f44805a4" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/avandra/app/APIMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/avandra/app/APIMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/avandra/app/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/avandra/app/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/avandra/core/port/DBConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/avandra/core/port/DBConnectionPort.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/avandra/core/port/DBHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/avandra/core/port/DBHandlerPort.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/JSONDBHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/JSONDBHandlerPort.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/MongoDBConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/MongoDBConnectionPort.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/MongoDBHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/MongoDBHandlerPort.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/src/test/java/avandra/test/MongoDBConnectionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/test/java/avandra/test/MongoDBConnectionPortTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/src/test/java/avandra/test/MongoDBHandlerIT.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/test/java/avandra/test/MongoDBHandlerPortIT.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/src/test/java/avandra/test/MongoDBHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/test/java/avandra/test/MongoDBHandlerPortTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/src/main/java/avandra/core/domain/FindBestTripService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/src/main/java/avandra/core/port/DBService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/DBMongoService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/src/test/java/avandra/test/IpGeolocationAdapterTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/src/test/java/avandra/test/RandomLocationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/core/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/avandra/core/adapter/IpGeolocationAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/avandra/core/adapter/IpGeolocationAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/avandra/core/domain/TripPart.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/avandra/core/domain/TripPart.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/target/classes/avandra/core/adapter/IpGeolocationAdapter.class" beforeDir="false" afterPath="$PROJECT_DIR$/core/target/classes/avandra/core/adapter/IpGeolocationAdapter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/target/classes/avandra/core/domain/TripPart.class" beforeDir="false" afterPath="$PROJECT_DIR$/core/target/classes/avandra/core/domain/TripPart.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/TripFileHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/TripFileHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/target/classes/avandra/storage/adapter/MongoDBHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/storage/target/classes/avandra/storage/adapter/MongoDBHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/target/classes/avandra/storage/adapter/TripFileHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/storage/target/classes/avandra/storage/adapter/TripFileHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/src/test/java/avandra/test/TripFileHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/test/java/avandra/test/TripFileHandlerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/src/test/java/avandra/test/TripPartTest.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,8 +31,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Interface" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -66,7 +73,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "Dev",
+    "git-widget-placeholder": "feature/TripFileHandler",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/Gooner/Documents/GitHub/Software-Gruppe-2/avandra"
@@ -86,7 +93,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MongoDBConnectionPortTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="MongoDBConnectionTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="test" />
       <extension name="coverage">
         <pattern>
@@ -95,13 +102,13 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="avandra.test" />
-      <option name="MAIN_CLASS_NAME" value="avandra.test.MongoDBConnectionPortTest" />
+      <option name="MAIN_CLASS_NAME" value="avandra.test.MongoDBConnectionTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MongoDBHandlerPortIT" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="MongoDBHandlerIT" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="test" />
       <extension name="coverage">
         <pattern>
@@ -110,13 +117,13 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="avandra.test" />
-      <option name="MAIN_CLASS_NAME" value="avandra.test.MongoDBHandlerPortIT" />
+      <option name="MAIN_CLASS_NAME" value="avandra.test.MongoDBHandlerIT" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MongoDBHandlerPortTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="MongoDBHandlerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="test" />
       <extension name="coverage">
         <pattern>
@@ -125,13 +132,13 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="avandra.test" />
-      <option name="MAIN_CLASS_NAME" value="avandra.test.MongoDBHandlerPortTest" />
+      <option name="MAIN_CLASS_NAME" value="avandra.test.MongoDBHandlerTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MongoDBHandlerPortTest.createUser_insertsOneDocument" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="MongoDBHandlerTest.createUser_insertsOneDocument" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="test" />
       <extension name="coverage">
         <pattern>
@@ -140,7 +147,7 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="avandra.test" />
-      <option name="MAIN_CLASS_NAME" value="avandra.test.MongoDBHandlerPortTest" />
+      <option name="MAIN_CLASS_NAME" value="avandra.test.MongoDBHandlerTest" />
       <option name="METHOD_NAME" value="createUser_insertsOneDocument" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
@@ -161,10 +168,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.All in test" />
-        <item itemvalue="JUnit.MongoDBHandlerPortTest" />
-        <item itemvalue="JUnit.MongoDBHandlerPortIT" />
-        <item itemvalue="JUnit.MongoDBConnectionPortTest" />
-        <item itemvalue="JUnit.MongoDBHandlerPortTest.createUser_insertsOneDocument" />
+        <item itemvalue="JUnit.MongoDBHandlerTest" />
+        <item itemvalue="JUnit.MongoDBHandlerIT" />
+        <item itemvalue="JUnit.MongoDBConnectionTest" />
+        <item itemvalue="JUnit.MongoDBHandlerTest.createUser_insertsOneDocument" />
       </list>
     </recent_temporary>
   </component>

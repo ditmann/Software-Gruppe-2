@@ -1,5 +1,7 @@
 package avandra.test;
 
+import avandra.core.domain.Coordinate;
+import avandra.core.domain.TripPart;
 import avandra.core.port.EnturClient;
 import avandra.storage.adapter.TripFileHandler;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -12,135 +14,135 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Unit tests for TripFileHandler.
+ * tests for the grouped TripFileHandler
  *
- * Verifies:
- *  - Delegation to EnturClient with correct arguments
- *  - JSON structure written to disk with and without request metadata
- *  - Propagation of IO exceptions from the EnturClient call
- *  - Basic file lifecycle (created/cleaned up)
+ * - takes a List<Coordinate> [from, to]
+ * - calls Entur with the right args
+ * - writes Trip.json with {request, trip} when includeRequestMeta = true
+ * - returns a matrix of legs where each inner list is one tripPattern
  */
 @ExtendWith(MockitoExtension.class)
 class TripFileHandlerTest {
 
-    @Mock
-    // Mocked dependency the handler uses to fetch trip data
-    EnturClient entur;
-    // Shared JSON mapper for constructing/reading test payloads
+    @Mock EnturClient entur;
+
     ObjectMapper mapper;
-    // System under test
     TripFileHandler handler;
 
     @BeforeEach
     void setUp() {
         mapper = new ObjectMapper();
         handler = new TripFileHandler(entur, mapper);
-
-        // Ensure we start fresh: remove previous file if it exists
+        // clean up old test file if it exists
         new File("Trip.json").delete();
     }
 
     @AfterEach
     void tearDown() {
-        // Clean up the file created by tests
+        // remove the test file after each run
         new File("Trip.json").delete();
     }
 
-    /**
-     * Helper: returns a minimal, valid trip JSON structure that looks like Entur’s response.
-     */
-    private JsonNode sampleTrip() {
-        ObjectNode trip = mapper.createObjectNode();
-        trip.putArray("tripPatterns")
+    // small helper that behaves like our Coordinate class
+    // note the NUM suffix on longitude to match the real interface
+    private static final class TestCoord extends Coordinate {
+        private final double lat, lon;
+        TestCoord(double lat, double lon) { this.lat = lat; this.lon = lon; }
+        @Override public double getLatitudeNum() { return lat; }
+        @Override public double getLongitudeNUM() { return lon; }
+    }
+
+    // minimal fake Entur trip payload
+    // one pattern with a single leg to keep parsing simple
+    private JsonNode sampleTrip(ObjectMapper m) {
+        ObjectNode trip = m.createObjectNode();
+        var legs = trip.putArray("tripPatterns")
                 .addObject()
-                .put("startTime", 123456789L)
-                .put("duration", 900)
-                .put("walkDistance", 1200.5);
+                .putArray("legs");
+        legs.addObject()
+                .put("mode", "bus")
+                .put("distance", 740)
+                .set("line", m.createObjectNode()
+                        .put("id", "RUT:Line:25")
+                        .put("name", "Bekkestua - Majorstuen")
+                        .put("publicCode", "25")
+                        .put("transportMode", "bus")
+                        .set("authority", m.createObjectNode().put("name", "Ruter")));
         return trip;
     }
 
-    /**
-     * When includeRequestMeta=false:
-     *  - The handler should write the trip JSON as returned by Entur (no wrapper).
-     *  - The file should exist and not contain a "request" field.
-     */
     @Test
-    void writesTripOnly_whenIncludeRequestMetaFalse() throws Exception {
-        double a=59.91,b=10.75,c=63.43,d=10.39; int n=3;
+    void planTrip_writesFileWithRequest_andReturnsGroupedMatrix() throws Exception {
+        // set up a simple from/to and pattern count
+        var from = new TestCoord(59.91, 10.75);
+        var to   = new TestCoord(63.43, 10.39);
+        int n = 3;
 
-        // Mock Entur returning a known trip payload
-        when(entur.planTripCoords(a,b,c,d,n)).thenReturn(sampleTrip());
+        // fake Entur returning a known payload
+        when(entur.planTripCoords(from.getLatitudeNum(), from.getLongitudeNUM(),
+                to.getLatitudeNum(),   to.getLongitudeNUM(), n))
+                .thenReturn(sampleTrip(mapper));
 
-        // Execute: write the file without request metadata
-        File out = handler.planTripCoordsToFile(a,b,c,d,n,false);
+        // run the method
+        List<Coordinate> coords = List.of(from, to);
+        List<List<TripPart>> matrix = handler.planTrip(coords, n, true);
 
-        // Assert: file exists and contains only the trip content
-        assertTrue(out.exists());
-        JsonNode written = mapper.readTree(out);
-        assertTrue(written.has("tripPatterns"));
-        assertFalse(written.has("request"));
+        // we should get a matrix back with one pattern and one leg inside
+        assertNotNull(matrix, "handler should return a matrix");
+        assertEquals(1, matrix.size(), "expected one pattern in the test data");
+        assertEquals(1, matrix.get(0).size(), "expected one leg inside the pattern");
 
-        // Verify the handler called Entur with the expected arguments once
-        verify(entur).planTripCoords(a,b,c,d,n);
-    }
+        TripPart leg = matrix.get(0).get(0);
+        assertEquals("bus", leg.getLegTransportMode(), "mode should match JSON");
+        assertEquals(740, leg.getTravelDistance(), "distance should match JSON");
+        assertEquals("RUT:Line:25", leg.getLineId(), "line id should match JSON");
+        assertEquals("25", leg.getLineNumber(), "line number should match JSON");
 
-    /**
-     * When includeRequestMeta=true:
-     *  - The handler should write an object with "request" and "trip" fields.
-     *  - "request" must match the input parameters.
-     *  - "trip" must contain the Entur trip payload.
-     */
-    @Test
-    void writesRequestAndTrip_whenIncludeRequestMetaTrue() throws Exception {
-        double a=59.91,b=10.75,c=63.43,d=10.39; int n=3;
+        // check that Trip.json exists and has both request + trip
+        File out = new File("Trip.json");
+        assertTrue(out.exists(), "Trip.json should be written");
 
-        // Mock Entur returning a known trip payload
-        when(entur.planTripCoords(a,b,c,d,n)).thenReturn(sampleTrip());
-
-        // Execute: write the file including request metadata
-        File out = handler.planTripCoordsToFile(a,b,c,d,n,true);
-
-        // Parse written JSON and assert shape/content
         JsonNode root = mapper.readTree(out);
-        assertTrue(root.has("request"));
-        assertTrue(root.has("trip"));
+        assertTrue(root.has("request"), "file should have 'request' when includeRequestMeta = true");
+        assertTrue(root.has("trip"), "file should have 'trip' when includeRequestMeta = true");
 
-        // Build expected "request" JSON and compare exactly
-        ObjectNode expectedReq = mapper.createObjectNode()
-                .put("fromLat", a)
-                .put("fromLon", b)
-                .put("toLat",   c)
-                .put("toLon",   d)
-                .put("numPatterns", n);
+        JsonNode req = root.get("request");
+        assertEquals(from.getLatitudeNum(),  req.get("fromLat").asDouble(),  1e-9);
+        assertEquals(from.getLongitudeNUM(), req.get("fromLon").asDouble(),  1e-9);
+        assertEquals(to.getLatitudeNum(),    req.get("toLat").asDouble(),    1e-9);
+        assertEquals(to.getLongitudeNUM(),   req.get("toLon").asDouble(),    1e-9);
+        assertEquals(n,                      req.get("numPatterns").asInt());
 
-        ObjectNode req = (ObjectNode) root.get("request");
-        assertEquals(expectedReq, req);
-
-        // Ensure the trip payload is present
-        assertTrue(root.get("trip").has("tripPatterns"));
-
-        // Verify Entur was called once with the expected arguments
-        verify(entur).planTripCoords(a,b,c,d,n);
+        // make sure Entur got called once with the exact coords
+        verify(entur, times(1)).planTripCoords(
+                from.getLatitudeNum(), from.getLongitudeNUM(),
+                to.getLatitudeNum(),   to.getLongitudeNUM(),
+                n
+        );
     }
 
-    /**
-     * Propagates IOException thrown by EnturClient:
-     *  - If Entur throws IOException, the handler should rethrow it to the caller.
-     */
     @Test
-    void throwingIOException() throws Exception {
-        // Arrange: Entur throws an IOException for any call
-        when(entur.planTripCoords(anyDouble(), anyDouble(), anyDouble(), anyDouble(), anyInt()))
-                .thenThrow(new IOException("simulated error"));
+    void planTrip_errorsOnBadInput_andPropagatesIOException() throws Exception {
+        // null list should throw
+        assertThrows(IllegalArgumentException.class, () -> handler.planTrip(null, 1, false));
 
-        // Assert: handler rethrows IOException
-        assertThrows(IOException.class, () ->
-                handler.planTripCoordsToFile(1,2,3,4,1,false));
+        // list with only one coord should also throw
+        assertThrows(IllegalArgumentException.class,
+                () -> handler.planTrip(List.of(new TestCoord(59.91, 10.75)), 1, false));
+
+        // if Entur throws IOException
+        when(entur.planTripCoords(anyDouble(), anyDouble(), anyDouble(), anyDouble(), anyInt()))
+                .thenThrow(new IOException("simulated failure"));
+
+        var from = new TestCoord(59.91, 10.75);
+        var to   = new TestCoord(63.43, 10.39);
+
+        assertThrows(IOException.class, () -> handler.planTrip(List.of(from, to), 2, true));
     }
 }

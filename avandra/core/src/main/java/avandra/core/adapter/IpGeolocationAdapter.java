@@ -16,49 +16,50 @@ public class IpGeolocationAdapter implements LocationPort {
 
     private final String clientName;
 
-    // Public IP geolocation endpoint returning JSON
-    private static final String ENDPOINT = "https://ipapi.co/json";
+    // default endpoint for prod
+    private static final String DEFAULT_ENDPOINT = "https://ipapi.co/json";
 
-    // Object mapper
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    // HTTP client
-    private final OkHttpClient http = new OkHttpClient.Builder()
-            .callTimeout(Duration.ofSeconds(6))
-            .build();
+    private final OkHttpClient http;
+    private final String endpoint;
+
+    // normal constructor
     public IpGeolocationAdapter(String clientName) {
         this.clientName = clientName;
+        this.http = new OkHttpClient.Builder()
+                .callTimeout(Duration.ofSeconds(6))
+                .build();
+        this.endpoint = DEFAULT_ENDPOINT;
     }
 
-
+    // extra constructor for tests so we can inject a mock server and client
+    public IpGeolocationAdapter(String clientName, OkHttpClient http, String endpoint) {
+        this.clientName = clientName;
+        this.http = http != null ? http : new OkHttpClient();
+        this.endpoint = endpoint != null ? endpoint : DEFAULT_ENDPOINT;
+    }
 
     @Override
     public Coordinate currentCoordinate() throws Exception {
-        // Building GET request
         Request req = new Request.Builder()
-                .url(ENDPOINT)
+                .url(endpoint)
                 .header("User-Agent", clientName)
                 .build();
 
-        // Execute and parse!! try-with-resources to make it smoother
         try (Response res = http.newCall(req).execute()) {
             if (!res.isSuccessful()) {
                 throw new IllegalStateException("ipapi.co HTTP " + res.code());
             }
-
             if (res.body() == null) {
-                // CHECK!!!! avoid NPE if provider returns no content
                 throw new IOException("Empty response body from ipapi.co");
             }
 
-            // Parse JSON once and read the fields
             JsonNode json = MAPPER.readTree(res.body().byteStream());
+            double lat = json.get("latitude").asDouble();
+            double lon = json.get("longitude").asDouble();
 
-                double lat = json.get("latitude").asDouble();
-                double lon = json.get("longitude").asDouble();
-
-                // Converter
-            return new Coordinate((float) lat, (float)lon);
+            return new Coordinate((float) lat, (float) lon);
         }
     }
 }
