@@ -2,7 +2,8 @@ package avandra.test;
 
 import avandra.core.DTO.CoordinateDTO;
 import avandra.core.DTO.TripPartDTO;
-import avandra.test.main.EnturClient;
+import avandra.core.port.EnturClientPort;
+import avandra.core.port.EnturClientPort;
 import avandra.storage.adapter.TripFileHandler;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,7 +31,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class TripFileHandlerTest {
 
-    @Mock EnturClient entur;
+    @Mock EnturClientPort entur;
 
     ObjectMapper mapper;
     TripFileHandler handler;

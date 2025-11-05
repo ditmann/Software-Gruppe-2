@@ -9,7 +9,7 @@ import java.util.List;
 
 import avandra.core.DTO.CoordinateDTO;
 import avandra.core.DTO.TripPartDTO;
-import avandra.core.port.EnturClient;
+import avandra.core.port.EnturClientPort;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -18,11 +18,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Returns a matrix of legs so we keep each tripPattern grouped
  */
 public final class TripFileHandler {
-    private final EnturClient entur;
+    private final EnturClientPort entur;
     private final ObjectMapper json;
     private static final ZoneId DEFAULT_ZONE = ZoneId.of("Europe/Oslo");
 
-    public TripFileHandler(EnturClient entur, ObjectMapper json) {
+    public TripFileHandler(EnturClientPort entur, ObjectMapper json) {
         this.entur = entur;
         this.json = json;
     }

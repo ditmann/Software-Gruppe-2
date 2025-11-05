@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.Map;
 
-import avandra.core.port.EnturClient;
+import avandra.core.port.EnturClientPort;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -22,7 +22,7 @@ import okhttp3.Response;
  * - Requires an "ET-Client-Name" header as per Entur API policy.
  * - Uses OkHttp for HTTP and Jackson for JSON.
  */
-public final class EnturHttpClient implements EnturClient {
+public final class EnturHttpClientPort implements EnturClientPort {
 
     // Entur Journey Planner GraphQL endpoint.
     private static final String GQL_URL = "https://api.entur.io/journey-planner/v3/graphql";
@@ -44,7 +44,7 @@ public final class EnturHttpClient implements EnturClient {
      *
      * @param clientName Value for the ET-Client-Name header (must be non-blank).
      */
-    public EnturHttpClient(String clientName) {
+    public EnturHttpClientPort(String clientName) {
         this.clientName = clientName;
 
         // Configure HTTP client timeouts:

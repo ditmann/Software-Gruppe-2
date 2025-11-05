@@ -5,20 +5,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import avandra.api.EnturHttpClientPort;
 import avandra.core.adapter.IpGeolocationAdapter;
 import avandra.core.port.DBConnectionPort;
+import avandra.core.port.EnturClientPort;
 import avandra.storage.adapter.MongoDBConnectionAdapter;
 import avandra.storage.adapter.MongoDBHandlerAdapter;
 import org.bson.Document;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import avandra.api.EnturHttpClient;
 import avandra.core.adapter.RandomLocationAdapter;
 import avandra.core.DTO.CoordinateDTO;
 import avandra.core.DTO.TripPartDTO;
 import avandra.core.port.DBHandlerPort;
-import avandra.core.port.EnturClient;
 import avandra.core.port.LocationPort;
 import avandra.storage.adapter.TripFileHandler;
 
@@ -30,7 +30,7 @@ public class APIMain {
 
         // lager "services" vi bruker videre
         String clientName = "HIOFsTUD-AVANDRA";
-        EnturClient entur = new EnturHttpClient(clientName); // snakker med entur
+        EnturClientPort entur = new EnturHttpClientPort(clientName); // snakker med entur
         DBConnectionPort connection = new MongoDBConnectionAdapter();
         LocationPort location = null;
         DBHandlerPort db = new MongoDBHandlerAdapter(connection);                 // snakker med mongodb
@@ -221,7 +221,7 @@ public class APIMain {
         System.out.println("Til: " + valgtDest + " (" + dest.getLatitudeNum() + ", " + dest.getLongitudeNUM() + ")");
         System.out.println("");
 
-        // spør TripFileHandler (som bruker EnturHttpClient) om en konkret rute
+        // spør TripFileHandler (som bruker EnturHttpClientPort) om en konkret rute
         File tripJson = files.planTripCoordsToFile(
                 start.getLatitudeNum(), start.getLongitudeNUM(),
                 dest.getLatitudeNum(), dest.getLongitudeNUM(),
@@ -370,7 +370,7 @@ public class APIMain {
                         in,
                         målBruker,
                         db,
-                        new TripFileHandler(new EnturHttpClient("HIOFsTUD-AVANDRA"), new ObjectMapper()),
+                        new TripFileHandler(new EnturHttpClientPort("HIOFsTUD-AVANDRA"), new ObjectMapper()),
                         new RandomLocationAdapter()
                 );
             } catch (Exception e) {

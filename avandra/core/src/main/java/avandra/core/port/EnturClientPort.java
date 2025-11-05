@@ -1,4 +1,4 @@
-package avandra.test.main;
+package avandra.core.port;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import java.io.IOException;
@@ -11,7 +11,7 @@ import java.io.IOException;
  * - Return the "trip" node (i.e., GraphQL data.trip) as a JsonNode.
  * - Do not perform file I/O here—keep this port purely about fetching data.
  */
-public interface EnturClient {
+public interface EnturClientPort {
 
     /**
      * Query Entur for trip plans between two coordinates.
