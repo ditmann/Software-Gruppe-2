@@ -1,9 +1,10 @@
+package avandra.core.service;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import avandra.core.DTO.CoordinateDTO;
 import avandra.core.port.LocationPort;
-import avandra.core.service.DBService;
 
 
 public class JourneyPlannerService {
