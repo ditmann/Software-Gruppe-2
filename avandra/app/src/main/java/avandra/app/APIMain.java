@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import avandra.api.EnturHttpClient;
-import avandra.core.adapter.IpGeolocationAdapter;
+import avandra.api.IpGeolocationAdapter;
 import avandra.core.port.DBConnectionPort;
 import avandra.core.port.EnturClientPort;
 import avandra.storage.adapter.MongoDBConnectionAdapter;
@@ -230,7 +230,7 @@ public class APIMain {
         );
 
         // TripPartDTO.tripParts() leser den fila og oversetter til "steg"
-        List<TripPartDTO> deler = TripPartDTO.tripParts(tripJson);
+        List<TripPartDTO> deler = TripFileHandler.;
         if (deler == null || deler.isEmpty()) {
             System.out.println("Fant ingen rute.");
             return;
