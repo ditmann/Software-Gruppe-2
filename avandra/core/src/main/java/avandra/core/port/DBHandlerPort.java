@@ -7,6 +7,8 @@ public interface DBHandlerPort {
     // make user in DB %overloading skal brukes%
     public void createUser( String userID, boolean adminUser, String favoriteDestination, String address, double latitude, double longitude);
 
+    public void createUser(String userID, boolean adminUser);
+
     /// @param addValue is Object to allow appending Documents, ArrayLists and Strings
     public void appendData(String id, String addKey, Object addValue);
 
@@ -16,11 +18,9 @@ public interface DBHandlerPort {
     /// Legger til destinasjon til favoritter
     public void addDestinationToFavorites(String userID, String destinationName, String address, double latitude, double longitude);
 
-    /// Legger til koordinater i lagret destinasjon
+     /// Legger til koordinater i lagret destinasjon
     public void addCoordinatesToDestination(String userID, String destinationName, double latitude, double longitude);
 
-    ///  Returnerer koordinater
-    public CoordinateDTO destinationCoordinate(String name);
 
     /// search with ID to find specific document
     public CoordinateDTO searchDestination(String userID, String destinationID);

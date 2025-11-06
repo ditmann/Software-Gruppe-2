@@ -5,25 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1929c9ed-51df-4c9e-810d-8a44f44805a4" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/test/src/test/java/avandra/test/FindBestTripServiceTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/target/classes/avandra/api/EnturHttpClient.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/avandra/core/adapter/IpGeolocationAdapter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/avandra/core/domain/AdminBruker.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/avandra/core/domain/Coordinate.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/avandra/core/domain/Destinasjon.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/avandra/core/domain/FavReise.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/avandra/core/domain/LiteBruker.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/avandra/core/domain/PlanReise.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/avandra/core/domain/SearchOnDestination$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/avandra/core/domain/SearchOnDestination.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/avandra/core/domain/TripPart.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/avandra/core/port/DBConnection.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/JSONDBHandlerAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/JSONDBHandlerAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/target/classes/avandra/storage/adapter/MongoDBConnection.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/target/classes/avandra/storage/adapter/MongoDBHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/target/classes/avandra/storage/adapter/TripFileHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/src/test/java/avandra/test/IpGeolocationAdapterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/test/java/avandra/test/IpGeolocationAdapterTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/avandra/app/APIMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/avandra/app/APIMain.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,7 +58,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "Testing",
+    "git-widget-placeholder": "feature/DBService",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/Gooner/Documents/GitHub/Software-Gruppe-2/avandra"
