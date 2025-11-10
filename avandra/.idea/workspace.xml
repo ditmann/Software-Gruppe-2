@@ -5,29 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1929c9ed-51df-4c9e-810d-8a44f44805a4" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/test/src/test/java/avandra/test/AvandraControllerIT.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/src/test/java/avandra/test/AvandraControllerTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/src/test/java/avandra/test/JourneyPlannerServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Trip.json" beforeDir="false" afterPath="$PROJECT_DIR$/Trip.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/avandra/Controllers/AvandraController.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/avandra/Controllers/AvandraController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/avandra/app/APIMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/avandra/app/APIMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/target/classes/avandra/app/APIMain.class" beforeDir="false" afterPath="$PROJECT_DIR$/app/target/classes/avandra/app/APIMain.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/target/classes/avandra/app/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/avandra/core/DTO/TripPartDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/avandra/core/DTO/TripPartDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/avandra/core/port/DBHandlerPort.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/avandra/core/port/DBHandlerPort.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/avandra/core/service/DBService.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/avandra/core/service/DBService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/avandra/core/service/JourneyPlannerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/avandra/core/service/JourneyPlannerService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/avandra/core/service/TripFileHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/avandra/core/service/TripFileHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/JSONDBHandlerAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/JSONDBHandlerAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/MongoDBConnectionAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/MongoDBConnectionAdapter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/MongoDBHandlerAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/storage/src/main/java/avandra/storage/adapter/MongoDBHandlerAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/src/test/java/avandra/test/IpGeolocationAdapterTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/src/test/java/avandra/test/MongoDBConnectionAdapterTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/src/test/java/avandra/test/MongoDBHandlerAdapterIT.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/test/java/avandra/test/MongoDBHandlerAdapterIT.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/src/test/java/avandra/test/MongoDBHandlerAdapterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/test/java/avandra/test/MongoDBHandlerAdapterTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/src/test/java/avandra/test/TripFileHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/test/java/avandra/test/TripFileHandlerTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,7 +78,7 @@
       <recent name="C:\Users\Gooner\Documents\GitHub\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\port" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.All in test">
+  <component name="RunManager">
     <configuration name="All in test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="test" />
       <option name="PACKAGE_NAME" value="" />

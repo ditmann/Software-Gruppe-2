@@ -1,16 +1,13 @@
 package avandra.storage.adapter;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import avandra.core.port.DBHandlerPort;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 import avandra.core.DTO.CoordinateDTO;
-import org.bson.Document;
 
 
 public class JSONDBHandlerAdapter implements DBHandlerPort {
