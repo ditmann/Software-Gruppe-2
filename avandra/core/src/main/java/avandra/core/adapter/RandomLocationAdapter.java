@@ -3,7 +3,7 @@ package avandra.core.adapter;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import avandra.core.domain.Coordinate;
+import avandra.core.DTO.CoordinateDTO;
 import avandra.core.port.LocationPort;
 
 /** Returns fixed or random coords. */
@@ -24,11 +24,11 @@ public class RandomLocationAdapter implements LocationPort {
     public RandomLocationAdapter() { this(null, null); }
 
     @Override
-    public Coordinate currentCoordinate() {
+    public CoordinateDTO currentCoordinate() {
         double lat = fixedLat != null ? fixedLat
                 : ThreadLocalRandom.current().nextDouble(minLat, maxLat);
         double lon = fixedLon != null ? fixedLon
                 : ThreadLocalRandom.current().nextDouble(minLon, maxLon);
-        return new Coordinate( lat, lon);
+        return new CoordinateDTO( lat, lon);
     }
 }

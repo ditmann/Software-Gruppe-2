@@ -1,482 +1,477 @@
 package avandra.app;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
-import avandra.core.adapter.IpGeolocationAdapter;
-import avandra.core.port.DBConnection;
-import org.bson.Document;
-
-import avandra.storage.adapter.MongoDBConnection;
+import avandra.Controllers.AvandraController;
+import avandra.api.EnturHttpClient;
+import avandra.api.IpGeolocationAdapter;
+import avandra.core.DTO.TripPartDTO;
+import avandra.core.port.DBHandlerPort;
+import avandra.core.port.EnturClientPort;
+import avandra.core.service.DBService;
+import avandra.core.service.FindBestTripService;
+import avandra.core.service.JourneyPlannerService;
+import avandra.storage.adapter.MongoDBConnectionAdapter;
+import avandra.storage.adapter.MongoDBHandlerAdapter;
+import avandra.core.service.TripFileHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import avandra.api.EnturHttpClient;
-import avandra.core.adapter.RandomLocationAdapter;
-import avandra.core.domain.Coordinate;
-import avandra.core.domain.TripPart;
-import avandra.core.port.DBHandler;
-import avandra.core.port.EnturClient;
-import avandra.core.port.LocationPort;
-import avandra.storage.adapter.MongoDBHandler;
-import avandra.storage.adapter.TripFileHandler;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class APIMain {
 
     public static void main(String[] args) throws Exception {
 
-        Scanner in = new Scanner(System.in);
+        // System setup
+        DBHandlerPort mongoHandler = new MongoDBHandlerAdapter(new MongoDBConnectionAdapter());
+        DBService dbService = new DBService(mongoHandler);
 
-        // lager "services" vi bruker videre
-        String clientName = "HIOFsTUD-AVANDRA";
-        EnturClient entur = new EnturHttpClient(clientName); // snakker med entur
-        DBConnection connection = new MongoDBConnection();
-        LocationPort location = null;
-        DBHandler db = new MongoDBHandler(connection);                 // snakker med mongodb
-        TripFileHandler files = new TripFileHandler(entur, new ObjectMapper()); // lager reiseplaner
+        FindBestTripService findBestTripService = new FindBestTripService(1,8,2);
+        JourneyPlannerService journeyPlannerService =
+                new JourneyPlannerService(new IpGeolocationAdapter("HIOF-AVANDRA"), dbService);
 
-        // ytre while: gjør at vi kan logge ut og logge inn som en annen bruker
-        while (true) {
-            System.out.println("=== Velkommen til Avandra ===");
-            System.out.println("");
+        EnturClientPort enturClient = new EnturHttpClient("HIOF-AVANDRA");
+        ObjectMapper mapper = new ObjectMapper();
+        TripFileHandler tripFileHandler = new TripFileHandler(enturClient, mapper);
 
-            // henter ALLE brukerne fra databasen (kan inneholde duplikater)
-            ArrayList<Document> alleBrukereRaw = (ArrayList<Document>) db.retrieveAllData();
-            if (alleBrukereRaw == null || alleBrukereRaw.isEmpty()) {
-                System.out.println("Ingen brukere funnet i databasen. Avslutter.");
-                return;
-            }
-
-            // fjerner duplikater basert på id (navn)
-            ArrayList<Document> alleBrukere = new ArrayList<Document>();
-            ArrayList<String> settAvNavn = new ArrayList<String>();
-
-            for (Document d : alleBrukereRaw) {
-                String navn = d.getString("id");
-                if (navn == null) {
-                    continue;
-                }
-                if (!settAvNavn.contains(navn)) {
-                    settAvNavn.add(navn);
-                    alleBrukere.add(d);
-                }
-            }
-
-            if (alleBrukere.isEmpty()) {
-                System.out.println("Fant ingen gyldige brukere.");
-                return;
-            }
-
-            // viser lista over brukere en gang (nå uten duplikater)
-            System.out.println("Hvem vil du logge inn som?");
-            for (int i = 0; i < alleBrukere.size(); i++) {
-                Document d = alleBrukere.get(i);
-
-                Object alder = d.get("alder"); // noen har alder, noen har ikke
-
-                if (alder != null) {
-                    System.out.println((i + 1) + ") " + d.get("id") + " (alder: " + alder + ")");
-                } else {
-                    System.out.println((i + 1) + ") " + d.get("id"));
-                }
-            }
-
-            // brukeren velger hvem de logger inn som (tall fra lista)
-            int brukerValg = lesValg(in, 1, alleBrukere.size());
-            Document aktivBruker = alleBrukere.get(brukerValg - 1);
-
-            // henter navnet og admin-flag
-            String aktivNavn = aktivBruker.getString("id");
-            boolean erAdmin = isAdmin(aktivBruker);
-
-            System.out.println("");
-            System.out.println("Logget inn som: " + aktivNavn + " (admin=" + erAdmin + ")");
-            System.out.println("");
-
-            // indre while: meny for DEN brukeren vi er logget inn som
-            // vi holder oss i denne til du velger "logg ut"
-            while (true) {
-
-                // skriver meny
-                System.out.println("Hva vil du gjøre?");
-                System.out.println("1) Reise til en destinasjon");
-
-                // disse valgene kun for admin-brukere
-                if (erAdmin) {
-                    System.out.println("2) Legge til ny favoritt (for meg)");
-                    System.out.println("3) Fjerne en favoritt (for meg)");
-
-                    // admin kan få lov til å styre andre brukere (litebrukere)
-                    if (aktivBruker.containsKey("litebrukere")) {
-                        System.out.println("4) Administrer litebrukere");
-                    }
-                }
-
-                System.out.println("0) Logg ut");
-
-                // bestem hva som er høyeste gyldige valg i menyen akkurat nå
-                int maxValg;
-                if (erAdmin) {
-                    // hvis admin OG har litebrukere, meny går til 4
-                    if (aktivBruker.containsKey("litebrukere")) {
-                        maxValg = 4;
-                    } else {
-                        // admin men uten litebrukere -> stopper på 3
-                        maxValg = 3;
-                    }
-                } else {
-                    // vanlig bruker -> bare valg 1 (reise)
-                    maxValg = 1;
-                }
-
-                // les valg fra bruker
-                int valg = lesValg(in, 0, maxValg);
-
-                // 0 = logg ut av denne brukeren, gå tilbake til outer while
-                if (valg == 0) {
-                    break;
-                }
-
-                // 1 = reis til en av favorittene dine
-                if (valg == 1) {
-                    System.out.println("(1) Random location");
-                    System.out.println("(2) IP based loaction");
-                    location = ipPortPicker(in, clientName);
-                    reis(in, aktivBruker, db, files, location);
-                }
-
-                // 2 = legg til ny favoritt (bare admin får lov)
-                if (valg == 2 && erAdmin) {
-                    leggTilFavoritt(in, aktivBruker, db);
-                }
-
-                // 3 = fjern en favoritt (bare admin)
-                if (valg == 3 && erAdmin) {
-                    fjernFavoritt(in, aktivBruker, db);
-                }
-
-                // 4 = adminstyr brukere som ligger i "litebrukere"
-                if (valg == 4 && erAdmin && aktivBruker.containsKey("litebrukere")) {
-                    adminMeny(in, aktivBruker, alleBrukere, db);
-                }
-            }
-
-            // når vi har brutt ut fra indre while er vi "logget ut"
-            // nå spør vi om hele programmet skal stoppe
-            System.out.println("");
-            System.out.println("Vil du avslutte hele programmet? (j/n)");
-            if (!skalFortsette(in)) {
-                System.out.println("Ha det!");
-                return;
-            }
-            System.out.println("");
-        }
-    }
-
-    // ======================= FUNKSJONER =======================
-
-    // planlegg reise til en av favorittene
-    private static void reis(Scanner in, Document bruker, DBHandler db,
-                             TripFileHandler files, LocationPort location) throws Exception {
-
-        String navn = bruker.getString("id");
-
-        // henter favoritter til brukeren
-        Object favObj = bruker.get("favoritter");
-        if (!(favObj instanceof Document)) {
-            System.out.println("Ingen favoritter registrert.");
-            return;
-        }
-
-        Document favDoc = (Document) favObj;
-        if (favDoc.isEmpty()) {
-            System.out.println("Ingen favoritter registrert.");
-            return;
-        }
-
-        // lager en liste av destinasjonsnavnene (keyene i favoritter-objektet)
-        List<String> favorittNavn = new ArrayList<String>(favDoc.keySet());
-
-        // la brukeren velge hvilken favoritt å reise til
-        System.out.println("Velg destinasjon:");
-        for (int i = 0; i < favorittNavn.size(); i++) {
-            System.out.println((i + 1) + ") " + favorittNavn.get(i));
-        }
-
-        int valg = lesValg(in, 1, favorittNavn.size());
-        String valgtDest = favorittNavn.get(valg - 1);
-
-        // hent koordinatene (latitude/longitude) for den valgte destinasjonen
-        Coordinate dest = db.searchDestination(navn, valgtDest);
-        if (dest == null) {
-            System.out.println("Fant ikke koordinater.");
-            return;
-        }
-
-        // generer en tilfeldig startposisjon
-        Coordinate start = location.currentCoordinate();
-
-        System.out.println("Reiser fra: " + start.getLatitudeNum() + ", " + start.getLongitudeNUM());
-        System.out.println("Til: " + valgtDest + " (" + dest.getLatitudeNum() + ", " + dest.getLongitudeNUM() + ")");
-        System.out.println("");
-
-        // spør TripFileHandler (som bruker EnturHttpClient) om en konkret rute
-        File tripJson = files.planTripCoordsToFile(
-                start.getLatitudeNum(), start.getLongitudeNUM(),
-                dest.getLatitudeNum(), dest.getLongitudeNUM(),
-                1,   // antall rute-forslag vi vil ha
-                true // ta med ekstra info
+        AvandraController controller = new AvandraController(
+                dbService, tripFileHandler, findBestTripService, journeyPlannerService
         );
 
-        // TripPart.tripParts() leser den fila og oversetter til "steg"
-        List<TripPart> deler = TripPart.tripParts(tripJson);
-        if (deler == null || deler.isEmpty()) {
-            System.out.println("Fant ingen rute.");
-            return;
-        }
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("=== Welcome to Avandra ===");
 
-        System.out.println("=== Reiseplan ===");
-        for (TripPart del : deler) {
-            System.out.println(del.toString());
-        }
+        boolean appRunning = true;
+        while (appRunning) {
 
-        System.out.println("God tur " + navn + "!");
-        System.out.println("");
-    }
+            // Login Selection
+            List<String> allUserIds = controller.listAllUserIds();
+            if (allUserIds.isEmpty()) {
+                System.out.println("No users found in the database.");
+                return;
+            }
 
-    // legger til en favoritt for deg selv (kun admin)
-    private static void leggTilFavoritt(Scanner in, Document bruker, DBHandler db) {
-        if (!isAdmin(bruker)) {
-            System.out.println("Du har ikke rettigheter til å legge til favoritter.");
-            return;
-        }
+            System.out.println("\nAvailable users:");
+            for (int i = 0; i < allUserIds.size(); i++) {
+                System.out.printf("%d) %s%n", i + 1, allUserIds.get(i));
+            }
 
-        String navn = bruker.getString("id");
+            System.out.print("\nSelect user number to log in as (0 to exit): ");
+            int selection = readInt(scanner, 0, allUserIds.size());
+            if (selection == 0) {
+                appRunning = false;
+                break;
+            }
 
-        System.out.println("Navn på ny favoritt:");
-        String destNavn = in.nextLine();
+            String userId = allUserIds.get(selection - 1);
+            boolean isAdmin = controller.isAdminUser(userId);
+            System.out.println("\nLogged in as: " + userId + (isAdmin ? " (Admin)" : ""));
+            System.out.println("----------------------------------------");
 
-        System.out.println("Latitude:");
-        String latStr = in.nextLine();
+            // For admins: load litebrukere (Can also be empty)
+            List<String> litebrukere = Collections.emptyList();
+            if (isAdmin) {
+                try {
+                    litebrukere = controller.listLitebrukereForAdmin(userId);
+                } catch (Exception e) {
+                    System.err.println("Could not fetch litebrukere for " + userId + ": " + e.getMessage());
+                    litebrukere = Collections.emptyList();
+                }
+                if (!litebrukere.isEmpty()) {
+                    System.out.println("Your lite users:");
+                    for (int i = 0; i < litebrukere.size(); i++) {
+                        System.out.printf(" - %s%n", litebrukere.get(i));
+                    }
+                }
+            }
 
-        System.out.println("Longitude:");
-        String lonStr = in.nextLine();
+            boolean userLoggedIn = true;
+            while (userLoggedIn) {
+                System.out.println("\n--- Menu ---");
+                System.out.println("1. View destinations");
+                System.out.println("2. Travel now");
+                if (isAdmin) {
+                    System.out.println("3. Manage destinations (self or lite user)");
+                }
+                System.out.println("4. Log out");
+                System.out.println("0. Exit");
+                System.out.print("Select option: ");
 
-        double lat = Double.parseDouble(latStr);
-        double lon = Double.parseDouble(lonStr);
+                String choice = scanner.nextLine().trim();
 
-        // addDestinationToFavorites(brukerId, destNavn, adresse, lat, lon)
-        // vi bruker destNavn også som "adresse"
-        ((MongoDBHandler) db).addDestinationToFavorites(navn, destNavn, destNavn, lat, lon);
+                try {
+                    switch (choice) {
+                        case "1":
+                            showUserDestinations(controller, userId);
+                            break;
 
-        System.out.println("Favoritt '" + destNavn + "' lagt til for " + navn);
-        System.out.println("");
-    }
+                        case "2":
+                            planTrip(controller, scanner, userId);
+                            break;
 
-    // fjerner en favoritt for deg selv (kun admin)
-    private static void fjernFavoritt(Scanner in, Document bruker, DBHandler db) {
-        if (!isAdmin(bruker)) {
-            System.out.println("Du har ikke rettigheter til å fjerne favoritter.");
-            return;
-        }
+                        case "3":
+                            if (isAdmin) manageDestinationsMenu(controller, scanner, userId, litebrukere);
+                            break;
 
-        String navn = bruker.getString("id");
+                        case "4":
+                            userLoggedIn = false;
+                            System.out.println("Logged out.\n");
+                            break;
 
-        // henter favoritter fra dokumentet
-        Object favObj = bruker.get("favoritter");
-        if (!(favObj instanceof Document)) {
-            System.out.println("Ingen favoritter å fjerne.");
-            return;
-        }
+                        case "0":
+                            userLoggedIn = false;
+                            appRunning = false;
+                            System.out.println("Exiting application.");
+                            break;
 
-        Document favDoc = (Document) favObj;
-        if (favDoc.isEmpty()) {
-            System.out.println("Ingen favoritter å fjerne.");
-            return;
-        }
+                        default:
+                            System.out.println("Invalid choice, try again.");
+                            break;
+                    }
 
-        // liste med eksisterende favoritt-navn
-        List<String> favorittNavn = new ArrayList<String>(favDoc.keySet());
-
-        System.out.println("Velg destinasjon som skal fjernes:");
-        for (int i = 0; i < favorittNavn.size(); i++) {
-            System.out.println((i + 1) + ") " + favorittNavn.get(i));
-        }
-
-        int valg = lesValg(in, 1, favorittNavn.size());
-        String valgtDest = favorittNavn.get(valg - 1);
-
-        // removeData(collection, fieldToRemove, userId)
-        ((MongoDBHandler) db).removeData("brukere", "favoritter." + valgtDest, navn);
-
-        System.out.println("Favoritt '" + valgtDest + "' fjernet for " + navn);
-        System.out.println("");
-    }
-
-    // admin-meny: admin kan styre brukere i sin "litebrukere"-liste
-    private static void adminMeny(Scanner in, Document admin, ArrayList<Document> alleBrukere, DBHandler db) {
-
-        // sikkerhet: sjekk at du faktisk er admin
-        if (!isAdmin(admin)) {
-            System.out.println("Du har ikke rettigheter til å administrere andre.");
-            return;
-        }
-
-        // henter lista med litebrukere (f.eks. ["Christian", "Victoria", ...])
-        List<String> litebrukere = admin.getList("litebrukere", String.class);
-        if (litebrukere == null || litebrukere.isEmpty()) {
-            System.out.println("Du har ingen litebrukere.");
-            return;
-        }
-
-        System.out.println("Du kan administrere disse litebrukerne:");
-        for (int i = 0; i < litebrukere.size(); i++) {
-            System.out.println((i + 1) + ") " + litebrukere.get(i));
-        }
-
-        System.out.println("Velg hvilken litebruker du vil styre:");
-        int valgBruker = lesValg(in, 1, litebrukere.size());
-        String valgtLitebrukerNavn = litebrukere.get(valgBruker - 1);
-
-        // finn Document-objektet til den brukeren vi valgte
-        Document målBruker = null;
-        for (Document b : alleBrukere) {
-            String bNavn = b.getString("id");
-            if (bNavn != null && bNavn.equals(valgtLitebrukerNavn)) {
-                målBruker = b;
+                } catch (Exception e) {
+                    System.err.println("Error: " + e.getMessage());
+                }
             }
         }
 
-        if (målBruker == null) {
-            System.out.println("Fant ikke brukeren " + valgtLitebrukerNavn);
+        scanner.close();
+    }
+
+
+     //  Admin management sub-menu
+    private static void manageDestinationsMenu(AvandraController controller, Scanner scanner,
+                                               String adminId, List<String> litebrukere) throws Exception {
+        while (true) {
+            System.out.println("\n--- Destination Management ---");
+            System.out.println("1. Manage destinations");
+            if (!litebrukere.isEmpty()) {
+                System.out.println("2. Manage a lite user's destinations");
+            }
+            System.out.println("0. Back");
+            System.out.print("Select option: ");
+
+            String choice = scanner.nextLine().trim();
+
+            if ("1".equals(choice)) {
+                manageDestinations(controller, scanner, adminId, null);
+            } else if ("2".equals(choice) && !litebrukere.isEmpty()) {
+                for (int i = 0; i < litebrukere.size(); i++) {
+                    System.out.printf("%d) %s%n", i + 1, litebrukere.get(i));
+                }
+                System.out.print("Select number (0 to cancel): ");
+                int sel = readInt(scanner, 0, litebrukere.size());
+                if (sel > 0) {
+                    String liteId = litebrukere.get(sel - 1);
+                    manageDestinations(controller, scanner, adminId, liteId);
+                }
+            } else if ("0".equals(choice)) {
+                return;
+            } else {
+                System.out.println("Invalid choice.");
+            }
+        }
+    }
+
+    private static void manageDestinations(AvandraController controller, Scanner scanner,
+                                           String adminId, String targetUserId) throws Exception {
+        while (true) {
+            String who = (targetUserId == null) ? "your own" : targetUserId + "'s";
+            System.out.println("\n--- Managing " + who + " destinations ---");
+            System.out.println("1. View destinations");
+            System.out.println("2. Add destination");
+            System.out.println("3. Remove destination");
+            System.out.println("0. Back");
+            System.out.print("Select option: ");
+
+            String choice = scanner.nextLine().trim();
+            switch (choice) {
+                case "1":
+                    List<String> list = (targetUserId == null)
+                            ? controller.listUserDestinations(adminId)
+                            : controller.adminListLiteUserDestinations(adminId, targetUserId);
+                    printDestinations(list, targetUserId == null ? adminId : targetUserId);
+                    break;
+                case "2":
+                    addFavorite(controller, scanner, adminId, targetUserId);
+                    printDestinations(
+                            (targetUserId == null)
+                                    ? controller.listUserDestinations(adminId)
+                                    : controller.adminListLiteUserDestinations(adminId, targetUserId),
+                            targetUserId == null ? adminId : targetUserId);
+                    break;
+                case "3":
+                    removeFavorite(controller, scanner, adminId, targetUserId);
+                    printDestinations(
+                            (targetUserId == null)
+                                    ? controller.listUserDestinations(adminId)
+                                    : controller.adminListLiteUserDestinations(adminId, targetUserId),
+                            targetUserId == null ? adminId : targetUserId);
+                    break;
+                case "0":
+                    return;
+                default:
+                    System.out.println("Invalid choice.");
+            }
+        }
+    }
+
+    // Destination and trip helpers
+    private static void showUserDestinations(AvandraController controller, String userId) throws Exception {
+        List<String> destinations = controller.listUserDestinations(userId);
+        printDestinations(destinations, userId);
+    }
+
+    private static void printDestinations(java.util.List<String> destinations, String userId) {
+        if (destinations == null || destinations.isEmpty()) {
+            System.out.println("No destinations found for " + userId + ".");
+        } else {
+            System.out.println("Destinations for " + userId + ":");
+            for (int i = 0; i < destinations.size(); i++) {
+                System.out.printf(" %d) %s%n", i + 1, destinations.get(i));
+            }
+        }
+    }
+
+    private static void planTrip(AvandraController controller, Scanner scanner, String userId) throws Exception {
+        List<String> destinations = controller.listUserDestinations(userId);
+
+        String destName;
+        if (destinations == null || destinations.isEmpty()) {
+            System.out.print("You have no saved destinations. Enter a destination name: ");
+            destName = scanner.nextLine().trim();
+        } else {
+            System.out.println("\nChoose a destination:");
+            for (int i = 0; i < destinations.size(); i++) {
+                System.out.printf(" %d) %s%n", i + 1, destinations.get(i));
+            }
+            System.out.println(" 0) Type a custom destination name");
+            System.out.print("Select option: ");
+
+            int sel = readInt(scanner, 0, destinations.size());
+            if (sel == 0) {
+                System.out.print("Enter destination name: ");
+                destName = scanner.nextLine().trim();
+            } else {
+                destName = destinations.get(sel - 1);
+            }
+        }
+
+        List<TripPartDTO> trip = controller.bestJourney(userId, destName);
+        if (trip == null || trip.isEmpty()) {
+            System.out.println("No trip could be planned to " + destName);
             return;
         }
 
-        System.out.println("");
-        System.out.println("Hva vil du gjøre med " + valgtLitebrukerNavn + "?");
-        System.out.println("1) Legge til favoritt");
-        System.out.println("2) Fjerne favoritt");
-        System.out.println("3) Reise med denne brukeren");
-        int valg = lesValg(in, 1, 3);
+        // Pretty ASCII table with overall start/end/duration in header
+        printTripTableAscii(trip, "Trip to " + destName);
+    }
 
-        if (valg == 1) {
-            leggTilFavorittForAndre(in, målBruker, db);
-        } else if (valg == 2) {
-            fjernFavorittForAndre(in, målBruker, db);
-        } else if (valg == 3) {
+    private static void addFavorite(AvandraController controller, Scanner scanner,
+                                    String adminId, String targetUserId) throws Exception {
+        System.out.print("Enter new destination name: ");
+        String newDest = scanner.nextLine().trim();
+        System.out.print("Enter address: ");
+        String address = scanner.nextLine().trim();
+        System.out.print("Enter latitude: ");
+        double lat = Double.parseDouble(scanner.nextLine().trim());
+        System.out.print("Enter longitude: ");
+        double lon = Double.parseDouble(scanner.nextLine().trim());
+        controller.adminAddFavorite(adminId, targetUserId, newDest, address, lat, lon);
+        System.out.println("Destination added successfully!");
+    }
+
+    private static void removeFavorite(AvandraController controller, Scanner scanner,
+                                       String adminId, String targetUserId) throws Exception {
+        System.out.print("Enter destination name to remove: ");
+        String toRemove = scanner.nextLine().trim();
+        controller.adminRemoveFavorite(adminId, targetUserId, toRemove);
+        System.out.println("Destination removed successfully!");
+    }
+
+    // Utility helpers
+    private static int readInt(Scanner scanner, int min, int max) {
+        while (true) {
             try {
-                reis(
-                        in,
-                        målBruker,
-                        db,
-                        new TripFileHandler(new EnturHttpClient("HIOFsTUD-AVANDRA"), new ObjectMapper()),
-                        new RandomLocationAdapter()
-                );
-            } catch (Exception e) {
-                System.out.println("Feil under reiseplanlegging: " + e.getMessage());
+                int value = Integer.parseInt(scanner.nextLine().trim());
+                if (value >= min && value <= max) return value;
+            } catch (NumberFormatException ignored) {}
+            System.out.print("Enter a number between " + min + " and " + max + ": ");
+        }
+    }
+
+    /* ===========================================================
+       Pretty trip table (ASCII) — stop names + walk target (CHATGPT FOR LOGIC ON THIS ONE)
+       =========================================================== */
+
+    private static void printTripTableAscii(List<TripPartDTO> trip, String title) {
+        DateTimeFormatter HHMM = DateTimeFormatter.ofPattern("HH:mm");
+
+        // Compute overall start (first dep expected/aimed) and end (last arr expected/aimed)
+        LocalDateTime tripStart = null;
+        LocalDateTime tripEnd = null;
+
+        for (TripPartDTO p : trip) {
+            LocalDateTime dep = firstNonNull(p.getExpectedDeparture(), p.getAimedDeparture());
+            if (dep != null && (tripStart == null || dep.isBefore(tripStart))) {
+                tripStart = dep;
+            }
+            LocalDateTime arr = firstNonNull(p.getExpectedArrival(), p.getAimedArrival());
+            if (arr != null && (tripEnd == null || arr.isAfter(tripEnd))) {
+                tripEnd = arr;
             }
         }
 
-        System.out.println("");
-    }
-
-    // admin legger til favoritt på en litebruker
-    private static void leggTilFavorittForAndre(Scanner in, Document bruker, DBHandler db) {
-        String navn = bruker.getString("id");
-
-        System.out.println("Navn på ny favoritt:");
-        String destNavn = in.nextLine();
-
-        System.out.println("Latitude:");
-        String latStr = in.nextLine();
-
-        System.out.println("Longitude:");
-        String lonStr = in.nextLine();
-
-        double lat = Double.parseDouble(latStr);
-        double lon = Double.parseDouble(lonStr);
-
-        ((MongoDBHandler) db).addDestinationToFavorites(navn, destNavn, destNavn, lat, lon);
-
-        System.out.println("Favoritt '" + destNavn + "' lagt til for " + navn);
-    }
-
-    // admin fjerner favoritt på en litebruker
-    private static void fjernFavorittForAndre(Scanner in, Document bruker, DBHandler db) {
-        String navn = bruker.getString("id");
-        Object favObj = bruker.get("favoritter");
-
-        if (!(favObj instanceof Document)) {
-            System.out.println("Ingen favoritter å fjerne.");
-            return;
+        String headerSuffix = "";
+        if (tripStart != null && tripEnd != null) {
+            long mins = Math.max(0, Duration.between(tripStart, tripEnd).toMinutes());
+            headerSuffix = " (" + tripStart.format(HHMM) + " \u2192 " + tripEnd.format(HHMM) + ", " + mins + "m)";
         }
 
-        Document favDoc = (Document) favObj;
-        if (favDoc.isEmpty()) {
-            System.out.println("Ingen favoritter å fjerne.");
-            return;
-        }
+        System.out.println();
+        System.out.println("=== " + (title == null ? "Trip plan" : title) + headerSuffix + " ===");
+        System.out.println(repeat('-', 95));
+        System.out.printf("%-3s %-8s %-12s %-24s %-10s %-24s %-10s %-9s%n",
+                "#", "MODE", "LINE", "FROM (stop)", "DEPART", "TO (stop)", "ARRIVE", "DIST");
+        System.out.println(repeat('-', 95));
 
-        List<String> favorittNavn = new ArrayList<String>(favDoc.keySet());
+        for (int i = 0; i < trip.size(); i++) {
+            TripPartDTO p = trip.get(i);
 
-        System.out.println("Velg destinasjon som skal fjernes:");
-        for (int i = 0; i < favorittNavn.size(); i++) {
-            System.out.println((i + 1) + ") " + favorittNavn.get(i));
-        }
+            String mode = readableMode(p.getLegTransportMode());
+            String line = joinNonEmpty(p.getLineName(), p.getLineNumber(), p.getLineOwner());
 
-        int valg = lesValg(in, 1, favorittNavn.size());
-        String valgtDest = favorittNavn.get(valg - 1);
+            // Use stop NAMES (no IDs)
+            String fromStop = safeFromStopName(p);
+            String toStop   = safeToStopName(p);
 
-        ((MongoDBHandler) db).removeData("brukere", "favoritter." + valgtDest, navn);
-
-        System.out.println("Favoritt '" + valgtDest + "' fjernet for " + navn);
-    }
-
-    // ======================= HJELPEFUNKSJONER =======================
-
-    // sjekker om en Document-bruker har admin=true
-    private static boolean isAdmin(Document bruker) {
-        if (bruker.containsKey("admin")) {
-            Object a = bruker.get("admin");
-            if (a instanceof Boolean) {
-                return (Boolean) a;
-            }
-        }
-        return false;
-    }
-
-    // leser et tallvalg fra konsollen, nekter alt som er utenfor min..max
-    private static int lesValg(Scanner in, int min, int max) {
-        while (true) {
-            String s = in.nextLine();
-            try {
-                int v = Integer.parseInt(s);
-                if (v >= min && v <= max) return v;
-            } catch (Exception e) {
-                // ignorer bare, vi spør igjen under
-            }
-            System.out.println("Skriv et tall mellom " + min + " og " + max + ": ");
-        }
-    }
-
-    // spør bruker om ja/nei, returnerer true hvis "j" / "ja"
-    private static boolean skalFortsette(Scanner in) {
-        while (true) {
-            String s = in.nextLine().trim().toLowerCase();
-            if (s.equals("j") || s.equals("ja")) return true;
-            if (s.equals("n") || s.equals("nei")) return false;
-            System.out.println("Skriv j eller n:");
-        }
-    }
-    private static LocationPort ipPortPicker(Scanner in, String clientName) {
-        while (true) {
-            String s = in.nextLine().trim().toLowerCase();
-            if (s.equals("1")) {  return new RandomLocationAdapter();} // gir random posisjon
-            if (s.equals("2")) { return new IpGeolocationAdapter(clientName); // gir posisjon basert på ip
+            // For WALK/FOOT legs, show where you need to walk TO (next leg's origin if present)
+            if (isWalkMode(p.getLegTransportMode())) {
+                String nextOrigin = nextLegOriginStopName(trip, i);
+                if (!nextOrigin.isBlank()) {
+                    toStop = nextOrigin;
+                }
             }
 
+            String dep = formatTimeWithDelay(p.getAimedDeparture(), p.getExpectedDeparture(), HHMM);
+            String arr = formatTimeWithDelay(p.getAimedArrival(),   p.getExpectedArrival(),   HHMM);
+
+            String dist = p.getTravelDistance() > 0 ? (p.getTravelDistance() + " m") : "";
+
+            System.out.printf("%-3d %-8s %-12s %-24s %-10s %-24s %-10s %-9s%n",
+                    (i + 1),
+                    truncate(mode, 8),
+                    truncate(line, 12),
+                    truncate(fromStop, 24),
+                    dep,
+                    truncate(toStop, 24),
+                    arr,
+                    dist);
         }
+
+        System.out.println(repeat('-', 95));
+    }
+
+    /* ===========================================================
+       Helpers for stop names + walk target
+       =========================================================== */
+
+    // Prefer stop name fields you already have (platform *names* here); never print IDs.
+    private static String safeFromStopName(TripPartDTO p) {
+        // Your DTO already exposes platform *names*:
+        // previously you printed: p.getDepartPlatformName() + " (" + p.getDepartPlatformId() + ")"
+        // We now just take the name and avoid the ID entirely.
+        return nullToEmpty(p.getDepartPlatformName());
+    }
+
+    private static String safeToStopName(TripPartDTO p) {
+        return nullToEmpty(p.getArrivePlatformName());
+    }
+
+    // Where do we walk to? Prefer next leg's FROM stop; otherwise this leg's TO stop.
+    private static String nextLegOriginStopName(List<TripPartDTO> trip, int i) {
+        if (i + 1 < trip.size()) {
+            TripPartDTO next = trip.get(i + 1);
+            String fromNext = safeFromStopName(next);
+            if (!fromNext.isBlank()) return fromNext;
+        }
+        return safeToStopName(trip.get(i));
+    }
+
+    private static String nullToEmpty(String s) {
+        return (s == null) ? "" : s.trim();
+    }
+
+    /* ===========================================================
+       Utility helpers for printing
+       =========================================================== */
+
+    private static LocalDateTime firstNonNull(LocalDateTime a, LocalDateTime b) {
+        return a != null ? a : b;
+    }
+
+    private static String formatTimeWithDelay(LocalDateTime aimed,
+                                              LocalDateTime expected,
+                                              DateTimeFormatter fmt) {
+        if (expected != null) {
+            String base = expected.format(fmt);
+            if (aimed != null) {
+                long diff = Duration.between(aimed, expected).toMinutes();
+                if (diff != 0) base += " (" + (diff > 0 ? "+" : "") + diff + "m)";
+            }
+            return base;
+        }
+        return aimed != null ? aimed.format(fmt) : "";
+    }
+
+    private static String readableMode(String mode) {
+        if (mode == null) return "";
+        String m = mode.toLowerCase();
+        return switch (m) {
+            case "bus" -> "Bus";
+            case "train" -> "Train";
+            case "tram" -> "Tram";
+            case "metro" -> "Metro";
+            case "ferry" -> "Ferry";
+            case "walk", "walking", "foot", "footpath" -> "Walk"; // normalize “Foot” etc.
+            default -> capitalize(m);
+        };
+    }
+
+    private static boolean isWalkMode(String mode) {
+        if (mode == null) return false;
+        String m = mode.toLowerCase();
+        return m.equals("walk") || m.equals("walking") || m.equals("foot") || m.equals("footpath");
+    }
+
+    private static String capitalize(String s) {
+        if (s == null || s.isBlank()) return "";
+        return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+    }
+
+    private static String joinNonEmpty(String... parts) {
+        StringBuilder sb = new StringBuilder();
+        for (String p : parts) {
+            if (p != null && !p.isBlank()) {
+                if (sb.length() > 0) sb.append(" ");
+                sb.append(p.trim());
+            }
+        }
+        return sb.toString();
+    }
+
+    private static String bracket(String v) {
+        if (v == null || v.isBlank()) return "";
+        return "(" + v + ")";
+    }
+
+    private static String truncate(String s, int max) {
+        if (s == null) return "";
+        return s.length() <= max ? s : s.substring(0, Math.max(0, max - 1)) + ".";
+    }
+
+    private static String repeat(char c, int n) {
+        return String.valueOf(c).repeat(Math.max(0, n));
     }
 }
-

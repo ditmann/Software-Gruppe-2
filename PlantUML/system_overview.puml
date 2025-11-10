@@ -1,0 +1,118 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+package "app" {
+    class "Main"
+}
+
+package "Core" {
+
+    package "Port" {
+        interface "DBHandlerPort"
+        interface "DBConnectionPort"
+        interface "LocationPort"
+        interface "EnturClientPort"
+    }
+
+    package "Service" {
+        class "FindBestTripService"
+        class "TripFileHandler"
+        class "DBService"
+    }
+
+    package "DTO" {
+            class "TripPartDTO"
+            class "CoordinateDTO"
+    }
+
+    package "Adapter" {
+
+        class "RandomLocationAdapter" 
+    }
+}
+
+package "Storage" {
+
+    class JsonDBhandlerAdapter {
+    }
+
+    class MongoDBConnectionAdapter {
+    }
+
+    class MongoDBHandlerAdapter{
+    - list: ArrayList<Document>
+    - idField: String
+    - connectionToDatabase: DBConnection
+    - listOfDocuments: MongoCollection<Document>
+    }
+}
+
+package "API" {
+    class "EnturHttpClient"
+    class "IpGeolocationAdapter"
+    class "AvandraController"
+
+}
+
+package "Test" {
+
+    class "TripFileHandlerTest"
+    class "MongoDBHandlerAdapterTest"
+    class "IpGeolocationAdapterTest"
+    class "RandomLocationTest"
+    class "MongoDBHandlerAdapterIT"
+    class "MongoDBConnectionAdapterTest"
+    class "FindBestTripServiceTest"
+}
+
+'API koblinger:
+"EnturHttpClient"-->"EnturClientPort"
+"IpGeolocationAdapter"-->"LocationPort"
+"IpGeolocationAdapter"-->"CoordinateDTO"
+
+'Storage koblinger:
+"JsonDBhandlerAdapter"-->"DBHandlerPort"
+"JsonDBhandlerAdapter"-->"CoordinateDTO"
+"MongoDBConnectionAdapter"-->"DBConnectionPort"
+"MongoDBHandlerAdapter"-->"DBHandlerPort"
+"MongoDBHandlerAdapter"-->"CoordinateDTO"
+"MongoDBHandlerAdapter"-->"DBConnectionPort"
+
+'Core koblinger:
+'   Adapter:
+"RandomLocationAdapter"-->"LocationPort"
+"RandomLocationAdapter"-->"CoordinateDTO"
+'   Port:
+"DBHandlerPort"-->"CoordinateDTO"
+"LocationPort"-->"CoordinateDTO"
+'   DTO: Bruker ingen koblinger
+'   Service:
+"FindBestTripService"-->"TripPartDTO"
+"TripFileHandler"-->"TripPartDTO"
+"TripFileHandler"-->"CoordinateDTO"
+"TripFileHandler"-->"EnturClientPort"
+
+'Test kobling:
+"TripFileHandlerTest"-->"CoordinateDTO"
+"TripFileHandlerTest"-->"TripPartDTO"
+"TripFileHandlerTest"-->"EnturClientPort"
+"TripFileHandlerTest"-->"TripFileHandler"
+"RandomLocationTest"-->"RandomLocationAdapter"
+"RandomLocationTest"-->"CoordinateDTO"
+"MongoDBHandlerAdapterTest"-->"CoordinateDTO"
+"MongoDBHandlerAdapterTest"-->"DBConnectionPort"
+"MongoDBHandlerAdapterTest"-->"MongoDBHandlerAdapter"
+"MongoDBHandlerAdapterTest"-->"MongoDBConnectionAdapter"
+"MongoDBHandlerAdapterIT"-->"DBConnectionPort"
+"MongoDBHandlerAdapterIT"-->"MongoDBConnectionAdapter"
+"MongoDBHandlerAdapterIT"-->"MongoDBHandlerAdapter"
+"MongoDBConnectionAdapterTest"-->"MongoDBConnectionAdapter"
+"IpGeolocationAdapterTest"-->"IpGeolocationAdapter"
+"IpGeolocationAdapterTest"-->"CoordinateDTO"
+"FindBestTripServiceTest"-->"FindBestTripService"
+"FindBestTripServiceTest"-->"TripPartDTO"
+
+
+
+
+@enduml
