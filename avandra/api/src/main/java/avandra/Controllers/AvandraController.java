@@ -73,9 +73,8 @@ public class AvandraController {
         this.defaultIncludeRequestMetadata = defaultIncludeRequestMeta;
     }
 
-    /* ===========================================================
-       Journey logic
-       =========================================================== */
+    // Journey logic
+
 
     /**
      * finds the best journey for a given user and destination
@@ -102,9 +101,8 @@ public class AvandraController {
         return bestTripSelectionService.pickBest(routeAlternatives);
     }
 
-    /* ===========================================================
-       Read only destinations for any user
-       =========================================================== */
+    // Read only destinations for any user
+
 
     /**
      * returns a list of user favorites from the database
@@ -119,9 +117,8 @@ public class AvandraController {
         return databaseService.listUserDestinations(userId);
     }
 
-    /* ===========================================================
-       Admin management for favorites and litebrukere
-       =========================================================== */
+    // Admin management for favorites and litebrukere
+
 
     /**
      * adds or updates a favorite for an admin or their lite user
@@ -247,9 +244,7 @@ public class AvandraController {
         return databaseService.listLitebrukereForAdmin(adminId);
     }
 
-    /* ===========================================================
-       Authorization and relationships
-       =========================================================== */
+    // Authorization and relationships
 
     /**
      * checks if user is an admin throws error if not
@@ -291,9 +286,7 @@ public class AvandraController {
         }
     }
 
-    /* ===========================================================
-       Utilities for UI layer (Only in use for the MVP)
-       =========================================================== */
+    // Utilities for UI layer (Only in use for the MVP)
 
     /**
      * returns list of all user ids for use in login menu or admin panels
