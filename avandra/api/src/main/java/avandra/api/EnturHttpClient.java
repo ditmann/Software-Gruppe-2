@@ -4,11 +4,10 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.Map;
 
-import avandra.core.port.EnturClientPort;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import avandra.core.port.EnturClient;
+import avandra.core.port.EnturClientPort;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
