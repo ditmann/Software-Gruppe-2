@@ -22,6 +22,7 @@
     </properties>
 
     <dependencies>
+        <!-- Modules under test -->
         <dependency>
             <groupId>avandra</groupId>
             <artifactId>core</artifactId>
@@ -38,6 +39,7 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
+        <!-- JUnit 5 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -45,6 +47,7 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Mockito -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
@@ -58,6 +61,15 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Testcontainers: JUnit Jupiter integration (needed for @Testcontainers/@Container) -->
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Testcontainers: MongoDB module -->
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>mongodb</artifactId>
@@ -65,6 +77,7 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Optional: MockWebServer for HTTP tests -->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>mockwebserver</artifactId>
@@ -76,6 +89,7 @@
     <build>
         <plugins>
 
+            <!-- Java compilation -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -86,6 +100,7 @@
                 </configuration>
             </plugin>
 
+            <!-- Unit tests (*Test.java) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -96,6 +111,7 @@
                 </configuration>
             </plugin>
 
+            <!-- Integration tests (*IT.java) run in verify phase -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>

@@ -1,0 +1,102 @@
+{
+  "request" : {
+    "fromLat" : 59.91,
+    "fromLon" : 10.75,
+    "toLat" : 59.92,
+    "toLon" : 10.76,
+    "numPatterns" : 3
+  },
+  "trip" : {
+    "tripPatterns" : [ {
+      "legs" : [ {
+        "mode" : "foot",
+        "distance" : 400,
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "Q1",
+            "name" : "WalkStart"
+          },
+          "expectedDepartureTime" : "2025-01-01T10:00:00Z"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "Q2",
+            "name" : "WalkEnd"
+          },
+          "expectedDepartureTime" : "2025-01-01T10:05:00Z"
+        }
+      }, {
+        "mode" : "bus",
+        "distance" : 0,
+        "line" : {
+          "id" : "BUS-10",
+          "name" : "Bus 10",
+          "publicCode" : "10",
+          "transportMode" : "bus",
+          "authority" : {
+            "name" : "Ruter"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "QB1",
+            "name" : "Stop A"
+          },
+          "expectedDepartureTime" : "2025-01-01T10:06:00Z"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "QB2",
+            "name" : "Stop B"
+          },
+          "expectedDepartureTime" : "2025-01-01T10:30:00Z"
+        }
+      } ]
+    }, {
+      "legs" : [ {
+        "mode" : "foot",
+        "distance" : 200,
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "Q3",
+            "name" : "WalkStart2"
+          },
+          "expectedDepartureTime" : "2025-01-01T10:00:00Z"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "Q4",
+            "name" : "WalkEnd2"
+          },
+          "expectedDepartureTime" : "2025-01-01T10:02:00Z"
+        }
+      }, {
+        "mode" : "tram",
+        "distance" : 0,
+        "line" : {
+          "id" : "TR-1",
+          "name" : "Tram 1",
+          "publicCode" : "T1",
+          "transportMode" : "tram",
+          "authority" : {
+            "name" : "Ruter"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "QT1",
+            "name" : "Tram A"
+          },
+          "expectedDepartureTime" : "2025-01-01T10:03:00Z"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "QT2",
+            "name" : "Tram B"
+          },
+          "expectedDepartureTime" : "2025-01-01T10:20:00Z"
+        }
+      } ]
+    } ]
+  }
+}

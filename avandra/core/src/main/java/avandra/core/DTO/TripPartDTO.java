@@ -38,6 +38,9 @@ public class TripPartDTO {
 
     public TripPartDTO() {}
 
+    public TripPartDTO(String walk, int i) {
+    }
+
     public String getLegTransportMode() {
         return legTransportMode;
     }

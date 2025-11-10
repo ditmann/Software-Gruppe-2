@@ -1,7 +1,13 @@
+//This is the result after many iteriations, we have gone over what
+//think we actually need for this port, also we had some issues with
+//having mongoDB sepsific datatypes here, but we managed to remove
+//Those
 package avandra.core.port;
 
 
 import avandra.core.DTO.CoordinateDTO;
+
+import java.util.List;
 
 public interface DBHandlerPort {
     // make user in DB %overloading skal brukes%
@@ -19,11 +25,11 @@ public interface DBHandlerPort {
     public void addDestinationToFavorites(String userID, String destinationName, String address, double latitude, double longitude);
 
      /// Legger til koordinater i lagret destinasjon
-    public void addCoordinatesToDestination(String userID, String destinationName, double latitude, double longitude);
+    public void addCoordinatesToFavDestination(String userID, String destinationName, double latitude, double longitude);
 
 
     /// search with ID to find specific document
-    public CoordinateDTO searchDestination(String userID, String destinationID);
+    public CoordinateDTO searchFavDestination(String userID, String destinationID);
 
     //Removes data (dokument id, what to delete, path, path, path) %overloading skal brukes%
     public void removeData(String userID); //sletter topp nivå i dokument
@@ -32,13 +38,13 @@ public interface DBHandlerPort {
     public void removeData(String userID, String keyToRemove, String destinationType, String destinationKey); //sletter kordinater
 
 
-    //admin gir lite destinasjoner retunerer bra eller dårlig
-    public boolean insertDestinationForLiteUser(String liteUserId,
-                                                String destId,
-                                                String name,
-                                                String address,
-                                                Double lat,
-                                                Double lng,
-                                                String adminId
-    );
+    /** Return all favorites for a user as a map name -> coordinates. */
+    List<String> listUserFavDestinations(String userId);
+
+    List<String> listLitebrukereForAdmin(String adminId);
+
+
+    boolean isAdmin(String userId);
+
+
 }

@@ -3,6 +3,8 @@ package avandra.core.service;
 import avandra.core.DTO.CoordinateDTO;
 import avandra.core.port.DBHandlerPort;
 
+import java.util.List;
+
 /**
  * thin service layer over DBHandlerPort
  * keeps the rest of the app from talking to the handler directly
@@ -80,7 +82,7 @@ public class DBService {
      * @param longitude destination longitude
      */
     public void addCoordinatesToDestination(String userID, String destinationName, double latitude, double longitude) {
-        handler.addCoordinatesToDestination(userID, destinationName, latitude, longitude);
+        handler.addCoordinatesToFavDestination(userID, destinationName, latitude, longitude);
     }
 
     /**
@@ -90,29 +92,9 @@ public class DBService {
      * @return coordinate dto if found, otherwise null
      */
     public CoordinateDTO searchDestination(String userID, String destinationID) {
-        return handler.searchDestination(userID, destinationID);
+        return handler.searchFavDestination(userID, destinationID);
     }
 
-    /**
-     * upsert a destination for a lite user if the admin has access
-     * @param liteUserId the lite user id
-     * @param destId destination id
-     * @param name display name
-     * @param address address text
-     * @param lat latitude or null to leave unchanged
-     * @param lng longitude or null to leave unchanged
-     * @param adminId admin performing the change
-     * @return true if insert happened, false otherwise
-     */
-    public boolean insertDestinationForLiteUser(String liteUserId,
-                                                String destId,
-                                                String name,
-                                                String address,
-                                                Double lat,
-                                                Double lng,
-                                                String adminId) {
-        return handler.insertDestinationForLiteUser(liteUserId, destId, name, address, lat, lng, adminId);
-    }
 
     /**
      * delete a user document by id
@@ -151,4 +133,20 @@ public class DBService {
     public void removeData(String userID, String keyToRemove, String destinationType, String destinationKey) {
         handler.removeData(userID, keyToRemove, destinationType, destinationKey);
     }
+
+    public List<String> listUserDestinations(String userId) {
+        return handler.listUserFavDestinations(userId);
+    }
+
+    public List<String> listLitebrukereForAdmin(String adminId) {
+        return handler.listLitebrukereForAdmin(adminId);
+    }
+
+
+
+    public boolean isAdmin(String userId) { return handler.isAdmin(userId); }
+
+
+
+
 }

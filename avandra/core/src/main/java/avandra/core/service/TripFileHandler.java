@@ -1,4 +1,4 @@
-package avandra.storage.adapter;
+package avandra.core.service;
 
 import java.io.File;
 import java.io.IOException;

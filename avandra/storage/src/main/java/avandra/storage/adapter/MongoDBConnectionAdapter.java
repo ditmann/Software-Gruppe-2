@@ -12,7 +12,7 @@ public class MongoDBConnectionAdapter implements AutoCloseable, DBConnectionPort
     private String pass;
     private String uri;                  // full connection string path
     private String db_name = "dummy";
-    private String collection_name = "testdata";
+    private String collection_name = "prototype_0.0.1";
     private MongoClient client;
 
     /// Exists only for developers, will not go to launch

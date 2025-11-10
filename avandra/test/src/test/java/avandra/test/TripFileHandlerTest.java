@@ -4,7 +4,7 @@ import avandra.core.DTO.CoordinateDTO;
 import avandra.core.DTO.TripPartDTO;
 import avandra.core.port.EnturClientPort;
 import avandra.core.port.EnturClientPort;
-import avandra.storage.adapter.TripFileHandler;
+import avandra.core.service.TripFileHandler;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -51,12 +51,11 @@ class TripFileHandlerTest {
     }
 
     // small helper that behaves like our CoordinateDTO class
-    // note the NUM suffix on longitude to match the real interface
     private static final class TestCoord extends CoordinateDTO {
         private final double lat, lon;
         TestCoord(double lat, double lon) { this.lat = lat; this.lon = lon; }
-        @Override public double getLatitudeNum() { return lat; }
-        @Override public double getLongitudeNUM() { return lon; }
+         public double getLatitudeNum() { return lat; }
+         public double getLongitudeNUM() { return lon; }
     }
 
     // minimal fake Entur trip payload

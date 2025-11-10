@@ -17,7 +17,14 @@ public class JourneyPlannerService {
         this.dbService = dbService;
     }
 
-    //startingpoint depends on what adapter you are using 
+    //startingpoint depends on what adapter you are using
+
+    /**
+     * @param userIDForDB usersID for the database call
+     * @param destinationID where the user is going
+     * @return returns a list of two coordinates
+     * @throws Exception
+     */
     public List<CoordinateDTO> fetchStartingPointAndEndPoint (String userIDForDB, String destinationID) throws Exception{
         List<CoordinateDTO> startingPointAndEndPoint = new ArrayList<>();
         CoordinateDTO startPoint = locationPort.currentCoordinate();

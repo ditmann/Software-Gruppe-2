@@ -1,13 +1,16 @@
 package avandra.storage.adapter;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import avandra.core.port.DBHandlerPort;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 import avandra.core.DTO.CoordinateDTO;
-
+import org.bson.Document;
 
 
 public class JSONDBHandlerAdapter implements DBHandlerPort {
@@ -76,12 +79,12 @@ public class JSONDBHandlerAdapter implements DBHandlerPort {
     }
 
     @Override
-    public void addCoordinatesToDestination(String userID, String destinationName, double latitude, double longitude) {
+    public void addCoordinatesToFavDestination(String userID, String destinationName, double latitude, double longitude) {
 
     }
 
     @Override
-    public CoordinateDTO searchDestination(String userID, String destinationID) {
+    public CoordinateDTO searchFavDestination(String userID, String destinationID) {
         return null;
     }
 
@@ -107,7 +110,19 @@ public class JSONDBHandlerAdapter implements DBHandlerPort {
     }
 
     @Override
-    public boolean insertDestinationForLiteUser(String liteUserId, String destId, String name, String address, Double lat, Double lng, String adminId) {
+    public List<String> listUserFavDestinations(String userId) {
+        return null;
+    }
+
+    @Override
+    public List<String> listLitebrukereForAdmin(String adminId) {
+        return List.of();
+    }
+
+
+
+    @Override
+    public boolean isAdmin(String userId) {
         return false;
     }
 /*

@@ -1,99 +1,151 @@
 package avandra.test;
 
+import avandra.core.DTO.CoordinateDTO;
 import avandra.core.port.DBConnectionPort;
+import avandra.core.service.DBService;
 import avandra.storage.adapter.MongoDBConnectionAdapter;
 import avandra.storage.adapter.MongoDBHandlerAdapter;
 import org.bson.Document;
 import org.junit.jupiter.api.*;
-
 import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Testcontainers
 class MongoDBHandlerAdapterIT {
 
-    static MongoDBContainer mongo;
-    static MongoDBHandlerAdapter handler;
+    @Container
+    static final MongoDBContainer mongoContainer = new MongoDBContainer("mongo:7.0");
 
-    @BeforeAll
-    static void setup() throws Exception {
-        // Spin up a real MongoDB instance in Docker using Testcontainers.
-        // This gives us an actual running database for the integration test
-        mongo = new MongoDBContainer("mongo:7.0");
-        mongo.start();
+    private DBService dbService;
+    private MongoDBHandlerAdapter dbHandler;
 
-        // Create a real DBConnectionPort that points at the Mongo container.
-        DBConnectionPort realConn = new MongoDBConnectionAdapter(
-                mongo.getConnectionString(), // connection URI from the container
-                "testdb",                    // test database name (can be anything)
-                "users"                      // collection name we want to use
-        );
+    @BeforeEach
+    void setUp() throws Exception {
+        String databaseName = "itdb_" + UUID.randomUUID();
+        String collectionName = "users";
 
-        // Create the real handler we're testing, but now backed by the container DB.
-        handler = new MongoDBHandlerAdapter(realConn);
+        DBConnectionPort connection =
+                new MongoDBConnectionAdapter(mongoContainer.getConnectionString(), databaseName, collectionName);
 
-        // Make sure the handler is using the same "id" field we rely on in production.
-        // (If MongoDBHandlerAdapter defaults to some other key, set it here.)
-        handler.setIdField("id");
+        dbHandler = new MongoDBHandlerAdapter(connection);
+        dbHandler.setIdField("id");
+        dbService = new DBService(dbHandler);
     }
 
-    @AfterAll
-    static void teardown() {
-        // Stop the Mongo container after all tests are done.
-        mongo.stop();
+    // --- small helpers -------------------------------------------------------
+
+    @SuppressWarnings("unchecked")
+    private Optional<Document> getUserDoc(String userId) {
+        ArrayList<Document> all = (ArrayList<Document>) dbService.retriveALLData();
+        return all.stream().filter(d -> userId.equals(d.getString("id"))).findFirst();
+    }
+
+    // --- tests ---------------------------------------------------------------
+
+    @Test
+    void createUser_appendData_and_readBack() {
+        String userId = "u1";
+
+        dbService.createUser(userId, true);
+        dbService.appendData(userId, "age", 30);
+
+        Document u1 = getUserDoc(userId).orElseThrow();
+        assertEquals(userId, u1.getString("id"));
+        assertTrue(u1.containsKey("admin"));
+        assertTrue(u1.containsKey("litebrukere"));
+        assertTrue(u1.containsKey("planlagte reiser"));
+        assertTrue(u1.containsKey("favoritter"));
+        assertEquals(30, u1.get("age"));
+
+        // exercise retrieveByKeyValue / retrieveByValue on real data
+        ArrayList<Document> byKey = dbHandler.retrieveByKeyValue("id", userId);
+        assertEquals(1, byKey.size());
+        ArrayList<Document> byValue = dbHandler.retrieveByValue("age");
+        assertTrue(byValue.stream().anyMatch(d -> userId.equals(d.getString("id"))));
     }
 
     @Test
-    void createUser_appendData_readBack_roundtrip() throws Exception {
-        // createUser should insert a new user document for "Per".
-        handler.createUser("Per", true);
+    void favorites_add_list_and_update_coordinates() {
+        String userId = "u2";
+        String destName = "Home";
 
-        // appendData should update that same user with an extra field.
-        handler.appendData("Per", "age", "78");
+        dbService.createUser(userId, false);
+        dbService.addDestinationToFavorites(userId, destName, "Main St 1", 59.91, 10.75);
 
-        // This is how production code would read all user documents back out.
-        ArrayList<Document> all = handler.retrieveAllData();
+        List<String> names = dbService.listUserDestinations(userId);
+        assertEquals(List.of(destName), names);
 
-        // We expect at least one user to exist in the DB now.
-        assertFalse(all.isEmpty(), "expected at least one user in DB");
+        CoordinateDTO coords = dbService.searchDestination(userId, destName);
+        assertNotNull(coords);
+        assertEquals(59.91, coords.getLatitudeNum(), 1e-6);
+        assertEquals(10.75, coords.getLongitudeNUM(), 1e-6);
 
-        // Find the document we just created for Per.
-        Document per = all.stream()
-                .filter(doc -> "Per".equals(doc.getString("id")))
-                .findFirst()
-                .orElseThrow(() -> new AssertionError("Per not found in DB"));
-
-        // Verify that createUser added the base fields we expect for a new user.
-        assertEquals("Per", per.getString("id"));
-        assertTrue(per.containsKey("admin"));
-        assertTrue(per.containsKey("litebrukere"));
-        assertTrue(per.containsKey("planlagte reiser"));
-        assertTrue(per.containsKey("favoritter"));
-
-        // Verify that appendData actually persisted "age" = "78" in Mongo,
-        // not just in memory.
-        assertEquals("78", per.get("age"));
-
-        // retrieveByKeyValue("id", "Per") should also be able to find this user.
-        var byKeyVal = handler.retrieveByKeyValue("id", "Per");
-        assertFalse(byKeyVal.isEmpty(), "retrieveByKeyValue should find Per");
+        dbService.addCoordinatesToDestination(userId, destName, 59.92, 10.76);
+        CoordinateDTO updated = dbService.searchDestination(userId, destName);
+        assertNotNull(updated);
+        assertEquals(59.92, updated.getLatitudeNum(), 1e-6);
+        assertEquals(10.76, updated.getLongitudeNUM(), 1e-6);
     }
 
     @Test
-    void deleteUser_removesDocument() throws Exception {
-        handler.createUser("Petter", false);
+    void litebrukere_list_and_admin_flag() {
+        String adminId = "adminA";
 
-        handler.setList(new ArrayList<>()); // clear cache before reading
-        var before = handler.retrieveByKeyValue("id", "Petter");
-        assertFalse(before.isEmpty(), "user Petter should exist before delete");
+        dbService.createUser(adminId, true);
+        dbService.createUser("kid-1", false);
+        dbService.createUser("kid-2", false);
 
-        handler.removeData("Petter");
+        // store a mixed list (includes blank) to match unit test behavior
+        dbService.appendData(adminId, "litebrukere", List.of("kid-1", " ", "kid-2"));
 
-        handler.setList(new ArrayList<>()); // clear cache before reading again
-        var after = handler.retrieveByKeyValue("id", "Petter");
-        assertTrue(after.isEmpty(), "user Petter should be gone after delete");
+        List<String> lite = dbService.listLitebrukereForAdmin(adminId);
+        assertEquals(List.of("kid-1", "kid-2"), lite);
+
+        assertTrue(dbService.isAdmin(adminId));
+        dbService.createUser("notAdmin", false);
+        assertFalse(dbService.isAdmin("notAdmin"));
     }
 
+    @Test
+    void remove_field_and_delete_user_and_deleteMany() {
+        String userId = "petter";
+
+        dbService.createUser(userId, false);
+        dbService.appendData(userId, "age", 30);
+
+        // unset a field
+        dbService.removeData(userId, "age");
+        Document afterUnset = getUserDoc(userId).orElseThrow();
+        assertFalse(afterUnset.containsKey("age"));
+
+        // delete the doc
+        dbService.removeData(userId);
+        assertTrue(getUserDoc(userId).isEmpty());
+
+        // create again then deleteMany (branch coverage)
+        dbService.createUser(userId, false);
+        dbHandler.deleteManyDocuments(userId);
+        assertTrue(getUserDoc(userId).isEmpty());
+    }
+
+    @Test
+    void searchFavDestination_returnsNull_when_nodes_missing() {
+        String userId = "u3";
+        dbService.createUser(userId, false);
+
+        // no favorites yet
+        assertNull(dbService.searchDestination(userId, "Home"));
+
+        // add a destination without coords and expect null
+        dbHandler.appendData(userId, "favoritter", new Document("Home", new Document()));
+        assertNull(dbService.searchDestination(userId, "Home"));
+    }
 }

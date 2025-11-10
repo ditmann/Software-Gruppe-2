@@ -1,10 +1,13 @@
 package avandra.storage.adapter;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import avandra.core.DTO.CoordinateDTO;
 import avandra.core.port.DBHandlerPort;
+import com.mongodb.client.model.Projections;
 import org.bson.Document;
 
 import com.mongodb.MongoException;
@@ -22,7 +25,6 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
     /// VARIABLE(S)
     ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
 
-    private ArrayList<Document> list = new ArrayList<>();
     private String idField = "id";
 
     // NOT given get'ers & set'ers as this application only accesses this specific db and collection
@@ -41,17 +43,13 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
     /// GET'ER(s) & SET'ER(s)
     ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
 
-    public ArrayList<Document> getList() {
-        return list;
-    }
+
 
     public String getIdField() {
         return idField;
     }
 
-    public void setList(ArrayList<Document> list) {
-        this.list = list;
-    }
+
 
     public void setIdField(String idField) {this.idField = idField;}
 
@@ -61,7 +59,6 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
 
     /// Creates a new document in the collection which represents a user, with all required fields
     public void createUser(String userID, boolean adminUser){
-
         try (MongoDBConnectionAdapter connection = (MongoDBConnectionAdapter) mongoDBConnectionPort.open()) {
 
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
@@ -123,7 +120,7 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
 
     //TODO: should be generalized to add coordinates to any list? Now just to favorites
     // OR: change name of method
-    public void addCoordinatesToDestination(String userID, String destinationName, double latitude, double longitude) {
+    public void addCoordinatesToFavDestination(String userID, String destinationName, double latitude, double longitude) {
 
         try (MongoDBConnectionAdapter connection = (MongoDBConnectionAdapter) mongoDBConnectionPort.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
@@ -150,6 +147,7 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
 
     /// Returns all documents in the collection as an array
     public ArrayList<Document> retrieveAllData() {
+        ArrayList<Document> out = new ArrayList<>();
 
         try (MongoDBConnectionAdapter connection = (MongoDBConnectionAdapter) mongoDBConnectionPort.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
@@ -158,7 +156,7 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
             /// Method Logic: Find and retrieve data
             FindIterable<Document> content = collection.find();
             for (Document doc : content) {
-                getList().add(doc);
+                out.add(doc);
             }
         }
         /// Super basic error "handling" + specified if Mongo-error
@@ -171,12 +169,12 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
             e.printStackTrace();
         }
 
-        return getList();
+        return out;
     }
 
 
     /// TODO: add description of what it does
-    public CoordinateDTO searchDestination(String userID, String destinationID){
+    public CoordinateDTO searchFavDestination(String userID, String destinationID){
         String coordinateFieldName = "koordinater";
 
         try (MongoDBConnectionAdapter connection = (MongoDBConnectionAdapter) mongoDBConnectionPort.open()) {
@@ -225,16 +223,15 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
 
     /// Returns all docs which contain the specified key:value in an array
     public ArrayList<Document> retrieveByKeyValue(String key, String value){
-
+        ArrayList<Document> out = new ArrayList<>();
         try (MongoDBConnectionAdapter connection = (MongoDBConnectionAdapter) mongoDBConnectionPort.open()) {
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
-
             /// Method Logic: Retrieve data
             FindIterable<Document> content = collection.find(Filters.eq(key, value));
             if (content.iterator().hasNext()) {
                 for (Document doc : content) {
-                    getList().add(doc);
+                    out.add(doc);
                 }
             }
             else {
@@ -252,7 +249,7 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
             e.printStackTrace();
         }
 
-        return getList();
+        return out;
     }
 
 
@@ -394,80 +391,6 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
         }
     }
 
-    /// Oppdater/legg til destinasjon hos lite-bruker, KUN hvis adminId har tilgang i admins.allowedLiteUsers
-    /// TODO: what if something doesnt exist, error message?
-    public boolean insertDestinationForLiteUser(
-            String liteUserId,
-            String destId,
-            String name,
-            String address,
-            Double lat,
-            Double lng,
-            String adminId
-    ) {
-
-        try (MongoDBConnectionAdapter connection = (MongoDBConnectionAdapter) mongoDBConnectionPort.open()) {
-            /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
-            collection = connection.getCollection();
-
-            /// Method Logic:
-            //Check that admin has access to this lite-user
-            Document admin = collection.find(
-                    Filters.and(
-                            Filters.eq("id", adminId),
-                            Filters.in("allowedLiteUsers", liteUserId)
-                    )
-            ).first();
-
-            //attempt to UPDATE existing destination
-            var updateRes = collection.updateOne(
-                    Filters.and(
-                            Filters.eq("id", liteUserId),
-                            Filters.eq("favorites.destId", destId)
-                    ),
-                    Updates.combine(
-                            Updates.set("favorites.$.name", name),
-                            Updates.set("favorites.$.address", address),
-                            Updates.set("favorites.$.coords", new Document()
-                                    .append("lat", lat)
-                                    .append("lng", lng)
-                            ),
-                            Updates.set("favorites.$.updatedAt", java.time.Instant.now()),
-                            Updates.set("favorites.$.adminId", adminId)));
-
-            //If did not exist: PUSH new destination
-            Document coords = new Document();
-            if (lat != null) coords.put("lat", lat);
-            if (lng != null) coords.put("lng", lng);
-
-            Document destDoc = new Document("destId", destId)
-                    .append("name", name)
-                    .append("address", address)
-                    .append("coords", coords)
-                    .append("adminId", adminId)
-                    .append("addedAt", java.time.Instant.now());
-
-            var insertRes = collection.updateOne(
-                    Filters.and(
-                            Filters.eq("id", liteUserId),
-                            Filters.ne("favorites.destId", destId) // ingen eksisterende dest med samme id
-                    ),
-                    Updates.push("favorites", destDoc)
-            );
-            return insertRes.getModifiedCount() == 1;
-        }
-        /// Super basic error "handling" + specified if Mongo-error
-        catch (MongoException e) {
-            System.out.println("\nMongoDB exception: ");
-            e.printStackTrace();
-            return false;
-        }
-        catch (Exception e) {
-            System.out.println("\nNon-DB exception: ");
-            e.printStackTrace();
-            return false;
-        }
-    }
 
 
     ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
@@ -505,7 +428,9 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
     // if alot of data this will take alot of processing time
     // useful for developers in testing
     public ArrayList<Document> retrieveByValue(String searchTerm) {
+        ArrayList<Document> out = new ArrayList<>();
         try (MongoDBConnectionAdapter connection = (MongoDBConnectionAdapter) mongoDBConnectionPort.open()) {
+
             /// Opens AutoCloseable connection to db and returns a specific collection defined in the class
             collection = connection.getCollection();
 
@@ -516,7 +441,7 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
                 Document doc = cursor.next(); //associating the cursor item with a datatype and variable
                 for (String key : doc.keySet()) {
                     if (doc.get(key).equals(searchTerm) || key.equals(searchTerm)) { //if value or key of doc matches input-value
-                        getList().add(doc); //save for later
+                        out.add(doc); //save for later
                 }
             }
         }
@@ -531,10 +456,88 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
         e.printStackTrace();
     }
 
-        if (getList().isEmpty()) {
+        if (out.isEmpty()) {
             System.out.println("Found no match for " + searchTerm + "\n");
         }
         //returns an empty list if search term had no matches
-        return getList();
+        return out;
     }
+
+    @Override
+    public List<String> listUserFavDestinations(String userId) {
+        java.util.List<String> out = new java.util.ArrayList<>();
+
+        try (MongoDBConnectionAdapter connection =
+                     (MongoDBConnectionAdapter) mongoDBConnectionPort.open()) {
+            collection = connection.getCollection();
+
+            Document userDoc = collection.find(com.mongodb.client.model.Filters.eq("id", userId)).first();
+            if (userDoc == null) return out;
+
+            Document favDoc = userDoc.get("favoritter", Document.class);
+            if (favDoc == null) return out;
+
+            // Just collect the keys (names) under "favoritter"
+            for (String name : favDoc.keySet()) {
+                if (name != null && !name.isBlank()) out.add(name);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return out;
+    }
+
+
+    @Override
+    public List<String> listLitebrukereForAdmin(String adminId) {
+         List<String> out = new ArrayList<>();
+        try (MongoDBConnectionAdapter connection =
+                     (MongoDBConnectionAdapter) mongoDBConnectionPort.open()) {
+
+            collection = connection.getCollection();
+            Document adminDoc = collection.find(com.mongodb.client.model.Filters.eq("id", adminId)).first();
+            if (adminDoc == null) return out;
+
+            Object lite = adminDoc.get("litebrukere"); // can be String or List
+            if (lite instanceof String s) {
+                if (!s.isBlank()) out.add(s);
+            } else if (lite instanceof java.util.List<?> list) {
+                for (Object o : list) {
+                    if (o instanceof String s && !s.isBlank()) out.add(s);
+                }
+            }
+            return out;
+
+        } catch (com.mongodb.MongoException e) {
+            System.out.println("\nMongoDB exception: ");
+            e.printStackTrace();
+            return out;
+        } catch (Exception e) {
+            System.out.println("\nNon-DB exception: ");
+            e.printStackTrace();
+            return out;
+        }
+    }
+
+    @Override
+    public boolean isAdmin(String userId) {
+        try (MongoDBConnectionAdapter connection =
+                     (MongoDBConnectionAdapter) mongoDBConnectionPort.open()) {
+            collection = connection.getCollection();
+
+            Document doc = collection.find(Filters.eq("id", userId)).first();
+            if (doc == null) return false;
+
+            Boolean admin = doc.getBoolean("admin", false);
+            return admin != null && admin;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+
+
 }

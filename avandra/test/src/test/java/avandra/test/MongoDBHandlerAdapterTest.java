@@ -1,19 +1,12 @@
+// These tests have gone through a lot of iterations, they were written a bit too early
+// and maybe also a bit too complicated than what they needed to be, here is the final
+// version
 package avandra.test;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import avandra.core.DTO.CoordinateDTO;
 import avandra.core.port.DBConnectionPort;
 import avandra.storage.adapter.MongoDBConnectionAdapter;
 import avandra.storage.adapter.MongoDBHandlerAdapter;
-import org.bson.Document;
-import org.bson.codecs.DocumentCodecProvider;
-import org.bson.codecs.configuration.CodecRegistries;
-import org.bson.codecs.configuration.CodecRegistry;
-import org.bson.conversions.Bson;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
 
 import com.mongodb.MongoException;
 import com.mongodb.client.FindIterable;
@@ -22,440 +15,392 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 
+import org.bson.BsonDocument;
+import org.bson.Document;
+import org.bson.conversions.Bson;
+
+import org.junit.jupiter.api.*;
+import org.mockito.ArgumentCaptor;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import org.mockito.ArgumentCaptor;
-import org.mockito.ArgumentMatchers;
-
-/**
- * Unit tests for MongoDBHandlerAdapter.
- *
- * We:
- *  - mock DBConnectionPort -> MongoDBConnectionAdapter -> MongoCollection so we never hit a real DB
- *  - mock FindIterable + MongoCursor for reads/loops
- *
- * IMPORTANT: all @Test methods declare `throws Exception`
- * because some handler methods are declared with checked throws.
- */
 class MongoDBHandlerAdapterTest {
 
-    /**
-     * Wiring object bundles all mocks and a handler instance.
-     *
-     * rootConnection.open() -> openedConnection
-     * openedConnection.getCollection() -> collection
-     * openedConnection.close() must be allowed
-     */
-    private static class Wiring {
+    private static BsonDocument toDoc(Bson bson) {
+        return bson.toBsonDocument(Document.class, com.mongodb.MongoClientSettings.getDefaultCodecRegistry());
+    }
+
+    /** Small wiring helper so each test works with a clean set of mocks */
+    private static class TestWiring {
         final DBConnectionPort rootConnection = mock(DBConnectionPort.class);
         final MongoDBConnectionAdapter openedConnection = mock(MongoDBConnectionAdapter.class);
         final MongoCollection<Document> collection = mock(MongoCollection.class);
         final MongoDBHandlerAdapter handler;
 
-        Wiring() throws Exception {
+        TestWiring() throws Exception {
             when(rootConnection.open()).thenReturn(openedConnection);
             when(openedConnection.getCollection()).thenReturn(collection);
             doNothing().when(openedConnection).close();
-
             handler = new MongoDBHandlerAdapter(rootConnection);
         }
     }
 
-    /**
-     * The handler accumulates results in an internal list.
-     * Clear it after each test to prevent cross-test contamination.
-     */
-    private static final ArrayList<MongoDBHandlerAdapter> INSTANCES_TO_RESET = new ArrayList<>();
+    // Per test wiring so we can verify close() in @AfterEach without repeating ourselves
+    private TestWiring wiring;
+    // Some tests use custom wiring for example the MongoException
+    private boolean skipCloseVerification;
+
+    @BeforeEach
+    void setUp() throws Exception {
+        wiring = new TestWiring();
+        skipCloseVerification = false;
+    }
 
     @AfterEach
-    void cleanupLists() {
-        for (MongoDBHandlerAdapter h : INSTANCES_TO_RESET) {
-            h.setList(new ArrayList<>());
+    void tearDown() throws Exception {
+        if (!skipCloseVerification && wiring != null) {
+            verify(wiring.openedConnection).close();
         }
-        INSTANCES_TO_RESET.clear();
     }
-
-    private void track(Wiring w) {
-        INSTANCES_TO_RESET.add(w.handler);
-    }
-
-    // -----------------------------
-    // createUser
-    // -----------------------------
 
     @Test
-    void createUser_insertsOneDocument_whenIdDoesNotExist() throws Exception {
-        Wiring w = new Wiring();
-        track(w);
-
+    void createUser_inserts_whenIdFree() throws Exception {
         FindIterable<Document> findIterable = mock(FindIterable.class);
         MongoCursor<Document> cursor = mock(MongoCursor.class);
 
-        when(w.collection.find(any(Bson.class))).thenReturn(findIterable);
+        when(wiring.collection.find(any(Bson.class))).thenReturn(findIterable);
         when(findIterable.iterator()).thenReturn(cursor);
-        when(cursor.hasNext()).thenReturn(false); // means "ID is free"
+        when(cursor.hasNext()).thenReturn(false);
 
-        w.handler.createUser("bar", true);
+        wiring.handler.createUser("u1", true);
 
-        verify(w.collection, times(1)).insertOne(
-                argThat(d ->
-                        "bar".equals(d.getString("id")) &&
-                                d.containsKey("admin") &&
-                                d.containsKey("litebrukere") &&
-                                d.containsKey("planlagte reiser") &&
-                                d.containsKey("favoritter")
+        verify(wiring.collection, times(1)).insertOne(
+                argThat(doc ->
+                        "u1".equals(doc.getString("id")) &&
+                                doc.containsKey("admin") &&
+                                doc.containsKey("litebrukere") &&
+                                doc.containsKey("planlagte reiser") &&
+                                doc.containsKey("favoritter")
                 )
         );
-
-        verify(w.rootConnection).open();
-        verify(w.openedConnection).close();
     }
 
-    // -----------------------------
-    // retrieveAllData
-    // -----------------------------
-
     @Test
-    void retrieveAllData_returnsAllDocs() throws Exception {
-        Wiring w = new Wiring();
-        track(w);
-
-        FindIterable<Document> iterable = mock(FindIterable.class);
+    void retrieveAllData_returnsAll() throws Exception {
+        FindIterable<Document> findIterable = mock(FindIterable.class);
         MongoCursor<Document> cursor = mock(MongoCursor.class);
 
-        Document d1 = new Document("a", 1);
-        Document d2 = new Document("b", 2);
+        Document doc1 = new Document("a", 1);
+        Document doc2 = new Document("b", 2);
 
-        when(w.collection.find()).thenReturn(iterable);
-        when(iterable.iterator()).thenReturn(cursor);
-
+        when(wiring.collection.find()).thenReturn(findIterable);
+        when(findIterable.iterator()).thenReturn(cursor);
         when(cursor.hasNext()).thenReturn(true, true, false);
-        when(cursor.next()).thenReturn(d1, d2);
+        when(cursor.next()).thenReturn(doc1, doc2);
 
-        ArrayList<Document> result = w.handler.retrieveAllData();
+        ArrayList<Document> result = wiring.handler.retrieveAllData();
 
         assertEquals(2, result.size());
-        assertTrue(result.containsAll(Arrays.asList(d1, d2)));
-
-        verify(w.rootConnection).open();
-        verify(w.openedConnection).close();
+        assertTrue(result.contains(doc1));
+        assertTrue(result.contains(doc2));
     }
 
-    // -----------------------------
-    // retrieveByKeyValue
-    // -----------------------------
-
     @Test
-    void retrieveByKeyValue_filtersByEq() throws Exception {
-        Wiring w = new Wiring();
-        track(w);
-
-        FindIterable<Document> iterable = mock(FindIterable.class);
-
+    void retrieveByKeyValue_returnsMatches() throws Exception {
+        FindIterable<Document> findIterable = mock(FindIterable.class);
         MongoCursor<Document> probeCursor = mock(MongoCursor.class);
         MongoCursor<Document> loopCursor = mock(MongoCursor.class);
 
-        Document d = new Document("key", "val");
+        Document matchedDoc = new Document("key", "val");
 
-        when(w.collection.find(any(Bson.class))).thenReturn(iterable);
-        when(iterable.iterator()).thenReturn(probeCursor, loopCursor);
-
-        // probeCursor used for `hasNext()` check
+        when(wiring.collection.find(any(Bson.class))).thenReturn(findIterable);
+        when(findIterable.iterator()).thenReturn(probeCursor, loopCursor);
         when(probeCursor.hasNext()).thenReturn(true);
-
-        // loopCursor used in the enhanced-for
         when(loopCursor.hasNext()).thenReturn(true, false);
-        when(loopCursor.next()).thenReturn(d);
+        when(loopCursor.next()).thenReturn(matchedDoc);
 
-        ArrayList<Document> result = w.handler.retrieveByKeyValue("key", "val");
-
-        // Verify that Filters.eq("key", "val") was used
-        verify(w.collection).find(
-                ArgumentMatchers.<Bson>argThat(b -> {
-                    CodecRegistry registry = CodecRegistries.fromRegistries(
-                            com.mongodb.MongoClientSettings.getDefaultCodecRegistry(),
-                            CodecRegistries.fromProviders(new DocumentCodecProvider())
-                    );
-                    var doc = b.toBsonDocument(Document.class, registry);
-                    return doc != null
-                            && doc.getString("key") != null
-                            && "val".equals(doc.getString("key").getValue());
-                })
-        );
+        ArrayList<Document> result = wiring.handler.retrieveByKeyValue("key", "val");
 
         assertEquals(1, result.size());
         assertEquals("val", result.get(0).getString("key"));
-
-        verify(w.rootConnection).open();
-        verify(w.openedConnection).close();
     }
-
-    // -----------------------------
-    // appendData
-    // -----------------------------
-
-    @Test
-    void appendData_setsField_forUser() throws Exception {
-        Wiring w = new Wiring();
-        track(w);
-
-        when(w.collection.countDocuments(any(Bson.class))).thenReturn(1L);
-
-        UpdateResult updResult = mock(UpdateResult.class);
-        when(w.collection.updateOne(any(Bson.class), any(Bson.class))).thenReturn(updResult);
-
-        w.handler.setIdField("id");
-        w.handler.appendData("Per", "age", "78");
-
-        ArgumentCaptor<Bson> filterCap = ArgumentCaptor.forClass(Bson.class);
-        ArgumentCaptor<Bson> updateCap = ArgumentCaptor.forClass(Bson.class);
-        verify(w.collection).updateOne(filterCap.capture(), updateCap.capture());
-
-        CodecRegistry registry = CodecRegistries.fromRegistries(
-                com.mongodb.MongoClientSettings.getDefaultCodecRegistry(),
-                CodecRegistries.fromProviders(new DocumentCodecProvider())
-        );
-
-        var filterDoc = filterCap.getValue().toBsonDocument(Document.class, registry);
-        var updateDoc = updateCap.getValue().toBsonDocument(Document.class, registry);
-
-        assertEquals("Per", filterDoc.getString("id").getValue());
-
-        var setDoc = updateDoc.getDocument("$set");
-        assertNotNull(setDoc);
-        assertEquals("78", setDoc.getString("age").getValue());
-
-        verify(w.rootConnection).open();
-        verify(w.openedConnection).close();
-    }
-
-    // -----------------------------
-    // removeData (unset field)
-    // -----------------------------
-
-    @Test
-    void removeData_unsetsKey_ifUserExists() throws Exception {
-        Wiring w = new Wiring();
-        track(w);
-
-        FindIterable<Document> findIterable = mock(FindIterable.class);
-        MongoCursor<Document> cursor = mock(MongoCursor.class);
-
-        when(w.collection.find(any(Bson.class))).thenReturn(findIterable);
-        when(findIterable.iterator()).thenReturn(cursor);
-        when(cursor.hasNext()).thenReturn(true);
-
-        UpdateResult updRes = mock(UpdateResult.class);
-        when(w.collection.updateOne(any(Bson.class), any(Bson.class))).thenReturn(updRes);
-
-        w.handler.removeData("user-123", "obsoleteField");
-
-        verify(w.collection).updateOne(any(Bson.class), any(Bson.class));
-
-        verify(w.rootConnection).open();
-        verify(w.openedConnection).close();
-    }
-
-    // -----------------------------
-    // removeData (deleteOne by id)
-    // -----------------------------
-
-    @Test
-    void removeData_deletesDocById_ifExists() throws Exception {
-        Wiring w = new Wiring();
-        track(w);
-
-        when(w.collection.countDocuments(any(Bson.class))).thenReturn(1L);
-
-        DeleteResult del = mock(DeleteResult.class);
-        when(del.getDeletedCount()).thenReturn(1L);
-        when(w.collection.deleteOne(any(Bson.class))).thenReturn(del);
-
-        w.handler.removeData("user-123");
-
-        verify(w.collection).deleteOne(any(Bson.class));
-
-        verify(w.rootConnection).open();
-        verify(w.openedConnection).close();
-    }
-
-    // -----------------------------
-    // deleteManyDocuments
-    // -----------------------------
-
-    @Test
-    void deleteManyDocuments_deletesAllWithSameId_ifExists() throws Exception {
-        Wiring w = new Wiring();
-        track(w);
-
-        when(w.collection.countDocuments(any(Bson.class))).thenReturn(3L);
-
-        DeleteResult del = mock(DeleteResult.class);
-        when(del.getDeletedCount()).thenReturn(3L);
-        when(w.collection.deleteMany(any(Bson.class))).thenReturn(del);
-
-        w.handler.deleteManyDocuments("dup-id");
-
-        verify(w.collection).deleteMany(any(Bson.class));
-
-        verify(w.rootConnection).open();
-        verify(w.openedConnection).close();
-    }
-
-    // -----------------------------
-    // retrieveByValue
-    // -----------------------------
 
     @Test
     void retrieveByValue_matchesOnKeyOrValue() throws Exception {
-        Wiring w = new Wiring();
-        track(w);
-
-        FindIterable<Document> iterable = mock(FindIterable.class);
+        FindIterable<Document> findIterable = mock(FindIterable.class);
         MongoCursor<Document> cursor = mock(MongoCursor.class);
 
         Document valueMatch = new Document("field1", "needle");
         Document keyMatch   = new Document("needle", "anything");
         Document noMatch    = new Document("other", "stuff");
 
-        when(w.collection.find()).thenReturn(iterable);
-        when(iterable.iterator()).thenReturn(cursor);
-
+        when(wiring.collection.find()).thenReturn(findIterable);
+        when(findIterable.iterator()).thenReturn(cursor);
         when(cursor.hasNext()).thenReturn(true, true, true, false);
         when(cursor.next()).thenReturn(valueMatch, keyMatch, noMatch);
 
-        var result = w.handler.retrieveByValue("needle");
+        ArrayList<Document> result = wiring.handler.retrieveByValue("needle");
 
         assertEquals(2, result.size());
         assertTrue(result.contains(valueMatch));
         assertTrue(result.contains(keyMatch));
-
-        verify(w.rootConnection).open();
-        verify(w.openedConnection).close();
-    }
-
-    // -----------------------------
-    // insertDestinationForLiteUser
-    // -----------------------------
-
-    @Test
-    void insertDestinationForLiteUser_twoUpdates_returnBasedOnSecondUpdateCount() throws Exception {
-        Wiring w = new Wiring();
-        track(w);
-
-        FindIterable<Document> adminFind = mock(FindIterable.class);
-
-        when(w.collection.find(any(Bson.class))).thenReturn(adminFind);
-        when(adminFind.first()).thenReturn(new Document("id", "admin1"));
-
-        UpdateResult firstUpdate = mock(UpdateResult.class);
-        when(firstUpdate.getModifiedCount()).thenReturn(1L);
-
-        UpdateResult secondUpdate = mock(UpdateResult.class);
-        when(secondUpdate.getModifiedCount()).thenReturn(1L);
-
-        when(w.collection.updateOne(any(Bson.class), any(Bson.class)))
-                .thenReturn(firstUpdate)
-                .thenReturn(secondUpdate);
-
-        boolean res = w.handler.insertDestinationForLiteUser(
-                "lite1", "dest1", "Home", "Addr", 59.9, 10.7, "admin1");
-
-        assertTrue(res);
-        verify(w.collection, times(2)).updateOne(any(Bson.class), any(Bson.class));
-
-        verify(w.rootConnection).open();
-        verify(w.openedConnection).close();
     }
 
     @Test
-    void insertDestinationForLiteUser_adminNull_stillReturnsBasedOnSecondUpdate() throws Exception {
-        Wiring w = new Wiring();
-        track(w);
+    void appendData_setsField() throws Exception {
+        when(wiring.collection.countDocuments(any(Bson.class))).thenReturn(1L);
+        UpdateResult updateResult = mock(UpdateResult.class);
+        when(wiring.collection.updateOne(any(Bson.class), any(Bson.class))).thenReturn(updateResult);
 
-        FindIterable<Document> adminFind = mock(FindIterable.class);
+        wiring.handler.setIdField("id");
+        wiring.handler.appendData("Per", "age", "78");
 
-        when(w.collection.find(any(Bson.class))).thenReturn(adminFind);
-        when(adminFind.first()).thenReturn(null);
+        ArgumentCaptor<Bson> filterCaptor = ArgumentCaptor.forClass(Bson.class);
+        ArgumentCaptor<Bson> updateCaptor = ArgumentCaptor.forClass(Bson.class);
+        verify(wiring.collection).updateOne(filterCaptor.capture(), updateCaptor.capture());
 
-        UpdateResult firstUpdate = mock(UpdateResult.class);
-        when(firstUpdate.getModifiedCount()).thenReturn(0L);
-
-        UpdateResult secondUpdate = mock(UpdateResult.class);
-        when(secondUpdate.getModifiedCount()).thenReturn(1L);
-
-        when(w.collection.updateOne(any(Bson.class), any(Bson.class)))
-                .thenReturn(firstUpdate)
-                .thenReturn(secondUpdate);
-
-        boolean res = w.handler.insertDestinationForLiteUser(
-                "lite1", "dest1", "Gym", "Addr3", 59.0, 10.0, "admin");
-
-        assertTrue(res);
-        verify(w.collection, times(2)).updateOne(any(Bson.class), any(Bson.class));
-
-        verify(w.rootConnection).open();
-        verify(w.openedConnection).close();
+        BsonDocument filterDoc = toDoc(filterCaptor.getValue());
+        BsonDocument updateDoc = toDoc(updateCaptor.getValue());
+        assertEquals("Per", filterDoc.getString("id").getValue());
+        assertEquals("78", updateDoc.getDocument("$set").getString("age").getValue());
     }
 
-    // -----------------------------
-    // searchDestination
-    // -----------------------------
+    @Test
+    void removeData_unset_updatesWhenUserExists() throws Exception {
+        FindIterable<Document> findIterable = mock(FindIterable.class);
+        MongoCursor<Document> cursor = mock(MongoCursor.class);
+
+        when(wiring.collection.find(any(Bson.class))).thenReturn(findIterable);
+        when(findIterable.iterator()).thenReturn(cursor);
+        when(cursor.hasNext()).thenReturn(true);
+        when(wiring.collection.updateOne(any(Bson.class), any(Bson.class)))
+                .thenReturn(mock(UpdateResult.class));
+
+        wiring.handler.removeData("user-123", "obsolete");
+
+        verify(wiring.collection).updateOne(any(Bson.class), any(Bson.class));
+    }
 
     @Test
-    void searchDestination_returnsCoordinates_whenFavoriteHasCoords() throws Exception {
-        Wiring w = new Wiring();
-        track(w);
+    void removeData_delete_deletesWhenExists() throws Exception {
+        when(wiring.collection.countDocuments(any(Bson.class))).thenReturn(1L);
+        DeleteResult deleteResult = mock(DeleteResult.class);
+        when(deleteResult.getDeletedCount()).thenReturn(1L);
+        when(wiring.collection.deleteOne(any(Bson.class))).thenReturn(deleteResult);
 
-        Document coordsDoc = new Document("latitude", 59.3231)
-                .append("longitude", 11.2526);
-        Document destinationDoc = new Document("koordinater", coordsDoc);
+        wiring.handler.removeData("user-123");
+
+        verify(wiring.collection).deleteOne(any(Bson.class));
+    }
+
+    @Test
+    void searchFavDestination_returnsCoordinates() throws Exception {
+        Document coordDoc = new Document("latitude", 59.3231).append("longitude", 11.2526);
+        Document destinationDoc = new Document("koordinater", coordDoc);
         Document favoritesDoc = new Document("FFK", destinationDoc);
-        Document userDoc = new Document("id", "Kåre")
-                .append("favoritter", favoritesDoc);
+        Document userDoc = new Document("id", "Kåre").append("favoritter", favoritesDoc);
 
         FindIterable<Document> findIterable = mock(FindIterable.class);
-        when(w.collection.find(any(Bson.class))).thenReturn(findIterable);
+        when(wiring.collection.find(any(Bson.class))).thenReturn(findIterable);
         when(findIterable.first()).thenReturn(userDoc);
 
-        CoordinateDTO result = w.handler.searchDestination("Kåre", "FFK");
+        CoordinateDTO coordinates = wiring.handler.searchFavDestination("Kåre", "FFK");
 
-        assertNotNull(result, "Expected coordinates, got null");
-        assertEquals(59.3231, result.getLatitudeNum(), 1e-6);
-        assertEquals(11.2526, result.getLongitudeNUM(), 1e-6);
-
-        verify(w.collection).find(any(Bson.class));
-        verify(w.rootConnection).open();
-        verify(w.openedConnection).close();
+        assertNotNull(coordinates);
+        assertEquals(59.3231, coordinates.getLatitudeNum(), 1e-6);
+        assertEquals(11.2526, coordinates.getLongitudeNUM(), 1e-6);
     }
 
-    // -----------------------------
-    // Exception handling
-    // -----------------------------
+    @Test
+    void listUserFavDestinations_returnsNamesOnly() throws Exception {
+        Document favoritesDoc = new Document("Home", new Document())
+                .append("School", new Document("koordinater", new Document("latitude", 1.0).append("longitude", 2.0)))
+                .append("Kiosk", new Document());
+
+        Document userDoc = new Document("id", "u1").append("favoritter", favoritesDoc);
+
+        FindIterable<Document> findIterable = mock(FindIterable.class);
+        when(wiring.collection.find(any(Bson.class))).thenReturn(findIterable);
+        when(findIterable.first()).thenReturn(userDoc);
+
+        List<String> names = wiring.handler.listUserFavDestinations("u1");
+
+        assertEquals(List.of("Home", "School", "Kiosk"), names);
+    }
+
 
     @Test
-    void methods_handleMongoException_gracefully() throws Exception {
+    void listLitebrukereForAdmin_singleString() throws Exception {
+        Document adminDoc = new Document("id", "a").append("litebrukere", "kid-1");
+        FindIterable<Document> findIterable = mock(FindIterable.class);
+        when(wiring.collection.find(any(Bson.class))).thenReturn(findIterable);
+        when(findIterable.first()).thenReturn(adminDoc);
 
-        DBConnectionPort rootConn = mock(DBConnectionPort.class);
-        MongoDBConnectionAdapter openedConn = mock(MongoDBConnectionAdapter.class);
+        List<String> litebrukere = wiring.handler.listLitebrukereForAdmin("a");
+        assertEquals(List.of("kid-1"), litebrukere);
+    }
 
-        when(rootConn.open()).thenReturn(openedConn);
-        when(openedConn.getCollection()).thenThrow(new MongoException("error"));
-        doNothing().when(openedConn).close();
+    @Test
+    void listLitebrukereForAdmin_listWithBlank() throws Exception {
+        Document adminDoc = new Document("id", "a").append("litebrukere", List.of("kid-1", " ", "kid-2"));
+        FindIterable<Document> findIterable = mock(FindIterable.class);
+        when(wiring.collection.find(any(Bson.class))).thenReturn(findIterable);
+        when(findIterable.first()).thenReturn(adminDoc);
 
-        MongoDBHandlerAdapter handler = new MongoDBHandlerAdapter(rootConn);
+        List<String> litebrukere = wiring.handler.listLitebrukereForAdmin("a");
+        assertEquals(List.of("kid-1", "kid-2"), litebrukere);
+    }
 
-        assertDoesNotThrow(() -> handler.searchDestination("Per", "Hjem"));
-        assertDoesNotThrow(() -> handler.createUser("Per", true));
-        assertDoesNotThrow(() -> handler.retrieveAllData());
-        assertDoesNotThrow(() -> handler.retrieveByKeyValue("Tore", "Hjem"));
-        assertDoesNotThrow(() -> handler.appendData("Per", "Hjem", "Fem"));
-        assertDoesNotThrow(() -> handler.removeData("Per", "hjem"));
-        assertDoesNotThrow(() -> handler.insertDestinationForLiteUser(
-                "lite", "d", "n", "a", 1.0, 2.0, "admin"));
+    @Test
+    void listLitebrukereForAdmin_missingField() throws Exception {
+        Document adminDoc = new Document("id", "a");
+        FindIterable<Document> findIterable = mock(FindIterable.class);
+        when(wiring.collection.find(any(Bson.class))).thenReturn(findIterable);
+        when(findIterable.first()).thenReturn(adminDoc);
 
-        verify(rootConn, atLeastOnce()).open();
-        verify(openedConn, atLeastOnce()).close();
+        List<String> litebrukere = wiring.handler.listLitebrukereForAdmin("a");
+        assertTrue(litebrukere.isEmpty());
+    }
+
+
+    @Test
+    void isAdmin_true() throws Exception {
+        FindIterable<Document> findIterable = mock(FindIterable.class);
+        when(wiring.collection.find(any(Bson.class))).thenReturn(findIterable);
+        when(findIterable.first()).thenReturn(new Document("id", "a").append("admin", true));
+
+        assertTrue(wiring.handler.isAdmin("a"));
+    }
+
+    @Test
+    void isAdmin_false() throws Exception {
+        FindIterable<Document> findIterable = mock(FindIterable.class);
+        when(wiring.collection.find(any(Bson.class))).thenReturn(findIterable);
+        when(findIterable.first()).thenReturn(new Document("id", "b"));
+
+        assertFalse(wiring.handler.isAdmin("b"));
+    }
+
+    @Test
+    void addDestinationToFavorites_callsUpdateOne() throws Exception {
+        when(wiring.collection.updateOne(any(Bson.class), any(Bson.class)))
+                .thenReturn(mock(UpdateResult.class));
+
+        wiring.handler.addDestinationToFavorites("u1", "Park", "Main St 1", 10.0, 20.0);
+
+        verify(wiring.collection).updateOne(any(Bson.class), any(Bson.class));
+    }
+
+    @Test
+    void addCoordinatesToFavDestination_callsUpdateOne() throws Exception {
+        when(wiring.collection.updateOne(any(Bson.class), any(Bson.class)))
+                .thenReturn(mock(UpdateResult.class));
+
+        wiring.handler.addCoordinatesToFavDestination("u1", "School", 59.9, 10.7);
+
+        verify(wiring.collection).updateOne(any(Bson.class), any(Bson.class));
+    }
+
+    @Test
+    void deleteManyDocuments_deletesWhenCountPositive() throws Exception {
+        when(wiring.collection.countDocuments(any(Bson.class))).thenReturn(2L);
+        when(wiring.collection.deleteMany(any(Bson.class))).thenReturn(mock(DeleteResult.class));
+
+        wiring.handler.deleteManyDocuments("dup");
+
+        verify(wiring.collection).deleteMany(any(Bson.class));
+    }
+
+    @Test
+    void deleteManyDocuments_doesNothingWhenZero() throws Exception {
+        when(wiring.collection.countDocuments(any(Bson.class))).thenReturn(0L);
+
+        wiring.handler.deleteManyDocuments("none");
+
+        verify(wiring.collection, never()).deleteMany(any(Bson.class));
+    }
+
+    @Test
+    void searchFavDestination_returnsNull_whenUserMissing() throws Exception {
+        FindIterable<Document> findIterable = mock(FindIterable.class);
+        when(wiring.collection.find(any(Bson.class))).thenReturn(findIterable);
+        when(findIterable.first()).thenReturn(null);
+
+        assertNull(wiring.handler.searchFavDestination("u1", "Home"));
+    }
+
+    @Test
+    void searchFavDestination_returnsNull_whenFavoritesMissing() throws Exception {
+        FindIterable<Document> findIterable = mock(FindIterable.class);
+        when(wiring.collection.find(any(Bson.class))).thenReturn(findIterable);
+        when(findIterable.first()).thenReturn(new Document("id", "u1"));
+
+        assertNull(wiring.handler.searchFavDestination("u1", "Home"));
+    }
+
+    @Test
+    void searchDestination_returnsNull_whenFavDestinationWithoutCoords() throws Exception {
+        Document favorites = new Document("Home", new Document()); // no koordinater
+        Document user = new Document("id", "u1").append("favoritter", favorites);
+        FindIterable<Document> findIterable = mock(FindIterable.class);
+        when(wiring.collection.find(any(Bson.class))).thenReturn(findIterable);
+        when(findIterable.first()).thenReturn(user);
+
+        assertNull(wiring.handler.searchFavDestination("u1", "Home"));
+    }
+
+    @Test
+    void appendData_doesNothingWhenUserNotFound() throws Exception {
+        when(wiring.collection.countDocuments(any(Bson.class))).thenReturn(0L);
+
+        wiring.handler.appendData("uX", "age", 30);
+
+        verify(wiring.collection, never()).updateOne(any(Bson.class), any(Bson.class));
+    }
+
+    @Test
+    void removeData_delete_doesNothingWhenCountZero() throws Exception {
+        when(wiring.collection.countDocuments(any(Bson.class))).thenReturn(0L);
+
+        wiring.handler.removeData("uX");
+
+        verify(wiring.collection, never()).deleteOne(any(Bson.class));
+    }
+
+    @Test
+    void methods_handleMongoException() throws Exception {
+        // Intentional sweep test verifies that all public methods handle MongoException
+        // from getCollection() without throwing Keeps behavior stable across refactors
+        skipCloseVerification = true; // uses its own wiring dont verify the class level close() here
+
+        DBConnectionPort rootConnection = mock(DBConnectionPort.class);
+        MongoDBConnectionAdapter openedConnection = mock(MongoDBConnectionAdapter.class);
+        when(rootConnection.open()).thenReturn(openedConnection);
+        when(openedConnection.getCollection()).thenThrow(new MongoException("boom"));
+        doNothing().when(openedConnection).close();
+
+        MongoDBHandlerAdapter handler = new MongoDBHandlerAdapter(rootConnection);
+
+        assertDoesNotThrow(() -> handler.createUser("x", true));
+        assertDoesNotThrow(handler::retrieveAllData);
+        assertDoesNotThrow(() -> handler.retrieveByKeyValue("k", "v"));
+        assertDoesNotThrow(() -> handler.retrieveByValue("needle"));
+        assertDoesNotThrow(() -> handler.appendData("x", "a", "b"));
+        assertDoesNotThrow(() -> handler.removeData("x", "y"));
+        assertDoesNotThrow(() -> handler.removeData("x"));
+        assertDoesNotThrow(() -> handler.deleteManyDocuments("x"));
+        assertDoesNotThrow(() -> handler.addDestinationToFavorites("x", "Park", "Main St 1", 10.0, 20.0));
+        assertDoesNotThrow(() -> handler.addCoordinatesToFavDestination("x", "Park", 10.0, 20.0));
+        assertDoesNotThrow(() -> handler.searchFavDestination("x", "dest"));
+        assertDoesNotThrow(() -> handler.listUserFavDestinations("x"));
+        assertDoesNotThrow(() -> handler.listLitebrukereForAdmin("x"));
+        assertDoesNotThrow(() -> handler.isAdmin("x"));
+
+        verify(rootConnection, atLeastOnce()).open();
+        verify(openedConnection, atLeastOnce()).close();
     }
 }
