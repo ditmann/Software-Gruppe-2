@@ -1,0 +1,88 @@
+@startuml
+
+' https://plantuml.com/class-diagram
+left to right direction
+' Global Layout Configuration
+skinparam class {
+    BorderColor black
+    BackgroundColor lightgrey
+}
+
+package "app" {
+    class "Main"
+}
+
+package "Core" {
+    package "Port" {
+        interface "DBHandlerPort" as DBH_Port
+        interface "DBConnectionPort" as DBC_Port
+        interface "LocationPort" as Loc_Port
+        interface "EnturClientPort" as Entur_Port
+    }
+
+    package "Service" {
+        class "FindBestTripService" as FBT_Service
+        class "TripFileHandler" as TF_Handler
+        class "DBService" as DB_Service
+        class "JourneyPlannerService" as JP_Service
+    }
+
+    package "DTO" {
+        class "TripPartDTO" as TP_DTO
+        class "CoordinateDTO" as C_DTO
+    }
+
+    package "Adapter" {
+        class "RandomLocationAdapter" as RLA_Adapter
+    }
+}
+
+package "Storage" {
+    class JsonDBhandlerAdapter {
+    }
+
+    class MongoDBConnectionAdapter {
+    }
+
+    class MongoDBHandlerAdapter {
+    - list: ArrayList<Document>
+    - idField: String
+    - connectionToDatabase: DBConnection 
+    - listOfDocuments: MongoCollection<Document>
+    }
+}
+
+package "API" {
+    class "EnturHttpClient"
+    class "IpGeolocationAdapter"
+    class "AvandraController"
+}
+
+package "Test" {
+    class "TripFileHandlerTest"
+    class "MongoDBHandlerAdapterTest"
+    class "IpGeolocationAdapterTest"
+    class "RandomLocationTest"
+    class "MongoDBHandlerAdapterIT"
+    class "MongoDBConnectionAdapterTest"
+    class "FindBestTripServiceTest"
+}
+
+' Define package-level connections
+
+"API" --> "Port"
+"API" --> "DTO"
+"API" --> "Service"
+
+"Storage" --> "Port"
+"Storage" --> "DTO"
+
+"Service" --> "Port"
+"Service" --> "DTO"
+
+
+"Test" ..> "Adapter"
+"Test" ..> "DTO"
+"Test" ..> "Service"
+
+@enduml

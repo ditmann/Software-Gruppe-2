@@ -18,6 +18,7 @@ package "Core" {
         class "FindBestTripService"
         class "TripFileHandler"
         class "DBService"
+        class "JourneyPlannerService"
     }
 
     package "DTO" {
@@ -69,8 +70,14 @@ package "Test" {
 "EnturHttpClient"-->"EnturClientPort"
 "IpGeolocationAdapter"-->"LocationPort"
 "IpGeolocationAdapter"-->"CoordinateDTO"
+"AvandraController"-->"CoordinateDTO"
+"AvandraController"-->"TripPartDTO"
+"AvandraController"-->"DBService"
+"AvandraController"-->"FindBestTripService"
+"AvandraController"-->"JourneyPlannerService"
+"AvandraController"-->"TripFileHandler"
 
-'Storage koblinger:
+'Storage:
 "JsonDBhandlerAdapter"-->"DBHandlerPort"
 "JsonDBhandlerAdapter"-->"CoordinateDTO"
 "MongoDBConnectionAdapter"-->"DBConnectionPort"
@@ -78,21 +85,28 @@ package "Test" {
 "MongoDBHandlerAdapter"-->"CoordinateDTO"
 "MongoDBHandlerAdapter"-->"DBConnectionPort"
 
-'Core koblinger:
+'Core:
 '   Adapter:
 "RandomLocationAdapter"-->"LocationPort"
 "RandomLocationAdapter"-->"CoordinateDTO"
+
 '   Port:
 "DBHandlerPort"-->"CoordinateDTO"
 "LocationPort"-->"CoordinateDTO"
+
 '   DTO: Bruker ingen koblinger
+
 '   Service:
 "FindBestTripService"-->"TripPartDTO"
 "TripFileHandler"-->"TripPartDTO"
 "TripFileHandler"-->"CoordinateDTO"
 "TripFileHandler"-->"EnturClientPort"
+"JourneyPlannerService"-->"CoordinateDTO"
+"JourneyPlannerService"-->"LocationPort"
+"DBService"-->"DBHandlerPort"
+"DBService"-->"CoordinateDTO"
 
-'Test kobling:
+'Test:
 "TripFileHandlerTest"-->"CoordinateDTO"
 "TripFileHandlerTest"-->"TripPartDTO"
 "TripFileHandlerTest"-->"EnturClientPort"
@@ -112,7 +126,7 @@ package "Test" {
 "FindBestTripServiceTest"-->"FindBestTripService"
 "FindBestTripServiceTest"-->"TripPartDTO"
 
-
+"Storage" ..> "Port"
 
 
 @enduml
