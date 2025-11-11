@@ -57,11 +57,22 @@ public class APIMain {
                 System.out.printf("%d) %s%n", i + 1, allUserIds.get(i));
             }
 
-            System.out.print("\nSelect user number to log in as (0 to exit): ");
-            int selection = readInt(scanner, 0, allUserIds.size());
-            if (selection == 0) {
+            System.out.print("\nSelect user number to log in as (9 to exit): ");
+            String loginChoice = scanner.nextLine().trim();
+            if ("9".equals(loginChoice)) {
                 appRunning = false;
                 break;
+            }
+            int selection;
+            try {
+                selection = Integer.parseInt(loginChoice);
+            } catch (NumberFormatException nfe) {
+                System.out.println("Invalid choice, try again.");
+                continue;
+            }
+            if (selection < 1 || selection > allUserIds.size()) {
+                System.out.println("Enter a number between 1 and " + allUserIds.size() + " (or 9 to exit).");
+                continue;
             }
 
             String userId = allUserIds.get(selection - 1);
@@ -86,26 +97,44 @@ public class APIMain {
                 }
             }
 
+            // Lite user: lock into the "Travel now" loop (destinations only, or log out with 0)
+            if (!isAdmin) {
+                try {
+                    liteTravelLoop(controller, scanner, userId);
+                    System.out.println("Logged out.\n");
+                } catch (Exception e) {
+                    System.err.println("Error: " + e.getMessage());
+                }
+                continue;
+            }
+
+            // Admin user menu
             boolean userLoggedIn = true;
             while (userLoggedIn) {
                 System.out.println("\n--- Menu ---");
-                System.out.println("1. View destinations");
+                List<String> destinations;
+                try {
+                    destinations = controller.listUserDestinations(userId);
+                } catch (Exception e) {
+                    System.err.println("Error: " + e.getMessage());
+                    destinations = Collections.emptyList();
+                }
+
+
+                printDestinationsNoNumbers(destinations, userId);
+
                 System.out.println("2. Travel now");
                 if (isAdmin) {
                     System.out.println("3. Manage destinations (self or lite user)");
                 }
-                System.out.println("4. Log out");
-                System.out.println("0. Exit");
+                System.out.println("0. Log out");
+                System.out.println("9. Exit");
                 System.out.print("Select option: ");
 
                 String choice = scanner.nextLine().trim();
 
                 try {
                     switch (choice) {
-                        case "1":
-                            showUserDestinations(controller, userId);
-                            break;
-
                         case "2":
                             planTrip(controller, scanner, userId);
                             break;
@@ -114,12 +143,12 @@ public class APIMain {
                             if (isAdmin) manageDestinationsMenu(controller, scanner, userId, litebrukere);
                             break;
 
-                        case "4":
+                        case "0":
                             userLoggedIn = false;
                             System.out.println("Logged out.\n");
                             break;
 
-                        case "0":
+                        case "9":
                             userLoggedIn = false;
                             appRunning = false;
                             System.out.println("Exiting application.");
@@ -139,8 +168,60 @@ public class APIMain {
         scanner.close();
     }
 
+    // Lite user travel-only loop
+    private static void liteTravelLoop(AvandraController controller, Scanner scanner, String userId) throws Exception {
+        while (true) {
+            List<String> destinations;
+            try {
+                destinations = controller.listUserDestinations(userId);
+            } catch (Exception e) {
+                System.err.println("Error: " + e.getMessage());
+                destinations = Collections.emptyList();
+            }
 
-     //  Admin management sub-menu
+            if (destinations == null || destinations.isEmpty()) {
+                System.out.print("You have no saved destinations. Enter a destination name (or 0 to log out): ");
+                String destName = scanner.nextLine().trim();
+                if ("0".equals(destName)) return;
+                if (destName.isEmpty()) {
+                    System.out.println("Please enter a destination name or 0 to log out.");
+                    continue;
+                }
+                runTrip(controller, userId, destName);
+                continue;
+            }
+
+            System.out.println("\nChoose a destination (0 to log out):");
+            for (int i = 0; i < destinations.size(); i++) {
+                System.out.printf(" %d) %s%n", i + 1, destinations.get(i));
+            }
+            System.out.print("Select option: ");
+            int sel = readInt(scanner, 0, destinations.size());
+            if (sel == 0) return;
+
+            String destName = destinations.get(sel - 1);
+            runTrip(controller, userId, destName);
+            // loop back to allow choosing another destination
+        }
+    }
+
+    private static void runTrip(AvandraController controller, String userId, String destName) throws Exception {
+        List<TripPartDTO> trip;
+        try {
+            trip = controller.bestJourney(userId, destName);
+        } catch (Exception e) {
+            System.out.println("No trips atm, try again later.");
+            System.err.println("Error: " + e.getMessage());
+            return;
+        }
+        if (trip == null || trip.isEmpty()) {
+            System.out.println("No trips atm, try again later.");
+            return;
+        }
+        printTripTableAscii(trip, "Trip to " + destName);
+    }
+
+    //  Admin management sub-menu
     private static void manageDestinationsMenu(AvandraController controller, Scanner scanner,
                                                String adminId, List<String> litebrukere) throws Exception {
         while (true) {
@@ -179,21 +260,14 @@ public class APIMain {
         while (true) {
             String who = (targetUserId == null) ? "your own" : targetUserId + "'s";
             System.out.println("\n--- Managing " + who + " destinations ---");
-            System.out.println("1. View destinations");
-            System.out.println("2. Add destination");
-            System.out.println("3. Remove destination");
+            System.out.println("1. Add destination");
+            System.out.println("2. Remove destination");
             System.out.println("0. Back");
             System.out.print("Select option: ");
 
             String choice = scanner.nextLine().trim();
             switch (choice) {
                 case "1":
-                    List<String> list = (targetUserId == null)
-                            ? controller.listUserDestinations(adminId)
-                            : controller.adminListLiteUserDestinations(adminId, targetUserId);
-                    printDestinations(list, targetUserId == null ? adminId : targetUserId);
-                    break;
-                case "2":
                     addFavorite(controller, scanner, adminId, targetUserId);
                     printDestinations(
                             (targetUserId == null)
@@ -201,7 +275,12 @@ public class APIMain {
                                     : controller.adminListLiteUserDestinations(adminId, targetUserId),
                             targetUserId == null ? adminId : targetUserId);
                     break;
-                case "3":
+                case "2":
+                    printDestinations(
+                            (targetUserId == null)
+                                    ? controller.listUserDestinations(adminId)
+                                    : controller.adminListLiteUserDestinations(adminId, targetUserId),
+                            targetUserId == null ? adminId : targetUserId);
                     removeFavorite(controller, scanner, adminId, targetUserId);
                     printDestinations(
                             (targetUserId == null)
@@ -234,33 +313,50 @@ public class APIMain {
         }
     }
 
+
+    private static void printDestinationsNoNumbers(java.util.List<String> destinations, String userId) {
+        if (destinations == null || destinations.isEmpty()) {
+            System.out.println("No destinations found for " + userId + ".");
+        } else {
+            System.out.println("Destinations for " + userId + ":");
+            for (String d : destinations) {
+                System.out.printf(" - %s%n", d);
+            }
+        }
+    }
+
     private static void planTrip(AvandraController controller, Scanner scanner, String userId) throws Exception {
         List<String> destinations = controller.listUserDestinations(userId);
 
         String destName;
         if (destinations == null || destinations.isEmpty()) {
-            System.out.print("You have no saved destinations. Enter a destination name: ");
-            destName = scanner.nextLine().trim();
+            System.out.print("You have no saved destinations. Enter a destination name (or 0 to cancel): ");
+            String input = scanner.nextLine().trim();
+            if ("0".equals(input)) return;
+            destName = input;
         } else {
-            System.out.println("\nChoose a destination:");
+            System.out.println("\nChoose a destination (0 to cancel):");
             for (int i = 0; i < destinations.size(); i++) {
                 System.out.printf(" %d) %s%n", i + 1, destinations.get(i));
             }
-            System.out.println(" 0) Type a custom destination name");
             System.out.print("Select option: ");
 
             int sel = readInt(scanner, 0, destinations.size());
-            if (sel == 0) {
-                System.out.print("Enter destination name: ");
-                destName = scanner.nextLine().trim();
-            } else {
-                destName = destinations.get(sel - 1);
-            }
+            if (sel == 0) return;
+            destName = destinations.get(sel - 1);
         }
 
-        List<TripPartDTO> trip = controller.bestJourney(userId, destName);
+        List<TripPartDTO> trip;
+        try {
+            trip = controller.bestJourney(userId, destName);
+        } catch (Exception e) {
+            System.out.println("No trips atm, try again later.");
+            System.err.println("Error: " + e.getMessage());
+            return;
+        }
+
         if (trip == null || trip.isEmpty()) {
-            System.out.println("No trip could be planned to " + destName);
+            System.out.println("No trips atm, try again later.");
             return;
         }
 
@@ -284,13 +380,26 @@ public class APIMain {
 
     private static void removeFavorite(AvandraController controller, Scanner scanner,
                                        String adminId, String targetUserId) throws Exception {
-        System.out.print("Enter destination name to remove: ");
-        String toRemove = scanner.nextLine().trim();
-        controller.adminRemoveFavorite(adminId, targetUserId, toRemove);
-        System.out.println("Destination removed successfully!");
+        while (true) {
+            System.out.print("Enter destination name to remove (or 0 to cancel): ");
+            String toRemove = scanner.nextLine().trim();
+
+            if ("0".equals(toRemove)) {
+                System.out.println("Cancelled. Going back.");
+                return;
+            }
+            if (toRemove.isEmpty()) {
+                System.out.println("Please enter a destination name or 0 to cancel.");
+                continue;
+            }
+
+            controller.adminRemoveFavorite(adminId, targetUserId, toRemove);
+            System.out.println("Destination removed successfully!");
+            return; // done
+        }
     }
 
-    // Utility helpers
+
     private static int readInt(Scanner scanner, int min, int max) {
         while (true) {
             try {
@@ -301,14 +410,9 @@ public class APIMain {
         }
     }
 
-    /* ===========================================================
-       Pretty trip table (ASCII) — stop names + walk target (CHATGPT FOR LOGIC ON THIS ONE)
-       =========================================================== */
-
     private static void printTripTableAscii(List<TripPartDTO> trip, String title) {
         DateTimeFormatter HHMM = DateTimeFormatter.ofPattern("HH:mm");
 
-        // Compute overall start (first dep expected/aimed) and end (last arr expected/aimed)
         LocalDateTime tripStart = null;
         LocalDateTime tripEnd = null;
 
@@ -331,22 +435,22 @@ public class APIMain {
 
         System.out.println();
         System.out.println("=== " + (title == null ? "Trip plan" : title) + headerSuffix + " ===");
-        System.out.println(repeat('-', 95));
-        System.out.printf("%-3s %-8s %-12s %-24s %-10s %-24s %-10s %-9s%n",
-                "#", "MODE", "LINE", "FROM (stop)", "DEPART", "TO (stop)", "ARRIVE", "DIST");
-        System.out.println(repeat('-', 95));
+        System.out.println(repeat('-', 120));
+        // No numbering column
+        System.out.printf("%-8s %-10s %-16s %-22s %-10s %-22s %-10s %-9s%n",
+                "MODE", "ROUTE", "LINE", "FROM (stop)", "DEPART", "TO (stop)", "ARRIVE", "DIST");
+        System.out.println(repeat('-', 120));
 
         for (int i = 0; i < trip.size(); i++) {
             TripPartDTO p = trip.get(i);
 
             String mode = readableMode(p.getLegTransportMode());
+            String route = firstNonEmptyStr(p.getLineNumber(), p.getLineName());
             String line = joinNonEmpty(p.getLineName(), p.getLineNumber(), p.getLineOwner());
 
-            // Use stop NAMES (no IDs)
             String fromStop = safeFromStopName(p);
             String toStop   = safeToStopName(p);
 
-            // For WALK/FOOT legs, show where you need to walk TO (next leg's origin if present)
             if (isWalkMode(p.getLegTransportMode())) {
                 String nextOrigin = nextLegOriginStopName(trip, i);
                 if (!nextOrigin.isBlank()) {
@@ -359,29 +463,21 @@ public class APIMain {
 
             String dist = p.getTravelDistance() > 0 ? (p.getTravelDistance() + " m") : "";
 
-            System.out.printf("%-3d %-8s %-12s %-24s %-10s %-24s %-10s %-9s%n",
-                    (i + 1),
+            System.out.printf("%-8s %-10s %-16s %-22s %-10s %-22s %-10s %-9s%n",
                     truncate(mode, 8),
-                    truncate(line, 12),
-                    truncate(fromStop, 24),
+                    truncate(route, 10),
+                    truncate(line, 16),
+                    truncate(fromStop, 22),
                     dep,
-                    truncate(toStop, 24),
+                    truncate(toStop, 22),
                     arr,
                     dist);
         }
 
-        System.out.println(repeat('-', 95));
+        System.out.println(repeat('-', 120));
     }
 
-    /* ===========================================================
-       Helpers for stop names + walk target
-       =========================================================== */
-
-    // Prefer stop name fields you already have (platform *names* here); never print IDs.
     private static String safeFromStopName(TripPartDTO p) {
-        // Your DTO already exposes platform *names*:
-        // previously you printed: p.getDepartPlatformName() + " (" + p.getDepartPlatformId() + ")"
-        // We now just take the name and avoid the ID entirely.
         return nullToEmpty(p.getDepartPlatformName());
     }
 
@@ -389,7 +485,6 @@ public class APIMain {
         return nullToEmpty(p.getArrivePlatformName());
     }
 
-    // Where do we walk to? Prefer next leg's FROM stop; otherwise this leg's TO stop.
     private static String nextLegOriginStopName(List<TripPartDTO> trip, int i) {
         if (i + 1 < trip.size()) {
             TripPartDTO next = trip.get(i + 1);
@@ -402,10 +497,6 @@ public class APIMain {
     private static String nullToEmpty(String s) {
         return (s == null) ? "" : s.trim();
     }
-
-    /* ===========================================================
-       Utility helpers for printing
-       =========================================================== */
 
     private static LocalDateTime firstNonNull(LocalDateTime a, LocalDateTime b) {
         return a != null ? a : b;
@@ -434,7 +525,7 @@ public class APIMain {
             case "tram" -> "Tram";
             case "metro" -> "Metro";
             case "ferry" -> "Ferry";
-            case "walk", "walking", "foot", "footpath" -> "Walk"; // normalize “Foot” etc.
+            case "walk", "walking", "foot", "footpath" -> "Walk";
             default -> capitalize(m);
         };
     }
@@ -459,6 +550,13 @@ public class APIMain {
             }
         }
         return sb.toString();
+    }
+
+    private static String firstNonEmptyStr(String... vals) {
+        for (String v : vals) {
+            if (v != null && !v.isBlank()) return v.trim();
+        }
+        return "";
     }
 
     private static String bracket(String v) {

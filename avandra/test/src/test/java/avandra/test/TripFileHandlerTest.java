@@ -3,7 +3,6 @@ package avandra.test;
 import avandra.core.DTO.CoordinateDTO;
 import avandra.core.DTO.TripPartDTO;
 import avandra.core.port.EnturClientPort;
-import avandra.core.port.EnturClientPort;
 import avandra.core.service.TripFileHandler;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

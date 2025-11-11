@@ -1,29 +1,29 @@
 {
   "request" : {
-    "fromLat" : 59.211299896240234,
-    "fromLon" : 10.936300277709961,
-    "toLat" : 59.2822,
-    "toLon" : 11.1067,
+    "fromLat" : 59.1327018737793,
+    "fromLon" : 11.34469985961914,
+    "toLat" : 59.2831,
+    "toLon" : 11.1099,
     "numPatterns" : 3
   },
   "trip" : {
     "tripPatterns" : [ {
-      "startTime" : "2025-11-10T10:22:08+01:00",
-      "duration" : 2106,
-      "walkDistance" : 709.36,
+      "startTime" : "2025-11-11T12:30:11+01:00",
+      "duration" : 3784,
+      "walkDistance" : 943.91,
       "legs" : [ {
         "mode" : "foot",
-        "distance" : 565.28,
+        "distance" : 776.14,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null
       }, {
         "mode" : "bus",
-        "distance" : 14173.27,
+        "distance" : 4495.55,
         "line" : {
-          "id" : "OST:Line:1_1",
-          "name" : "Glomma vest",
-          "publicCode" : "1",
+          "id" : "OST:Line:1_34",
+          "name" : "Remmen-Sykehuset",
+          "publicCode" : "34",
           "transportMode" : "bus",
           "authority" : {
             "name" : "Østfold kollektivtrafikk"
@@ -31,44 +31,112 @@
         },
         "fromEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:2850",
-            "name" : "Fredrikstad bussterminal"
+            "id" : "NSR:Quay:4692",
+            "name" : "Odde bro"
           },
-          "aimedDepartureTime" : "2025-11-10T10:30:00+01:00",
-          "expectedDepartureTime" : "2025-11-10T10:30:00+01:00"
+          "aimedDepartureTime" : "2025-11-11T12:41:00+01:00",
+          "expectedDepartureTime" : "2025-11-11T12:41:00+01:00"
         },
         "toEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:5184",
-            "name" : "Sarpsborg bussterminal"
+            "id" : "NSR:Quay:107567",
+            "name" : "Halden stasjon"
           },
-          "aimedDepartureTime" : "2025-11-10T10:55:00+01:00",
-          "expectedDepartureTime" : "2025-11-10T10:55:00+01:00"
+          "aimedDepartureTime" : "2025-11-11T12:53:00+01:00",
+          "expectedDepartureTime" : "2025-11-11T12:53:00+01:00"
         }
       }, {
         "mode" : "foot",
-        "distance" : 144.08,
+        "distance" : 51.6,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "rail",
+        "distance" : 27098.47,
+        "line" : {
+          "id" : "VYG:Line:RE20",
+          "name" : "Oslo S-Halden-Göteborg-Malmö (X-Border)",
+          "publicCode" : "RE20",
+          "transportMode" : "rail",
+          "authority" : {
+            "name" : "Vy"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:316",
+            "name" : "Halden stasjon"
+          },
+          "aimedDepartureTime" : "2025-11-11T13:03:00+01:00",
+          "expectedDepartureTime" : "2025-11-11T13:03:00+01:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:149",
+            "name" : "Sarpsborg stasjon"
+          },
+          "aimedDepartureTime" : "2025-11-11T13:25:00+01:00",
+          "expectedDepartureTime" : "2025-11-11T13:25:00+01:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 100.3,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "bus",
+        "distance" : 805.16,
+        "line" : {
+          "id" : "OST:Line:1_13",
+          "name" : "Kalnes - Blessom",
+          "publicCode" : "13",
+          "transportMode" : "bus",
+          "authority" : {
+            "name" : "Østfold kollektivtrafikk"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:2221",
+            "name" : "Sarpsborg stasjon"
+          },
+          "aimedDepartureTime" : "2025-11-11T13:30:00+01:00",
+          "expectedDepartureTime" : "2025-11-11T13:30:00+01:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:4477",
+            "name" : "Sarpsborg torg"
+          },
+          "aimedDepartureTime" : "2025-11-11T13:33:00+01:00",
+          "expectedDepartureTime" : "2025-11-11T13:33:00+01:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 15.87,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null
       } ]
     }, {
-      "startTime" : "2025-11-10T10:24:02+01:00",
-      "duration" : 2472,
-      "walkDistance" : 540.59,
+      "startTime" : "2025-11-11T12:30:11+01:00",
+      "duration" : 3814,
+      "walkDistance" : 1651.3400000000001,
       "legs" : [ {
         "mode" : "foot",
-        "distance" : 396.51,
+        "distance" : 776.14,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null
       }, {
         "mode" : "bus",
-        "distance" : 17477.25,
+        "distance" : 4495.55,
         "line" : {
-          "id" : "OST:Line:1_2",
-          "name" : "Fredrikstad rv.22  Sarpsborg ny",
-          "publicCode" : "2",
+          "id" : "OST:Line:1_34",
+          "name" : "Remmen-Sykehuset",
+          "publicCode" : "34",
           "transportMode" : "bus",
           "authority" : {
             "name" : "Østfold kollektivtrafikk"
@@ -76,44 +144,78 @@
         },
         "fromEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:4024",
-            "name" : "Nygata"
+            "id" : "NSR:Quay:4692",
+            "name" : "Odde bro"
           },
-          "aimedDepartureTime" : "2025-11-10T10:30:00+01:00",
-          "expectedDepartureTime" : "2025-11-10T10:30:00+01:00"
+          "aimedDepartureTime" : "2025-11-11T12:41:00+01:00",
+          "expectedDepartureTime" : "2025-11-11T12:41:00+01:00"
         },
         "toEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:5184",
-            "name" : "Sarpsborg bussterminal"
+            "id" : "NSR:Quay:107567",
+            "name" : "Halden stasjon"
           },
-          "aimedDepartureTime" : "2025-11-10T11:03:00+01:00",
-          "expectedDepartureTime" : "2025-11-10T11:03:00+01:00"
+          "aimedDepartureTime" : "2025-11-11T12:53:00+01:00",
+          "expectedDepartureTime" : "2025-11-11T12:53:00+01:00"
         }
       }, {
         "mode" : "foot",
-        "distance" : 144.08,
+        "distance" : 51.6,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "rail",
+        "distance" : 27098.47,
+        "line" : {
+          "id" : "VYG:Line:RE20",
+          "name" : "Oslo S-Halden-Göteborg-Malmö (X-Border)",
+          "publicCode" : "RE20",
+          "transportMode" : "rail",
+          "authority" : {
+            "name" : "Vy"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:316",
+            "name" : "Halden stasjon"
+          },
+          "aimedDepartureTime" : "2025-11-11T13:03:00+01:00",
+          "expectedDepartureTime" : "2025-11-11T13:03:00+01:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:149",
+            "name" : "Sarpsborg stasjon"
+          },
+          "aimedDepartureTime" : "2025-11-11T13:25:00+01:00",
+          "expectedDepartureTime" : "2025-11-11T13:25:00+01:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 823.6,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null
       } ]
     }, {
-      "startTime" : "2025-11-10T10:32:08+01:00",
-      "duration" : 2106,
-      "walkDistance" : 709.36,
+      "startTime" : "2025-11-11T12:53:15+01:00",
+      "duration" : 5160,
+      "walkDistance" : 1584.8899999999999,
       "legs" : [ {
         "mode" : "foot",
-        "distance" : 565.28,
+        "distance" : 1569.02,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null
       }, {
         "mode" : "bus",
-        "distance" : 14173.27,
+        "distance" : 16735.23,
         "line" : {
-          "id" : "OST:Line:1_1",
-          "name" : "Glomma vest",
-          "publicCode" : "1",
+          "id" : "OST:Line:1_630",
+          "name" : "Halden-Fredrikstad-Moss",
+          "publicCode" : "630",
           "transportMode" : "bus",
           "authority" : {
             "name" : "Østfold kollektivtrafikk"
@@ -121,23 +223,51 @@
         },
         "fromEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:2850",
-            "name" : "Fredrikstad bussterminal"
+            "id" : "NSR:Quay:4415",
+            "name" : "Remmen"
           },
-          "aimedDepartureTime" : "2025-11-10T10:40:00+01:00",
-          "expectedDepartureTime" : "2025-11-10T10:40:00+01:00"
+          "aimedDepartureTime" : "2025-11-11T13:15:00+01:00",
+          "expectedDepartureTime" : "2025-11-11T13:15:00+01:00"
         },
         "toEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:5184",
-            "name" : "Sarpsborg bussterminal"
+            "id" : "NSR:Quay:2781",
+            "name" : "Skjeberg bensin"
           },
-          "aimedDepartureTime" : "2025-11-10T11:05:00+01:00",
-          "expectedDepartureTime" : "2025-11-10T11:05:00+01:00"
+          "aimedDepartureTime" : "2025-11-11T13:29:00+01:00",
+          "expectedDepartureTime" : "2025-11-11T13:29:00+01:00"
+        }
+      }, {
+        "mode" : "bus",
+        "distance" : 11496.62,
+        "line" : {
+          "id" : "OST:Line:1_131",
+          "name" : "Sarpsborg-Kalaveien-Kvastebyen",
+          "publicCode" : "131",
+          "transportMode" : "bus",
+          "authority" : {
+            "name" : "Østfold kollektivtrafikk"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:2781",
+            "name" : "Skjeberg bensin"
+          },
+          "aimedDepartureTime" : "2025-11-11T13:59:00+01:00",
+          "expectedDepartureTime" : "2025-11-11T13:59:00+01:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:4477",
+            "name" : "Sarpsborg torg"
+          },
+          "aimedDepartureTime" : "2025-11-11T14:19:00+01:00",
+          "expectedDepartureTime" : "2025-11-11T14:19:00+01:00"
         }
       }, {
         "mode" : "foot",
-        "distance" : 144.08,
+        "distance" : 15.87,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null

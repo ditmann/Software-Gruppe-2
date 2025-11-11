@@ -10,7 +10,6 @@ import org.bson.Document;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -98,8 +97,13 @@ public class AvandraController {
                 tripPatternFileHandler.planTrip(startAndEndCoordinates, defaultRoutePatternCount, defaultIncludeRequestMetadata);
 
         // pick the best alternative using the selection service
-        return bestTripSelectionService.pickBest(routeAlternatives);
+        if (routeAlternatives == null || routeAlternatives.isEmpty()) {
+            return java.util.Collections.emptyList();
+        }
+        List<TripPartDTO> best = bestTripSelectionService.pickBest(routeAlternatives);
+        return (best != null) ? best : java.util.Collections.emptyList();
     }
+
 
     // Read only destinations for any user
 
