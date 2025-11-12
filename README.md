@@ -12,9 +12,8 @@ Avandra is a Java-based travel assistant system for planning public transport jo
 1) Install **Java 21+**  
 2) Download the ZIP from **GitHub Actions → latest successful run → Artifacts**  
 3) Unzip and run:
-   - macOS/Linux: `./run.sh` or `java -jar Avandra.jar`
-   - Windows: `run.bat` or `java -jar Avandra.jar`
-
+   avandra.exe
+   
 > The ZIP includes a runnable JAR and scripts. Internet is required for live journey data.
 
 #### Option B — Run from source (APIMain)
