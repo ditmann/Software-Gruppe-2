@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
- * tests for the grouped TripFileHandler
+ * tests for  TripFileHandler
  *
  * - takes a List<CoordinateDTO> [from, to]
  * - calls Entur with the right args

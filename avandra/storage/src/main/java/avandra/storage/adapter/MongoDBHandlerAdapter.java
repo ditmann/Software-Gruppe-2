@@ -62,8 +62,8 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
     ///  ----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|----^^*****^^----|
     /**
      * Creates a new document in the collection which represents a user, with all required fields
-     * @param userID
-     * @param adminUser
+     * @param userID unique id for the user in the db
+     * @param adminUser true if the user should be admin else false
      */
     public void createUser(String userID, boolean adminUser){
         try (MongoDBConnectionAdapter connection = (MongoDBConnectionAdapter) mongoDBConnectionPort.open()) {
@@ -100,12 +100,11 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
     }
 
     /**
-     *
-     * @param userID
-     * @param destinationName
-     * @param address
-     * @param latitude
-     * @param longitude
+     * @param userID id of the user we update
+     * @param destinationName key or name for the favorite
+     * @param address human readable street address
+     * @param latitude latitude in decimal degrees
+     * @param longitude longitude in decimal degrees
      */
     public void addDestinationToFavorites(String userID, String destinationName, String address, double latitude, double longitude) {
 
@@ -133,11 +132,10 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
 
 
     /**
-     *
-     * @param userID
-     * @param destinationName
-     * @param latitude
-     * @param longitude
+     * @param userID id of the user we update
+     * @param destinationName name of the favorite we add coordinates to
+     * @param latitude latitude
+     * @param longitude longitude
      */
     public void addCoordinatesToFavDestination(String userID, String destinationName, double latitude, double longitude) {
 
@@ -194,10 +192,9 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
 
 
     /**
-     *
-     * @param userID
-     * @param destinationID
-     * @return
+     * @param userID id of the user we search in
+     * @param destinationID name or key of the favorite we want
+     * @return coordinates of the favorite or null if not found
      */
     public CoordinateDTO searchFavDestination(String userID, String destinationID){
         String coordinateFieldName = "koordinater";
@@ -247,10 +244,9 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
     }
 
     /**
-     *
-     * @param key
-     * @param value
-     * @return Returns all docs which contain the specified key:value in an array
+     * @param key the field we filter on
+     * @param value the value we want to match
+     * @return all docs where key equals value
      */
     public ArrayList<Document> retrieveByKeyValue(String key, String value){
         ArrayList<Document> out = new ArrayList<>();
@@ -286,9 +282,9 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
     /**
      * Identifies a doc with the value of the id-key, adds a new key:value at end
      * OR overwrites existing value if key already exists
-     * @param userID
-     * @param addKey
-     * @param addValue is Object to allow appending Documents, ArrayLists and Strings
+     * @param userID id of the user to update
+     * @param addKey key we add or overwrite
+     * @param addValue can be a Document List or String that we set as the value
      */
     public void appendData(String userID, String addKey, Object addValue) {
 
@@ -317,8 +313,8 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
 
     /**
      * Removes key and value in specified doc at specified key, if it exists
-     * @param userID
-     * @param keyToRemove
+     * @param userID id of the user we want to change
+     * @param keyToRemove the key to remove
      */
     public void removeData(String userID, String keyToRemove) {
 
@@ -348,9 +344,9 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
 
     /**
      * deletes a key for a user, (userid, the key to remove, the type of destination[path])
-     * @param userID
-     * @param keyToRemove
-     * @param destinationType
+     * @param userID id of the user
+     * @param keyToRemove the key to remove
+     * @param destinationType the section or path like favoritter or planlagte reiser
      */
     public void removeData(String userID, String keyToRemove, String destinationType) {
 
@@ -382,10 +378,10 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
 
     /**
      * deletes a key for a user, (userid, the key to remove, the type of destination[path], the specific destination[path])
-     * @param userID
-     * @param keyToRemove
-     * @param destinationType
-     * @param destinationKey
+     * @param userID id of the user
+     * @param keyToRemove the key to remove
+     * @param destinationType top level path like favoritter
+     * @param destinationKey specific destination name under that path
      */
     public void removeData(String userID, String keyToRemove, String destinationType, String destinationKey) {
 
@@ -416,7 +412,7 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
 
     /**
      * Deletes the first document with a specified ID //start here
-     * @param userID
+     * @param userID id of the user to delete
      */
     public void removeData(String userID) {
 
@@ -444,9 +440,8 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
     }
 
     /**
-     *
-     * @param userId
-     * @return
+     * @param userId id of the user
+     * @return list of favorite destination names for the user
      */
     @Override
     public List<String> listUserFavDestinations(String userId) {
@@ -474,9 +469,8 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
     }
 
     /**
-     *
-     * @param adminId
-     * @return
+     * @param adminId id of the admin user
+     * @return list of litebrukere names attached to this admin
      */
     @Override
     public List<String> listLitebrukereForAdmin(String adminId) {
@@ -510,9 +504,8 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
     }
 
     /**
-     *
-     * @param userId
-     * @return
+     * @param userId id to check
+     * @return true if this user is an admin
      */
     @Override
     public boolean isAdmin(String userId) {
@@ -540,7 +533,7 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
     /**
      * Deletes all documents with a specified ID
      * necessary for developers in case of duplicate ID entries
-     * @param userID
+     * @param userID id of the user we want to remove everywhere
      */
     public void deleteManyDocuments(String userID) {
         try (MongoDBConnectionAdapter connection = (MongoDBConnectionAdapter) mongoDBConnectionPort.open()) {
@@ -571,8 +564,8 @@ public class MongoDBHandlerAdapter implements DBHandlerPort {
      * Searches the entire collection for a term and adds the containing doc to the return array
      * if alot of data this will take alot of processing time
      * useful for developers in testing
-     * @param searchTerm
-     * @return
+     * @param searchTerm a value or key to look for across documents
+     * @return every document that contains the value or key or an empty list if nothing matched
      */
     public ArrayList<Document> retrieveByValue(String searchTerm) {
         ArrayList<Document> out = new ArrayList<>();

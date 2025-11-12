@@ -3,15 +3,17 @@ package avandra.app;
 import avandra.Controllers.AvandraController;
 import avandra.api.EnturHttpClient;
 import avandra.api.IpGeolocationAdapter;
+import avandra.core.adapter.RandomLocationAdapter;
 import avandra.core.DTO.TripPartDTO;
 import avandra.core.port.DBHandlerPort;
 import avandra.core.port.EnturClientPort;
+import avandra.core.port.LocationPort;
 import avandra.core.service.DBService;
 import avandra.core.service.FindBestTripService;
 import avandra.core.service.JourneyPlannerService;
+import avandra.core.service.TripFileHandler;
 import avandra.storage.adapter.MongoDBConnectionAdapter;
 import avandra.storage.adapter.MongoDBHandlerAdapter;
-import avandra.core.service.TripFileHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.time.Duration;
@@ -27,20 +29,23 @@ public class APIMain {
         DBHandlerPort mongoHandler = new MongoDBHandlerAdapter(new MongoDBConnectionAdapter());
         DBService dbService = new DBService(mongoHandler);
 
-        FindBestTripService findBestTripService = new FindBestTripService(1,8,2);
-        JourneyPlannerService journeyPlannerService =
-                new JourneyPlannerService(new IpGeolocationAdapter("HIOF-AVANDRA"), dbService);
+        FindBestTripService findBestTripService = new FindBestTripService(1, 8, 2);
 
         EnturClientPort enturClient = new EnturHttpClient("HIOF-AVANDRA");
         ObjectMapper mapper = new ObjectMapper();
         TripFileHandler tripFileHandler = new TripFileHandler(enturClient, mapper);
 
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("=== Welcome to Avandra ===\n");
+        System.out.println("Choose location adapter (used to detect your current position):");
+        LocationPort locationPort = chooseLocationPort(scanner);
+        System.out.println("Using: " + locationPort.getClass().getSimpleName());
+
+        JourneyPlannerService journeyPlannerService = new JourneyPlannerService(locationPort, dbService);
+
         AvandraController controller = new AvandraController(
                 dbService, tripFileHandler, findBestTripService, journeyPlannerService
         );
-
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("=== Welcome to Avandra ===");
 
         boolean appRunning = true;
         while (appRunning) {
@@ -91,8 +96,8 @@ public class APIMain {
                 }
                 if (!litebrukere.isEmpty()) {
                     System.out.println("Your lite users:");
-                    for (int i = 0; i < litebrukere.size(); i++) {
-                        System.out.printf(" - %s%n", litebrukere.get(i));
+                    for (String lite : litebrukere) {
+                        System.out.printf(" - %s%n", lite);
                     }
                 }
             }
@@ -119,7 +124,6 @@ public class APIMain {
                     System.err.println("Error: " + e.getMessage());
                     destinations = Collections.emptyList();
                 }
-
 
                 printDestinationsNoNumbers(destinations, userId);
 
@@ -166,6 +170,42 @@ public class APIMain {
         }
 
         scanner.close();
+    }
+
+    // Location adapter chooser
+    private static LocationPort chooseLocationPort(Scanner scanner) {
+        while (true) {
+            System.out.println("  1) IP-based (IpGeolocationAdapter via ipapi.co)");
+            System.out.println("  2) Random/Fixed (RandomLocationAdapter)");
+            System.out.print("Select option: ");
+            String choice = scanner.nextLine().trim();
+
+            try {
+                switch (choice) {
+                    case "1":
+                        return new IpGeolocationAdapter("HIOF-AVANDRA");
+                    case "2":
+                            System.out.println("Using random Oslo-ish  each call.");
+                            return new RandomLocationAdapter();
+
+                    default:
+                        System.out.println("Invalid choice, please try again.\n");
+                }
+            } catch (Exception e) {
+                System.out.println("Unexpected error selecting adapter: " + e.getMessage());
+            }
+        }
+    }
+
+    private static double readDouble(Scanner scanner, double min, double max, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            try {
+                double value = Double.parseDouble(scanner.nextLine().trim().replace(',', '.'));
+                if (value >= min && value <= max) return value;
+            } catch (NumberFormatException ignored) {}
+            System.out.println("Please enter a number between " + min + " and " + max + ".");
+        }
     }
 
     // Lite user travel-only loop
@@ -313,7 +353,6 @@ public class APIMain {
         }
     }
 
-
     private static void printDestinationsNoNumbers(java.util.List<String> destinations, String userId) {
         if (destinations == null || destinations.isEmpty()) {
             System.out.println("No destinations found for " + userId + ".");
@@ -371,9 +410,9 @@ public class APIMain {
         System.out.print("Enter address: ");
         String address = scanner.nextLine().trim();
         System.out.print("Enter latitude: ");
-        double lat = Double.parseDouble(scanner.nextLine().trim());
+        double lat = Double.parseDouble(scanner.nextLine().trim().replace(',', '.'));
         System.out.print("Enter longitude: ");
-        double lon = Double.parseDouble(scanner.nextLine().trim());
+        double lon = Double.parseDouble(scanner.nextLine().trim().replace(',', '.'));
         controller.adminAddFavorite(adminId, targetUserId, newDest, address, lat, lon);
         System.out.println("Destination added successfully!");
     }
@@ -398,7 +437,6 @@ public class APIMain {
             return; // done
         }
     }
-
 
     private static int readInt(Scanner scanner, int min, int max) {
         while (true) {
@@ -449,7 +487,7 @@ public class APIMain {
             String line = joinNonEmpty(p.getLineName(), p.getLineNumber(), p.getLineOwner());
 
             String fromStop = safeFromStopName(p);
-            String toStop   = safeToStopName(p);
+            String toStop = safeToStopName(p);
 
             if (isWalkMode(p.getLegTransportMode())) {
                 String nextOrigin = nextLegOriginStopName(trip, i);
@@ -459,7 +497,7 @@ public class APIMain {
             }
 
             String dep = formatTimeWithDelay(p.getAimedDeparture(), p.getExpectedDeparture(), HHMM);
-            String arr = formatTimeWithDelay(p.getAimedArrival(),   p.getExpectedArrival(),   HHMM);
+            String arr = formatTimeWithDelay(p.getAimedArrival(), p.getExpectedArrival(), HHMM);
 
             String dist = p.getTravelDistance() > 0 ? (p.getTravelDistance() + " m") : "";
 
@@ -557,11 +595,6 @@ public class APIMain {
             if (v != null && !v.isBlank()) return v.trim();
         }
         return "";
-    }
-
-    private static String bracket(String v) {
-        if (v == null || v.isBlank()) return "";
-        return "(" + v + ")";
     }
 
     private static String truncate(String s, int max) {

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+    <dontWrapJar>false</dontWrapJar>
+    <headerType>console</headerType>
+
+    <!-- Paths are relative to THIS file (avandra/launch/) -->
+    <jar>../app/target/app-all.jar</jar>
+    <outfile>../dist/Avandra.exe</outfile>
+
+    <errTitle>Avandra</errTitle>
+
+    <!-- Safe to keep even if the shaded jar already has Main-Class -->
+    <classPath>
+        <mainClass>avandra.app.APIMain</mainClass>
+    </classPath>
+
+    <jre>
+        <minVersion>21</minVersion>
+        <!-- If you want to ship a private JRE folder, set <path> here -->
+        <!-- <path>../jre</path> -->
+    </jre>
+
+    <!-- Optional metadata & icon -->
+    <versionInfo>
+        <fileVersion>1.0.0.0</fileVersion>
+        <txtFileVersion>1.0.0</txtFileVersion>
+        <productVersion>1.0.0.0</productVersion>
+        <txtProductVersion>1.0.0</txtProductVersion>
+        <fileDescription>Avandra</fileDescription>
+        <productName>Avandra</productName>
+        <internalName>Avandra</internalName>
+        <originalFilename>Avandra.exe</originalFilename>
+    </versionInfo>
+    <!-- <icon>../launch/avandra.ico</icon> -->
+</launch4jConfig>
