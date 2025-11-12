@@ -85,4 +85,8 @@ package "Test" {
 "Test" ..> "DTO"
 "Test" ..> "Service"
 
+"Adapter" --> "Port"
+
+"app" --> "API"
+
 @enduml
