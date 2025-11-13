@@ -1,4 +1,4 @@
-# Software-Gruppe-2
+# Software-Gruppe-2 [![Build + Unit + Integration tests](https://github.com/ditmann/Software-Gruppe-2/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ditmann/Software-Gruppe-2/actions/workflows/ci.yml)
 
 ## Avandra
 
@@ -26,4 +26,4 @@ Avandra is a Java-based travel assistant system for planning public transport jo
 
 
 
-[![Build + Unit + Integration tests](https://github.com/ditmann/Software-Gruppe-2/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ditmann/Software-Gruppe-2/actions/workflows/ci.yml)
+
