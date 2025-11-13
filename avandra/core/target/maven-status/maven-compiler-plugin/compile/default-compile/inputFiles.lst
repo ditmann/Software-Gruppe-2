@@ -1,16 +1,11 @@
-C:\Users\adria\OneDrive - Østfold University College\Dataingeniør\3.semester\software\Avandra Github\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\adapter\IpGeolocationAdapter.java
-C:\Users\adria\OneDrive - Østfold University College\Dataingeniør\3.semester\software\Avandra Github\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\adapter\RandomLocationAdapter.java
-C:\Users\adria\OneDrive - Østfold University College\Dataingeniør\3.semester\software\Avandra Github\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\domain\AdminBruker.java
-C:\Users\adria\OneDrive - Østfold University College\Dataingeniør\3.semester\software\Avandra Github\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\domain\Coordinate.java
-C:\Users\adria\OneDrive - Østfold University College\Dataingeniør\3.semester\software\Avandra Github\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\domain\Destinasjon.java
-C:\Users\adria\OneDrive - Østfold University College\Dataingeniør\3.semester\software\Avandra Github\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\domain\FavReise.java
-C:\Users\adria\OneDrive - Østfold University College\Dataingeniør\3.semester\software\Avandra Github\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\domain\LiteBruker.java
-C:\Users\adria\OneDrive - Østfold University College\Dataingeniør\3.semester\software\Avandra Github\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\domain\PlanReise.java
-C:\Users\adria\OneDrive - Østfold University College\Dataingeniør\3.semester\software\Avandra Github\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\domain\SearchOnDestination.java
-C:\Users\adria\OneDrive - Østfold University College\Dataingeniør\3.semester\software\Avandra Github\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\domain\TripPart.java
-C:\Users\adria\OneDrive - Østfold University College\Dataingeniør\3.semester\software\Avandra Github\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\domainParents\Bruker.java
-C:\Users\adria\OneDrive - Østfold University College\Dataingeniør\3.semester\software\Avandra Github\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\domainParents\Reise.java
-C:\Users\adria\OneDrive - Østfold University College\Dataingeniør\3.semester\software\Avandra Github\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\port\DBHandler.java
-C:\Users\adria\OneDrive - Østfold University College\Dataingeniør\3.semester\software\Avandra Github\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\port\EnturClient.java
-C:\Users\adria\OneDrive - Østfold University College\Dataingeniør\3.semester\software\Avandra Github\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\port\LocationPort.java
-C:\Users\adria\OneDrive - Østfold University College\Dataingeniør\3.semester\software\Avandra Github\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\port\SearchOnDestinationPort.java
+C:\Users\Gooner\Documents\GitHub\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\adapter\RandomLocationAdapter.java
+C:\Users\Gooner\Documents\GitHub\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\DTO\CoordinateDTO.java
+C:\Users\Gooner\Documents\GitHub\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\DTO\TripPartDTO.java
+C:\Users\Gooner\Documents\GitHub\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\port\DBConnectionPort.java
+C:\Users\Gooner\Documents\GitHub\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\port\DBHandlerPort.java
+C:\Users\Gooner\Documents\GitHub\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\port\EnturClientPort.java
+C:\Users\Gooner\Documents\GitHub\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\port\LocationPort.java
+C:\Users\Gooner\Documents\GitHub\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\service\DBService.java
+C:\Users\Gooner\Documents\GitHub\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\service\FindBestTripService.java
+C:\Users\Gooner\Documents\GitHub\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\service\JourneyPlannerService.java
+C:\Users\Gooner\Documents\GitHub\Software-Gruppe-2\avandra\core\src\main\java\avandra\core\service\TripFileHandler.java

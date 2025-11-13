@@ -17,6 +17,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+/**
+ * Integration tests for the MongoDB adapter with Testcontainers
+ * Runs against a real MongoDB to check the full CRUD flow
+ * Verifies that users and destinations are stored and read correctly
+ * Makes sure data is cleaned up between test runs
+ * Confirms that the persistence layer behaves the same as in production
+ */
 
 @Testcontainers
 class MongoDBHandlerAdapterIT {

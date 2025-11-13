@@ -27,6 +27,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+/**
+ * Integration tests that go through the API controller down to the database
+ * Uses a real MongoDB in Testcontainers and stubs external APIs
+ * Checks that an admin can share destinations with a lite user
+ * Verifies that updates appear when fetching data right after changes
+ * Covers both normal and error cases from end to end
+ */
 
 @Testcontainers
 class AvandraControllerIT {
@@ -199,7 +206,7 @@ class AvandraControllerIT {
         assertTrue(liteFavorites.containsKey("School"));
 
         controller.adminUpdateFavoriteCoordinates("adminUser", "liteUser", "School", 60.0, 11.0);
-        var schoolCoords = dbService.searchDestination("liteUser", "School");
+        CoordinateDTO schoolCoords = dbService.searchDestination("liteUser", "School");
         assertNotNull(schoolCoords);
         assertEquals(60.0, schoolCoords.getLatitudeNum(), 1e-6);
         assertEquals(11.0, schoolCoords.getLongitudeNUM(), 1e-6);

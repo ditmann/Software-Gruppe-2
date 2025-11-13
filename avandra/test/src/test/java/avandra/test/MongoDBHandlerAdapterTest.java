@@ -27,6 +27,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+/**
+ * Unit tests for the MongoDB adapter using mocked database calls
+ * Tests create, read, update, and delete for users and destinations
+ * Checks that MongoException is caught and does not crash the program
+ * Makes sure missing data just returns empty results instead of errors
+ * Prevents data from leaking between method calls
+ */
 
 class MongoDBHandlerAdapterTest {
 

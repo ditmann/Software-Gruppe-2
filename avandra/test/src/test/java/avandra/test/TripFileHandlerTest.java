@@ -3,10 +3,10 @@ package avandra.test;
 import avandra.core.DTO.CoordinateDTO;
 import avandra.core.DTO.TripPartDTO;
 import avandra.core.port.EnturClientPort;
-import avandra.core.port.EnturClientPort;
 import avandra.core.service.TripFileHandler;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,13 +21,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
- * tests for the grouped TripFileHandler
- *
- * - takes a List<CoordinateDTO> [from, to]
- * - calls Entur with the right args
- * - writes Trip.json with {request, trip} when includeRequestMeta = true
- * - returns a matrix of legs where each inner list is one tripPattern
+ * Tests how trip data from Entur is read and validated
+ * Checks that valid JSON is parsed correctly into domain objects
+ * Invalid or incomplete JSON should fail fast with clear messages
+ * Makes sure I/O errors are passed up so they can be handled by higher layers
+ * Helps avoid silent data loss or half-parsed results
  */
+
 @ExtendWith(MockitoExtension.class)
 class TripFileHandlerTest {
 
@@ -60,28 +60,28 @@ class TripFileHandlerTest {
 
     // minimal fake Entur trip payload
     // one pattern with a single leg to keep parsing simple
-    private JsonNode sampleTrip(ObjectMapper m) {
-        ObjectNode trip = m.createObjectNode();
-        var legs = trip.putArray("tripPatterns")
+    private JsonNode sampleTrip(ObjectMapper mapper) {
+        ObjectNode trip = mapper.createObjectNode();
+        ArrayNode legs = trip.putArray("tripPatterns")
                 .addObject()
                 .putArray("legs");
         legs.addObject()
                 .put("mode", "bus")
                 .put("distance", 740)
-                .set("line", m.createObjectNode()
+                .set("line", mapper.createObjectNode()
                         .put("id", "RUT:Line:25")
                         .put("name", "Bekkestua - Majorstuen")
                         .put("publicCode", "25")
                         .put("transportMode", "bus")
-                        .set("authority", m.createObjectNode().put("name", "Ruter")));
+                        .set("authority", mapper.createObjectNode().put("name", "Ruter")));
         return trip;
     }
 
     @Test
     void planTrip_writesFileWithRequest_andReturnsGroupedMatrix() throws Exception {
         // set up a simple from/to and pattern count
-        var from = new TestCoord(59.91, 10.75);
-        var to   = new TestCoord(63.43, 10.39);
+        CoordinateDTO from = new TestCoord(59.91, 10.75);
+        CoordinateDTO to   = new TestCoord(63.43, 10.39);
         int n = 3;
 
         // fake Entur returning a known payload
@@ -140,8 +140,8 @@ class TripFileHandlerTest {
         when(entur.planTripCoords(anyDouble(), anyDouble(), anyDouble(), anyDouble(), anyInt()))
                 .thenThrow(new IOException("simulated failure"));
 
-        var from = new TestCoord(59.91, 10.75);
-        var to   = new TestCoord(63.43, 10.39);
+        CoordinateDTO from = new TestCoord(59.91, 10.75);
+        CoordinateDTO to   = new TestCoord(63.43, 10.39);
 
         assertThrows(IOException.class, () -> handler.planTrip(List.of(from, to), 2, true));
     }

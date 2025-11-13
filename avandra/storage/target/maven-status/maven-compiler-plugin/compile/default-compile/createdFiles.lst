@@ -1,0 +1,3 @@
+avandra\storage\adapter\JSONDBHandlerAdapter.class
+avandra\storage\adapter\MongoDBConnectionAdapter.class
+avandra\storage\adapter\MongoDBHandlerAdapter.class

@@ -1,70 +1,93 @@
 {
   "request" : {
-    "fromLat" : 59.211299896240234,
-    "fromLon" : 10.936300277709961,
-    "toLat" : 59.2822,
-    "toLon" : 11.1067,
+    "fromLat" : 59.92682808137782,
+    "fromLon" : 10.71815587805752,
+    "toLat" : 59.2313,
+    "toLon" : 10.9968,
     "numPatterns" : 3
   },
   "trip" : {
     "tripPatterns" : [ {
-      "startTime" : "2025-11-10T10:22:08+01:00",
-      "duration" : 2106,
-      "walkDistance" : 709.36,
+      "startTime" : "2025-11-12T10:50:51+01:00",
+      "duration" : 7041,
+      "walkDistance" : 1687.81,
       "legs" : [ {
         "mode" : "foot",
-        "distance" : 565.28,
+        "distance" : 588.35,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null
       }, {
-        "mode" : "bus",
-        "distance" : 14173.27,
+        "mode" : "metro",
+        "distance" : 3099.41,
         "line" : {
-          "id" : "OST:Line:1_1",
-          "name" : "Glomma vest",
+          "id" : "RUT:Line:1",
+          "name" : "Frognerseteren - Bergkrystallen",
           "publicCode" : "1",
-          "transportMode" : "bus",
+          "transportMode" : "metro",
           "authority" : {
-            "name" : "Østfold kollektivtrafikk"
+            "name" : "Ruter"
           }
         },
         "fromEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:2850",
-            "name" : "Fredrikstad bussterminal"
+            "id" : "NSR:Quay:8027",
+            "name" : "Majorstuen"
           },
-          "aimedDepartureTime" : "2025-11-10T10:30:00+01:00",
-          "expectedDepartureTime" : "2025-11-10T10:30:00+01:00"
+          "aimedDepartureTime" : "2025-11-12T10:59:00+01:00",
+          "expectedDepartureTime" : "2025-11-12T11:00:02+01:00"
         },
         "toEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:5184",
-            "name" : "Sarpsborg bussterminal"
+            "id" : "NSR:Quay:7183",
+            "name" : "Jernbanetorget"
           },
-          "aimedDepartureTime" : "2025-11-10T10:55:00+01:00",
-          "expectedDepartureTime" : "2025-11-10T10:55:00+01:00"
+          "aimedDepartureTime" : "2025-11-12T11:04:00+01:00",
+          "expectedDepartureTime" : "2025-11-12T11:05:02+01:00"
         }
       }, {
         "mode" : "foot",
-        "distance" : 144.08,
+        "distance" : 441.38,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null
-      } ]
-    }, {
-      "startTime" : "2025-11-10T10:24:02+01:00",
-      "duration" : 2472,
-      "walkDistance" : 540.59,
-      "legs" : [ {
+      }, {
+        "mode" : "rail",
+        "distance" : 91417.53,
+        "line" : {
+          "id" : "VYG:Line:RE20",
+          "name" : "Oslo S-Halden-Göteborg-Malmö (X-Border)",
+          "publicCode" : "RE20",
+          "transportMode" : "rail",
+          "authority" : {
+            "name" : "Vy"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:567",
+            "name" : "Oslo S"
+          },
+          "aimedDepartureTime" : "2025-11-12T11:14:00+01:00",
+          "expectedDepartureTime" : "2025-11-12T11:14:00+01:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:392",
+            "name" : "Fredrikstad stasjon"
+          },
+          "aimedDepartureTime" : "2025-11-12T12:15:00+01:00",
+          "expectedDepartureTime" : "2025-11-12T12:15:00+01:00"
+        }
+      }, {
         "mode" : "foot",
-        "distance" : 396.51,
+        "distance" : 275.84,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null
       }, {
         "mode" : "bus",
-        "distance" : 17477.25,
+        "distance" : 5141.7,
         "line" : {
           "id" : "OST:Line:1_2",
           "name" : "Fredrikstad rv.22  Sarpsborg ny",
@@ -76,44 +99,112 @@
         },
         "fromEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:4024",
-            "name" : "Nygata"
+            "id" : "NSR:Quay:4032",
+            "name" : "St. Croixundergangen"
           },
-          "aimedDepartureTime" : "2025-11-10T10:30:00+01:00",
-          "expectedDepartureTime" : "2025-11-10T10:30:00+01:00"
+          "aimedDepartureTime" : "2025-11-12T12:31:00+01:00",
+          "expectedDepartureTime" : "2025-11-12T12:31:00+01:00"
         },
         "toEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:5184",
-            "name" : "Sarpsborg bussterminal"
+            "id" : "NSR:Quay:4197",
+            "name" : "Borgehallen"
           },
-          "aimedDepartureTime" : "2025-11-10T11:03:00+01:00",
-          "expectedDepartureTime" : "2025-11-10T11:03:00+01:00"
+          "aimedDepartureTime" : "2025-11-12T12:43:00+01:00",
+          "expectedDepartureTime" : "2025-11-12T12:43:00+01:00"
         }
       }, {
         "mode" : "foot",
-        "distance" : 144.08,
+        "distance" : 382.24,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null
       } ]
     }, {
-      "startTime" : "2025-11-10T10:32:08+01:00",
-      "duration" : 2106,
-      "walkDistance" : 709.36,
+      "startTime" : "2025-11-12T10:36:38+01:00",
+      "duration" : 7894,
+      "walkDistance" : 1617.02,
       "legs" : [ {
         "mode" : "foot",
-        "distance" : 565.28,
+        "distance" : 588.35,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "metro",
+        "distance" : 3099.41,
+        "line" : {
+          "id" : "RUT:Line:1",
+          "name" : "Frognerseteren - Bergkrystallen",
+          "publicCode" : "1",
+          "transportMode" : "metro",
+          "authority" : {
+            "name" : "Ruter"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:8027",
+            "name" : "Majorstuen"
+          },
+          "aimedDepartureTime" : "2025-11-12T10:44:00+01:00",
+          "expectedDepartureTime" : "2025-11-12T10:45:49+01:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:7183",
+            "name" : "Jernbanetorget"
+          },
+          "aimedDepartureTime" : "2025-11-12T10:49:00+01:00",
+          "expectedDepartureTime" : "2025-11-12T10:50:49+01:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 454.11,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "coach",
+        "distance" : 93444.25,
+        "line" : {
+          "id" : "VYX:Line:12",
+          "name" : "VY6 Hvaler-Fredrikstad-Oslo",
+          "publicCode" : "VY6",
+          "transportMode" : "coach",
+          "authority" : {
+            "name" : "Vy Buss"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:99376",
+            "name" : "Oslo bussterminal"
+          },
+          "aimedDepartureTime" : "2025-11-12T11:00:00+01:00",
+          "expectedDepartureTime" : "2025-11-12T11:00:00+01:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:2845",
+            "name" : "Fredrikstad bussterminal"
+          },
+          "aimedDepartureTime" : "2025-11-12T12:25:00+01:00",
+          "expectedDepartureTime" : "2025-11-12T12:25:00+01:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 192.32,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null
       }, {
         "mode" : "bus",
-        "distance" : 14173.27,
+        "distance" : 6005.11,
         "line" : {
-          "id" : "OST:Line:1_1",
-          "name" : "Glomma vest",
-          "publicCode" : "1",
+          "id" : "OST:Line:1_2",
+          "name" : "Fredrikstad rv.22  Sarpsborg ny",
+          "publicCode" : "2",
           "transportMode" : "bus",
           "authority" : {
             "name" : "Østfold kollektivtrafikk"
@@ -121,23 +212,136 @@
         },
         "fromEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:2850",
+            "id" : "NSR:Quay:2848",
             "name" : "Fredrikstad bussterminal"
           },
-          "aimedDepartureTime" : "2025-11-10T10:40:00+01:00",
-          "expectedDepartureTime" : "2025-11-10T10:40:00+01:00"
+          "aimedDepartureTime" : "2025-11-12T12:30:00+01:00",
+          "expectedDepartureTime" : "2025-11-12T12:30:00+01:00"
         },
         "toEstimatedCall" : {
           "quay" : {
-            "id" : "NSR:Quay:5184",
-            "name" : "Sarpsborg bussterminal"
+            "id" : "NSR:Quay:4197",
+            "name" : "Borgehallen"
           },
-          "aimedDepartureTime" : "2025-11-10T11:05:00+01:00",
-          "expectedDepartureTime" : "2025-11-10T11:05:00+01:00"
+          "aimedDepartureTime" : "2025-11-12T12:43:00+01:00",
+          "expectedDepartureTime" : "2025-11-12T12:43:00+01:00"
         }
       }, {
         "mode" : "foot",
-        "distance" : 144.08,
+        "distance" : 382.24,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      } ]
+    }, {
+      "startTime" : "2025-11-12T11:49:49+01:00",
+      "duration" : 6203,
+      "walkDistance" : 1687.81,
+      "legs" : [ {
+        "mode" : "foot",
+        "distance" : 588.35,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "metro",
+        "distance" : 3099.41,
+        "line" : {
+          "id" : "RUT:Line:1",
+          "name" : "Frognerseteren - Bergkrystallen",
+          "publicCode" : "1",
+          "transportMode" : "metro",
+          "authority" : {
+            "name" : "Ruter"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:8027",
+            "name" : "Majorstuen"
+          },
+          "aimedDepartureTime" : "2025-11-12T11:59:00+01:00",
+          "expectedDepartureTime" : "2025-11-12T11:59:00+01:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:7183",
+            "name" : "Jernbanetorget"
+          },
+          "aimedDepartureTime" : "2025-11-12T12:04:00+01:00",
+          "expectedDepartureTime" : "2025-11-12T12:04:00+01:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 441.38,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "rail",
+        "distance" : 91416.95,
+        "line" : {
+          "id" : "VYG:Line:RE20",
+          "name" : "Oslo S-Halden-Göteborg-Malmö (X-Border)",
+          "publicCode" : "RE20",
+          "transportMode" : "rail",
+          "authority" : {
+            "name" : "Vy"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:567",
+            "name" : "Oslo S"
+          },
+          "aimedDepartureTime" : "2025-11-12T12:14:00+01:00",
+          "expectedDepartureTime" : "2025-11-12T12:14:00+01:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:392",
+            "name" : "Fredrikstad stasjon"
+          },
+          "aimedDepartureTime" : "2025-11-12T13:13:00+01:00",
+          "expectedDepartureTime" : "2025-11-12T13:13:00+01:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 275.84,
+        "line" : null,
+        "fromEstimatedCall" : null,
+        "toEstimatedCall" : null
+      }, {
+        "mode" : "bus",
+        "distance" : 5141.7,
+        "line" : {
+          "id" : "OST:Line:1_7",
+          "name" : "Moum-Ambjørnrød",
+          "publicCode" : "7",
+          "transportMode" : "bus",
+          "authority" : {
+            "name" : "Østfold kollektivtrafikk"
+          }
+        },
+        "fromEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:4032",
+            "name" : "St. Croixundergangen"
+          },
+          "aimedDepartureTime" : "2025-11-12T13:18:00+01:00",
+          "expectedDepartureTime" : "2025-11-12T13:18:00+01:00"
+        },
+        "toEstimatedCall" : {
+          "quay" : {
+            "id" : "NSR:Quay:4197",
+            "name" : "Borgehallen"
+          },
+          "aimedDepartureTime" : "2025-11-12T13:28:00+01:00",
+          "expectedDepartureTime" : "2025-11-12T13:28:00+01:00"
+        }
+      }, {
+        "mode" : "foot",
+        "distance" : 382.24,
         "line" : null,
         "fromEstimatedCall" : null,
         "toEstimatedCall" : null

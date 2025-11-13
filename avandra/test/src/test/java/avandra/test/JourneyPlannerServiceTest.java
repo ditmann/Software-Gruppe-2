@@ -11,6 +11,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+/**
+ * Tests how the journey planner service puts everything together
+ * Checks that start and destination are handled in the right order
+ * Makes sure it passes data to the ports and forwards any important errors
+ * Skips later steps if an earlier dependency fails
+ * Helps confirm that the controller layer gets clear error messages
+ */
 
 class JourneyPlannerServiceTest {
 
