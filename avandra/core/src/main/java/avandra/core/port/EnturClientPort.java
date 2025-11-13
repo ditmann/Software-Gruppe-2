@@ -4,17 +4,16 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.io.IOException;
 
 /**
- * - Build and execute trip-planning requests (GraphQL under the hood).
- * - Provide a simple API for trip planning by coordinates.
+ * - Build and execute trip-planning requests (GraphQL under the hood)
+ * - Provide a simple API for trip planning by coordinates
  * Notes:
- * - Implementations should set Entur-required headers (e.g., "ET-Client-Name").
- * - Return the "trip" node (i.e., GraphQL data.trip) as a JsonNode.
- * - Do not perform file I/O here—keep this port purely about fetching data.
+ * - Implementations should set Entur-required headers ("ET-Client-Name").
+ * - Return the "trip" node (GraphQL data.trip) as a JsonNode.
  */
 public interface EnturClientPort {
 
     /**
-     * Query Entur for trip plans between two coordinates.
+     * Query Entur for trip plans between two coordinates
      *
      * @param fromLat     origin latitude
      * @param fromLon     origin longitude

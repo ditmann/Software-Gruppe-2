@@ -49,7 +49,7 @@ public final class TripFileHandler {
         CoordinateDTO from = coords.get(0);
         CoordinateDTO to   = coords.get(1);
 
-        // use the exact getters the CoordinateDTO exposes
+        // using the exact getters the CoordinateDTO exposes
         double fromLat = from.getLatitudeNum();
         double fromLon = from.getLongitudeNUM();
         double toLat   = to.getLatitudeNum();
@@ -85,7 +85,7 @@ public final class TripFileHandler {
     }
 
     /**
-     * Parse the Entur trip node into a matrix where each inner list is one pattern's legs
+     * Parse the Entur trip node into a matrix where each inner list is one patterns legs
      */
     private static List<List<TripPartDTO>> parseTripPartsGrouped(JsonNode tripNode) {
         List<List<TripPartDTO>> grouped = new ArrayList<>();

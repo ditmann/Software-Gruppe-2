@@ -15,6 +15,13 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+/**
+ * Tests the main API controller with mocked services
+ * Makes sure input validation works and bad data is rejected early
+ * Verifies that each service is called once in the right order
+ * Confirms that controller just passes data and does not contain business logic
+ * Ensures clear mapping from domain results to API responses
+ */
 
 class AvandraControllerTest {
 

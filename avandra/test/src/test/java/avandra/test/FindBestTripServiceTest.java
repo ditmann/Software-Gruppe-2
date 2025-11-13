@@ -1,3 +1,6 @@
+
+
+
 package avandra.test;
 
 import avandra.core.DTO.TripPartDTO;
@@ -8,7 +11,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+/**
+ * Tests the logic that finds the best trip from a list of options
+ * Makes sure it picks the shortest travel time, then fewer transfers, then less walking
+ * Returns null when the input list is null or empty
+ * Includes edge cases like equal scores and empty journeys
+ */
 class FindBestTripServiceTest {
 
     private static final LocalDateTime BASE = LocalDateTime.of(2025, 1, 1, 8, 0);
@@ -38,7 +46,7 @@ class FindBestTripServiceTest {
                 buildLeg("bus", 0, "L1", BASE, BASE.plusMinutes(45))
         );
 
-        var best = service.pickBest(List.of(trip30, trip45));
+        List<TripPartDTO> best = service.pickBest(List.of(trip30, trip45));
         assertSame(trip30, best);
     }
 
@@ -63,7 +71,7 @@ class FindBestTripServiceTest {
         service.setDurationWeight(1.0);
         service.setTransferWeight(10.0); // make transfers expensive
 
-        var best = service.pickBest(List.of(threeBoardings, walkingOnly));
+        List<TripPartDTO> best = service.pickBest(List.of(threeBoardings, walkingOnly));
         assertSame(walkingOnly, best, "with high transfer weight and zero walking weight, walking-only should win");
     }
 
