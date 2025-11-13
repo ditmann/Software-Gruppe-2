@@ -10,7 +10,7 @@ Avandra is a Java-based travel assistant system for planning public transport jo
 
 #### Option A — Run the runnable ZIP (recommended)
 1) Install **Java 21+**  
-2) Download the ZIP from **GitHub Actions → latest successful run → Artifacts**  
+2) Download the v2.0.0 release ZIP from Releases -> https://github.com/ditmann/Software-Gruppe-2/releases/tag/v2.0.0
 3) Unzip and run:
    avandra.exe
    
@@ -22,8 +22,9 @@ Avandra is a Java-based travel assistant system for planning public transport jo
 3) Run the `main` method in **APIMain**:  
 
 
-
-
+## NB!
+Make sure Docker is installed and running if you want to run all tests locally.  
+Our integration tests use Testcontainers, which starts a MongoDB container during the test run.
 
 
 
