@@ -1,16 +1,26 @@
 package avandra.test;
 
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.anyString;
+import org.mockito.InOrder;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
 import avandra.core.DTO.CoordinateDTO;
 import avandra.core.port.LocationPort;
 import avandra.core.service.DBService;
 import avandra.core.service.JourneyPlannerService;
-import org.junit.jupiter.api.Test;
-import org.mockito.InOrder;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 /**
  * Tests how the journey planner service puts everything together
  * Checks that start and destination are handled in the right order
@@ -21,7 +31,7 @@ import static org.mockito.Mockito.*;
 
 class JourneyPlannerServiceTest {
     private static final String USERID1 = "user-123";
-    private static final String USERID2 = "user-123";
+    private static final String DEST = "dest-123";
 
 
     @Test
@@ -60,7 +70,7 @@ class JourneyPlannerServiceTest {
         JourneyPlannerService svc = new JourneyPlannerService(location, db);
 
         assertThrows(RuntimeException.class,
-                () -> svc.fetchStartingPointAndEndPoint("u", "d"));
+                () -> svc.fetchStartingPointAndEndPoint(USERID1, DEST));
 
         verify(location).currentCoordinate();
         verifyNoInteractions(db);
@@ -72,16 +82,16 @@ class JourneyPlannerServiceTest {
         DBService db = mock(DBService.class);
 
         when(location.currentCoordinate()).thenReturn(new CoordinateDTO());
-        when(db.searchDestination("u", "d")).thenThrow(new IllegalStateException("DB error"));
+        when(db.searchDestination(USERID1, DEST)).thenThrow(new IllegalStateException("DB error"));
 
         JourneyPlannerService svc = new JourneyPlannerService(location, db);
 
         assertThrows(IllegalStateException.class,
-                () -> svc.fetchStartingPointAndEndPoint("u", "d"));
+                () -> svc.fetchStartingPointAndEndPoint(USERID1, DEST));
 
         InOrder inOrder = inOrder(location, db);
         inOrder.verify(location).currentCoordinate();
-        inOrder.verify(db).searchDestination("u", "d");
+        inOrder.verify(db).searchDestination(USERID1, DEST);
     }
 
     @Test
