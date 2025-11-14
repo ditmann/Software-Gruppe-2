@@ -3,10 +3,31 @@
 // version
 package avandra.test;
 
-import avandra.core.DTO.CoordinateDTO;
-import avandra.core.port.DBConnectionPort;
-import avandra.storage.adapter.MongoDBConnectionAdapter;
-import avandra.storage.adapter.MongoDBHandlerAdapter;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bson.BsonDocument;
+import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.mongodb.MongoException;
 import com.mongodb.client.FindIterable;
@@ -15,18 +36,10 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 
-import org.bson.BsonDocument;
-import org.bson.Document;
-import org.bson.conversions.Bson;
-
-import org.junit.jupiter.api.*;
-import org.mockito.ArgumentCaptor;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import avandra.core.DTO.CoordinateDTO;
+import avandra.core.port.DBConnectionPort;
+import avandra.storage.adapter.MongoDBConnectionAdapter;
+import avandra.storage.adapter.MongoDBHandlerAdapter;
 /**
  * Unit tests for the MongoDB adapter using mocked database calls
  * Tests create, read, update, and delete for users and destinations
@@ -108,7 +121,7 @@ class MongoDBHandlerAdapterTest {
 
 
         Document doc1 = new Document(USERID1, 1);
-        Document doc2 = new Document("b", 2);
+        Document doc2 = new Document(USERID2, 2);
 
         when(wiring.collection.find()).thenReturn(findIterable);
         when(findIterable.iterator()).thenReturn(cursor);
@@ -234,13 +247,13 @@ class MongoDBHandlerAdapterTest {
                 .append("School", new Document("koordinater", new Document("latitude", 1.0).append("longitude", 2.0)))
                 .append("Kiosk", new Document());
 
-        Document userDoc = new Document("id", "u1").append("favoritter", favoritesDoc);
+        Document userDoc = new Document("id", USERID1).append("favoritter", favoritesDoc);
 
         FindIterable<Document> findIterable = mock(FindIterable.class);
         when(wiring.collection.find(any(Bson.class))).thenReturn(findIterable);
         when(findIterable.first()).thenReturn(userDoc);
 
-        List<String> names = wiring.handler.listUserFavDestinations("u1");
+        List<String> names = wiring.handler.listUserFavDestinations(USERID1);
 
         assertEquals(List.of("Home", "School", "Kiosk"), names);
     }
@@ -248,34 +261,34 @@ class MongoDBHandlerAdapterTest {
 
     @Test
     void listLitebrukereForAdmin_singleString() throws Exception {
-        Document adminDoc = new Document("id", "a").append("litebrukere", "kid-1");
+        Document adminDoc = new Document("id", USERID1).append("litebrukere", "kid-1");
         FindIterable<Document> findIterable = mock(FindIterable.class);
         when(wiring.collection.find(any(Bson.class))).thenReturn(findIterable);
         when(findIterable.first()).thenReturn(adminDoc);
 
-        List<String> litebrukere = wiring.handler.listLitebrukereForAdmin("a");
+        List<String> litebrukere = wiring.handler.listLitebrukereForAdmin(USERID1);
         assertEquals(List.of("kid-1"), litebrukere);
     }
 
     @Test
     void listLitebrukereForAdmin_listWithBlank() throws Exception {
-        Document adminDoc = new Document("id", "a").append("litebrukere", List.of("kid-1", " ", "kid-2"));
+        Document adminDoc = new Document("id", USERID1).append("litebrukere", List.of("kid-1", " ", "kid-2"));
         FindIterable<Document> findIterable = mock(FindIterable.class);
         when(wiring.collection.find(any(Bson.class))).thenReturn(findIterable);
         when(findIterable.first()).thenReturn(adminDoc);
 
-        List<String> litebrukere = wiring.handler.listLitebrukereForAdmin("a");
+        List<String> litebrukere = wiring.handler.listLitebrukereForAdmin(USERID1);
         assertEquals(List.of("kid-1", "kid-2"), litebrukere);
     }
 
     @Test
     void listLitebrukereForAdmin_missingField() throws Exception {
-        Document adminDoc = new Document("id", "a");
+        Document adminDoc = new Document("id", USERID1);
         FindIterable<Document> findIterable = mock(FindIterable.class);
         when(wiring.collection.find(any(Bson.class))).thenReturn(findIterable);
         when(findIterable.first()).thenReturn(adminDoc);
 
-        List<String> litebrukere = wiring.handler.listLitebrukereForAdmin("a");
+        List<String> litebrukere = wiring.handler.listLitebrukereForAdmin(USERID1);
         assertTrue(litebrukere.isEmpty());
     }
 
@@ -284,18 +297,18 @@ class MongoDBHandlerAdapterTest {
     void isAdmin_true() throws Exception {
         FindIterable<Document> findIterable = mock(FindIterable.class);
         when(wiring.collection.find(any(Bson.class))).thenReturn(findIterable);
-        when(findIterable.first()).thenReturn(new Document("id", "a").append("admin", true));
+        when(findIterable.first()).thenReturn(new Document("id", USERID1).append("admin", true));
 
-        assertTrue(wiring.handler.isAdmin("a"));
+        assertTrue(wiring.handler.isAdmin(USERID1));
     }
 
     @Test
     void isAdmin_false() throws Exception {
         FindIterable<Document> findIterable = mock(FindIterable.class);
         when(wiring.collection.find(any(Bson.class))).thenReturn(findIterable);
-        when(findIterable.first()).thenReturn(new Document("id", "b"));
+        when(findIterable.first()).thenReturn(new Document("id", USERID2));
 
-        assertFalse(wiring.handler.isAdmin("b"));
+        assertFalse(wiring.handler.isAdmin(USERID2));
     }
 
     @Test
@@ -303,7 +316,7 @@ class MongoDBHandlerAdapterTest {
         when(wiring.collection.updateOne(any(Bson.class), any(Bson.class)))
                 .thenReturn(mock(UpdateResult.class));
 
-        wiring.handler.addDestinationToFavorites("u1", "Park", "Main St 1", 10.0, 20.0);
+        wiring.handler.addDestinationToFavorites(USERID1, "Park", "Main St 1", 10.0, 20.0);
 
         verify(wiring.collection).updateOne(any(Bson.class), any(Bson.class));
     }
@@ -313,7 +326,7 @@ class MongoDBHandlerAdapterTest {
         when(wiring.collection.updateOne(any(Bson.class), any(Bson.class)))
                 .thenReturn(mock(UpdateResult.class));
 
-        wiring.handler.addCoordinatesToFavDestination("u1", "School", 59.9, 10.7);
+        wiring.handler.addCoordinatesToFavDestination(USERID1, "School", 59.9, 10.7);
 
         verify(wiring.collection).updateOne(any(Bson.class), any(Bson.class));
     }
@@ -343,27 +356,27 @@ class MongoDBHandlerAdapterTest {
         when(wiring.collection.find(any(Bson.class))).thenReturn(findIterable);
         when(findIterable.first()).thenReturn(null);
 
-        assertNull(wiring.handler.searchFavDestination("u1", "Home"));
+        assertNull(wiring.handler.searchFavDestination(USERID1, "Home"));
     }
 
     @Test
     void searchFavDestination_returnsNull_whenFavoritesMissing() throws Exception {
         FindIterable<Document> findIterable = mock(FindIterable.class);
         when(wiring.collection.find(any(Bson.class))).thenReturn(findIterable);
-        when(findIterable.first()).thenReturn(new Document("id", "u1"));
+        when(findIterable.first()).thenReturn(new Document("id", USERID1));
 
-        assertNull(wiring.handler.searchFavDestination("u1", "Home"));
+        assertNull(wiring.handler.searchFavDestination(USERID1, "Home"));
     }
 
     @Test
     void searchDestination_returnsNull_whenFavDestinationWithoutCoords() throws Exception {
         Document favorites = new Document("Home", new Document()); // no koordinater
-        Document user = new Document("id", "u1").append("favoritter", favorites);
+        Document user = new Document("id", USERID1).append("favoritter", favorites);
         FindIterable<Document> findIterable = mock(FindIterable.class);
         when(wiring.collection.find(any(Bson.class))).thenReturn(findIterable);
         when(findIterable.first()).thenReturn(user);
 
-        assertNull(wiring.handler.searchFavDestination("u1", "Home"));
+        assertNull(wiring.handler.searchFavDestination(USERID1, "Home"));
     }
 
     @Test
@@ -398,20 +411,20 @@ class MongoDBHandlerAdapterTest {
 
         MongoDBHandlerAdapter handler = new MongoDBHandlerAdapter(rootConnection);
 
-        assertDoesNotThrow(() -> handler.createUser("x", true));
+        assertDoesNotThrow(() -> handler.createUser(USERID1, true));
         assertDoesNotThrow(handler::retrieveAllData);
         assertDoesNotThrow(() -> handler.retrieveByKeyValue("something", "random"));
         assertDoesNotThrow(() -> handler.retrieveByValue("needle"));
-        assertDoesNotThrow(() -> handler.appendData("x", "something", "random"));
-        assertDoesNotThrow(() -> handler.removeData("x", "random"));
-        assertDoesNotThrow(() -> handler.removeData("x"));
-        assertDoesNotThrow(() -> handler.deleteManyDocuments("x"));
-        assertDoesNotThrow(() -> handler.addDestinationToFavorites("x", "Park", "Main St 1", 10.0, 20.0));
-        assertDoesNotThrow(() -> handler.addCoordinatesToFavDestination("x", "Park", 10.0, 20.0));
-        assertDoesNotThrow(() -> handler.searchFavDestination("x", "dest"));
-        assertDoesNotThrow(() -> handler.listUserFavDestinations("x"));
-        assertDoesNotThrow(() -> handler.listLitebrukereForAdmin("x"));
-        assertDoesNotThrow(() -> handler.isAdmin("x"));
+        assertDoesNotThrow(() -> handler.appendData(USERID1, "something", "random"));
+        assertDoesNotThrow(() -> handler.removeData(USERID1, "random"));
+        assertDoesNotThrow(() -> handler.removeData(USERID1));
+        assertDoesNotThrow(() -> handler.deleteManyDocuments(USERID1));
+        assertDoesNotThrow(() -> handler.addDestinationToFavorites(USERID1, "Park", "Main St 1", 10.0, 20.0));
+        assertDoesNotThrow(() -> handler.addCoordinatesToFavDestination(USERID1, "Park", 10.0, 20.0));
+        assertDoesNotThrow(() -> handler.searchFavDestination(USERID1, "dest"));
+        assertDoesNotThrow(() -> handler.listUserFavDestinations(USERID1));
+        assertDoesNotThrow(() -> handler.listLitebrukereForAdmin(USERID1));
+        assertDoesNotThrow(() -> handler.isAdmin(USERID1));
 
         verify(rootConnection, atLeastOnce()).open();
         verify(openedConnection, atLeastOnce()).close();
