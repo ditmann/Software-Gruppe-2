@@ -8,7 +8,8 @@ entity JourneyPlannerService as jps
 entity LocationPort
 control CoordinateDTO as cdto
 entity DBHandlerPort as dbh
-entity Entur
+entity EnturHttpClient as Entur
+entity DBService as dbs
 entity TripFileHandler
 control TripPartDTO as tpdto
 entity FindBestTripService as bts
@@ -27,13 +28,15 @@ jps -> LocationPort: Where am I?
 LocationPort -> cdto: Coordinates for position
 cdto -> jps: Timmys current position coords
 
-jps -> dbh: Coordinates for Turn pls
-dbh -> dbi: Coordinates for Turn pls
+jps -> dbs: Coordinates for Turn 
+dbs -> dbh: Coordinates for Turn 
+dbh -> dbi: Coordinates for Turn 
 dbi -> dbh: Coordinates
 dbh -> cdto: Coordinates for destination
-cdto -> jps: Destination coords
-
-jps -> Entur: Find journey
+cdto -> dbs: Destination coords
+dbs -> jps: Destination coords
+jps -> TripFileHandler: Find journey
+TripFileHandler -> Entur: Request trip data
 Entur -> TripFileHandler: Entur-data
 TripFileHandler -> tpdto: Converts data to DTO
 tpdto -> bts: Sends DTO for handline
