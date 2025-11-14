@@ -383,7 +383,7 @@ class MongoDBHandlerAdapterTest {
     void appendData_doesNothingWhenUserNotFound() throws Exception {
         when(wiring.collection.countDocuments(any(Bson.class))).thenReturn(0L);
 
-        wiring.handler.appendData("uX", "age", 30);
+        wiring.handler.appendData(USERID1, "age", 30);
 
         verify(wiring.collection, never()).updateOne(any(Bson.class), any(Bson.class));
     }
@@ -392,7 +392,7 @@ class MongoDBHandlerAdapterTest {
     void removeData_delete_doesNothingWhenCountZero() throws Exception {
         when(wiring.collection.countDocuments(any(Bson.class))).thenReturn(0L);
 
-        wiring.handler.removeData("uX");
+        wiring.handler.removeData(USERID1);
 
         verify(wiring.collection, never()).deleteOne(any(Bson.class));
     }
