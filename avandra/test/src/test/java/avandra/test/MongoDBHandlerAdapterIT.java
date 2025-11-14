@@ -29,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class MongoDBHandlerAdapterIT {
     private static final String USERID1 = "user-123";
     private static final String USERID2 = "user-345";
+    private static final String USERID3 = "user-789";
 
     @Container
     static final MongoDBContainer mongoContainer = new MongoDBContainer("mongo:7.0");
@@ -59,13 +60,13 @@ class MongoDBHandlerAdapterIT {
 
     @Test
     void createUser_appendData_and_readBack() {
-        String userId = "u1";
 
-        dbService.createUser(userId, true);
-        dbService.appendData(userId, "age", 30);
 
-        Document u1 = getUserDoc(userId).orElseThrow();
-        assertEquals(userId, u1.getString("id"));
+        dbService.createUser(USERID1, true);
+        dbService.appendData(USERID1, "age", 30);
+
+        Document u1 = getUserDoc(USERID1).orElseThrow();
+        assertEquals(USERID1, u1.getString("id"));
         assertTrue(u1.containsKey("admin"));
         assertTrue(u1.containsKey("litebrukere"));
         assertTrue(u1.containsKey("planlagte reiser"));
@@ -73,30 +74,29 @@ class MongoDBHandlerAdapterIT {
         assertEquals(30, u1.get("age"));
 
         // exercise retrieveByKeyValue / retrieveByValue on real data
-        ArrayList<Document> byKey = dbHandler.retrieveByKeyValue("id", userId);
+        ArrayList<Document> byKey = dbHandler.retrieveByKeyValue("id", USERID1);
         assertEquals(1, byKey.size());
         ArrayList<Document> byValue = dbHandler.retrieveByValue("age");
-        assertTrue(byValue.stream().anyMatch(d -> userId.equals(d.getString("id"))));
+        assertTrue(byValue.stream().anyMatch(d -> USERID1.equals(d.getString("id"))));
     }
 
     @Test
     void favorites_add_list_and_update_coordinates() {
-        String userId = "u2";
         String destName = "Home";
 
-        dbService.createUser(userId, false);
-        dbService.addDestinationToFavorites(userId, destName, "Main St 1", 59.91, 10.75);
+        dbService.createUser(USERID2, false);
+        dbService.addDestinationToFavorites(USERID2, destName, "Main St 1", 59.91, 10.75);
 
-        List<String> names = dbService.listUserDestinations(userId);
+        List<String> names = dbService.listUserDestinations(USERID2);
         assertEquals(List.of(destName), names);
 
-        CoordinateDTO coords = dbService.searchDestination(userId, destName);
+        CoordinateDTO coords = dbService.searchDestination(USERID2, destName);
         assertNotNull(coords);
         assertEquals(59.91, coords.getLatitudeNum(), 1e-6);
         assertEquals(10.75, coords.getLongitudeNUM(), 1e-6);
 
-        dbService.addCoordinatesToDestination(userId, destName, 59.92, 10.76);
-        CoordinateDTO updated = dbService.searchDestination(userId, destName);
+        dbService.addCoordinatesToDestination(USERID2, destName, 59.92, 10.76);
+        CoordinateDTO updated = dbService.searchDestination(USERID2, destName);
         assertNotNull(updated);
         assertEquals(59.92, updated.getLatitudeNum(), 1e-6);
         assertEquals(10.76, updated.getLongitudeNUM(), 1e-6);
@@ -145,14 +145,13 @@ class MongoDBHandlerAdapterIT {
 
     @Test
     void searchFavDestination_returnsNull_when_nodes_missing() {
-        String userId = "u3";
-        dbService.createUser(userId, false);
+        dbService.createUser(USERID3, false);
 
         // no favorites yet
-        assertNull(dbService.searchDestination(userId, "Home"));
+        assertNull(dbService.searchDestination(USERID3, "Home"));
 
         // add a destination without coords and expect null
-        dbHandler.appendData(userId, "favoritter", new Document("Home", new Document()));
-        assertNull(dbService.searchDestination(userId, "Home"));
+        dbHandler.appendData(USERID3, "favoritter", new Document("Home", new Document()));
+        assertNull(dbService.searchDestination(USERID3, "Home"));
     }
 }
