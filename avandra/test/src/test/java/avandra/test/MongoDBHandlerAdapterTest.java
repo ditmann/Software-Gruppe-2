@@ -36,6 +36,10 @@ import static org.mockito.Mockito.*;
  */
 
 class MongoDBHandlerAdapterTest {
+    
+    private static final String USERID1 = "user-123";
+    private static final String USERID2 = "user-345";
+    
 
     private static BsonDocument toDoc(Bson bson) {
         return bson.toBsonDocument(Document.class, com.mongodb.MongoClientSettings.getDefaultCodecRegistry());
@@ -83,11 +87,12 @@ class MongoDBHandlerAdapterTest {
         when(findIterable.iterator()).thenReturn(cursor);
         when(cursor.hasNext()).thenReturn(false);
 
-        wiring.handler.createUser("u1", true);
+
+        wiring.handler.createUser(USERID1, true);
 
         verify(wiring.collection, times(1)).insertOne(
                 argThat(doc ->
-                        "u1".equals(doc.getString("id")) &&
+                        USERID1.equals(doc.getString("id")) &&
                                 doc.containsKey("admin") &&
                                 doc.containsKey("litebrukere") &&
                                 doc.containsKey("planlagte reiser") &&
@@ -101,7 +106,8 @@ class MongoDBHandlerAdapterTest {
         FindIterable<Document> findIterable = mock(FindIterable.class);
         MongoCursor<Document> cursor = mock(MongoCursor.class);
 
-        Document doc1 = new Document("a", 1);
+
+        Document doc1 = new Document(USERID1, 1);
         Document doc2 = new Document("b", 2);
 
         when(wiring.collection.find()).thenReturn(findIterable);
@@ -380,24 +386,24 @@ class MongoDBHandlerAdapterTest {
 
     @Test
     void methods_handleMongoException() throws Exception {
-        // Intentional sweep test verifies that all public methods handle MongoException
+        // Intentional test verifies that all public methods handle MongoException
         // from getCollection() without throwing Keeps behavior stable across refactors
         skipCloseVerification = true; // uses its own wiring dont verify the class level close() here
 
         DBConnectionPort rootConnection = mock(DBConnectionPort.class);
         MongoDBConnectionAdapter openedConnection = mock(MongoDBConnectionAdapter.class);
         when(rootConnection.open()).thenReturn(openedConnection);
-        when(openedConnection.getCollection()).thenThrow(new MongoException("boom"));
+        when(openedConnection.getCollection()).thenThrow(new MongoException("error"));
         doNothing().when(openedConnection).close();
 
         MongoDBHandlerAdapter handler = new MongoDBHandlerAdapter(rootConnection);
 
         assertDoesNotThrow(() -> handler.createUser("x", true));
         assertDoesNotThrow(handler::retrieveAllData);
-        assertDoesNotThrow(() -> handler.retrieveByKeyValue("k", "v"));
+        assertDoesNotThrow(() -> handler.retrieveByKeyValue("something", "random"));
         assertDoesNotThrow(() -> handler.retrieveByValue("needle"));
-        assertDoesNotThrow(() -> handler.appendData("x", "a", "b"));
-        assertDoesNotThrow(() -> handler.removeData("x", "y"));
+        assertDoesNotThrow(() -> handler.appendData("x", "something", "random"));
+        assertDoesNotThrow(() -> handler.removeData("x", "random"));
         assertDoesNotThrow(() -> handler.removeData("x"));
         assertDoesNotThrow(() -> handler.deleteManyDocuments("x"));
         assertDoesNotThrow(() -> handler.addDestinationToFavorites("x", "Park", "Main St 1", 10.0, 20.0));

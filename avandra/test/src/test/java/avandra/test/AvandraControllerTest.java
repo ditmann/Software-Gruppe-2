@@ -24,6 +24,7 @@ import static org.mockito.Mockito.*;
  */
 
 class AvandraControllerTest {
+    private static final String USERID = "user-123";
 
     private DBService dbService;
     private TripFileHandler tripFileHandler;

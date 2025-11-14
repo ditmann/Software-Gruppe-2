@@ -16,7 +16,7 @@ public class RandomLocationAdapter implements LocationPort {
     public RandomLocationAdapter(Double fixedLat, Double fixedLon) {
         this.fixedLat = fixedLat;
         this.fixedLon = fixedLon;
-        // Oslo-ish bbox as a sane default
+        // Oslo-ish as a default
         this.minLat = 59.85; this.maxLat = 59.98;
         this.minLon = 10.60; this.maxLon = 10.90;
     }

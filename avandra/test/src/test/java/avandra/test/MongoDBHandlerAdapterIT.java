@@ -27,6 +27,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Testcontainers
 class MongoDBHandlerAdapterIT {
+    private static final String USERID1 = "user-123";
+    private static final String USERID2 = "user-345";
 
     @Container
     static final MongoDBContainer mongoContainer = new MongoDBContainer("mongo:7.0");
@@ -47,7 +49,6 @@ class MongoDBHandlerAdapterIT {
         dbService = new DBService(dbHandler);
     }
 
-    // --- small helpers -------------------------------------------------------
 
     @SuppressWarnings("unchecked")
     private Optional<Document> getUserDoc(String userId) {
@@ -55,7 +56,6 @@ class MongoDBHandlerAdapterIT {
         return all.stream().filter(d -> userId.equals(d.getString("id"))).findFirst();
     }
 
-    // --- tests ---------------------------------------------------------------
 
     @Test
     void createUser_appendData_and_readBack() {

@@ -20,6 +20,9 @@ import static org.mockito.Mockito.*;
  */
 
 class JourneyPlannerServiceTest {
+    private static final String USERID1 = "user-123";
+    private static final String USERID2 = "user-123";
+
 
     @Test
     void returnsStartThenEnd_andCallsDepsOnceInOrder() throws Exception {

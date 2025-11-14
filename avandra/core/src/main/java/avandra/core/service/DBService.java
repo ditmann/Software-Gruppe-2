@@ -89,7 +89,7 @@ public class DBService {
      * look up a destination’s coordinates for a user
      * @param userID user id
      * @param destinationID destination key or name
-     * @return coordinate dto if found, otherwise null
+     * @return CoordinateDTO if found, otherwise null
      */
     public CoordinateDTO searchDestination(String userID, String destinationID) {
         return handler.searchFavDestination(userID, destinationID);

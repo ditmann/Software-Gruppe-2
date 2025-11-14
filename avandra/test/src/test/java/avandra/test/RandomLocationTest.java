@@ -35,8 +35,8 @@ class RandomLocationTest {
             double lat = c.getLatitudeNum();
             double lon = c.getLongitudeNUM();
 
-            assertTrue(lat >= 59.85 && lat <= 59.98, "lat out of default Oslo bbox");
-            assertTrue(lon >= 10.60 && lon <= 10.90, "lon out of default Oslo bbox");
+            assertTrue(lat >= 59.85 && lat <= 59.98, "lat out of default Oslo");
+            assertTrue(lon >= 10.60 && lon <= 10.90, "lon out of default Oslo");
         }
     }
 }
